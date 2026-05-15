@@ -1058,6 +1058,10 @@ body {
     line-height: 36px;
   }
 
+  .lead-panel .section-label {
+    margin-bottom: 14px;
+  }
+
   .lead-panel__text {
     margin-top: 28px;
     font-size: 14px;
@@ -1091,7 +1095,7 @@ body {
   }
 
   .lead-panel__consent {
-    margin-top: 12px;
+    margin-top: 14px;
     font-size: 13px;
     line-height: 18px;
   }
