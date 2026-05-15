@@ -43,6 +43,7 @@ body {
 }
 
 .site-header__inner {
+  height: 108px;
   min-height: 108px;
   padding: 20px;
   border-radius: 10px;
@@ -55,6 +56,8 @@ body {
 .site-header__logo,
 .site-header__logo img {
   width: 200px;
+  height: 68px;
+  object-fit: contain;
 }
 
 .site-header__nav {
@@ -275,7 +278,7 @@ body {
 }
 
 .product {
-  padding-top: 140px;
+  padding-top: 150px;
 }
 
 .product__title {
@@ -351,13 +354,16 @@ body {
 
 .features {
   gap: 20px;
+  margin-top: 42px;
 }
 
 .feature-card {
+  height: 254px;
   min-height: 220px;
   padding: 34px;
   border-radius: 12px;
   background: #4a4a4c;
+  overflow: hidden;
 }
 
 .feature-card h3 {
@@ -373,7 +379,7 @@ body {
 }
 
 .audience {
-  padding-top: 140px;
+  padding-top: 150px;
 }
 
 .audience__title,
@@ -382,13 +388,15 @@ body {
 }
 
 .audience__grid {
-  gap: 20px;
+  gap: 18px;
 }
 
 .audience-card {
-  min-height: 320px;
+  height: 340px;
+  min-height: 340px;
   padding: 34px;
   border-radius: 20px;
+  overflow: hidden;
 }
 
 .audience-card h3 {
@@ -403,13 +411,14 @@ body {
 }
 
 .facts {
-  padding-top: 140px;
-  padding-bottom: 140px;
+  padding-top: 150px;
+  padding-bottom: 150px;
 }
 
 .facts__layout {
   grid-template-columns: minmax(0, 1fr) 600px;
-  gap: 20px;
+  column-gap: 20px;
+  row-gap: 10px;
 }
 
 .facts__items {
@@ -418,9 +427,11 @@ body {
 
 .fact-card,
 .facts__items--top .fact-card:nth-child(3) {
+  height: 220px;
   min-height: 220px;
   padding: 34px;
   border-radius: 20px;
+  overflow: hidden;
 }
 
 .fact-card h3 {
@@ -436,18 +447,21 @@ body {
 }
 
 .facts__image {
+  height: 910px;
   min-height: 910px;
   border-radius: 20px;
 }
 
 .form-section {
-  padding-bottom: 140px;
+  padding-bottom: 150px;
 }
 
 .lead-panel {
-  min-height: 430px;
+  height: 465px;
+  min-height: 465px;
   padding: 34px 40px 32px;
   border-radius: 12px;
+  overflow: hidden;
 }
 
 .lead-panel__title {
@@ -490,6 +504,11 @@ body {
 .footer {
   padding: 80px 0;
   background: #4a4a4c;
+}
+
+.footer__grid {
+  height: 260px;
+  overflow: hidden;
 }
 
 .footer,
@@ -557,6 +576,7 @@ body {
   }
 
   .site-header__inner {
+    height: 82px;
     min-height: 82px;
     padding: 16px;
     background: rgba(255, 255, 255, 0.2);
@@ -566,6 +586,8 @@ body {
   .site-header__logo,
   .site-header__logo img {
     width: 146px;
+    height: 50px;
+    object-fit: contain;
   }
 
   .site-header__burger {
@@ -792,6 +814,7 @@ body {
   }
 
   .feature-card {
+    height: 202px;
     min-width: 220px;
     min-height: 202px;
     padding: 14px;
@@ -826,6 +849,7 @@ body {
   .audience-card {
     min-width: 284px;
     min-height: 284px;
+    height: 284px;
     padding: 16px;
     border-radius: 12px;
   }
@@ -847,7 +871,8 @@ body {
   }
 
   .facts {
-    padding-bottom: 70px;
+    padding-top: 70px;
+    padding-bottom: 74px;
   }
 
   .facts__layout {
@@ -888,7 +913,7 @@ body {
 
   .form-section {
     padding-top: 0;
-    padding-bottom: 69px;
+    padding-bottom: 70px;
   }
 
   .footer {
@@ -896,6 +921,7 @@ body {
   }
 
   .footer__grid {
+    height: auto;
     min-height: 0;
     grid-template-columns: 125px 1fr;
     gap: 22px 11px;
