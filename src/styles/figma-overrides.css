@@ -745,6 +745,14 @@ body {
     object-position: center bottom;
   }
 
+  .about-card:nth-child(1) .about-card__image {
+    position: absolute;
+    inset: auto 0 0;
+    height: 217px;
+    object-fit: contain;
+    object-position: center bottom;
+  }
+
   .about-card:nth-child(2) .about-card__image {
     height: 245px;
     object-fit: cover;
