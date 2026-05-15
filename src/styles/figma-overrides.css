@@ -332,8 +332,23 @@ body {
   line-height: 24px;
 }
 
+.product__bullets li + li {
+  margin-top: 2px;
+}
+
+.product__selector-group {
+  margin-top: 24px;
+}
+
+.product__selector-label,
+.product__selector-group strong {
+  font-size: 16px;
+  line-height: 24px;
+}
+
 .product__thumbs {
-  gap: 10px;
+  gap: 8px;
+  margin-top: 12px;
 }
 
 .product-thumb {
@@ -344,12 +359,24 @@ body {
 
 .product-thumb--active {
   border: 1.5px solid #a6874e;
+  transform: none;
 }
 
 .weight-card {
-  min-width: 104px;
-  min-height: 76px;
+  width: 122px;
+  min-width: 122px;
+  height: 72px;
+  min-height: 72px;
   font-family: Rubik, sans-serif;
+}
+
+.product__weights {
+  margin-top: 14px;
+}
+
+.product__weight-list {
+  gap: 8px;
+  margin-top: 12px;
 }
 
 .product__cta {
@@ -832,7 +859,7 @@ body {
   }
 
   .product__weights {
-    margin-top: 14px;
+    margin-top: 10px;
   }
 
   .product__cta {
@@ -854,7 +881,9 @@ body {
   }
 
   .weight-card {
+    width: 98px;
     min-width: 98px;
+    height: 64px;
     min-height: 64px;
     padding: 13px 16px;
   }
