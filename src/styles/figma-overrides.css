@@ -948,6 +948,11 @@ body {
   .audience__grid {
     gap: 12px;
     padding-bottom: 0;
+    scrollbar-width: none;
+  }
+
+  .audience__grid::-webkit-scrollbar {
+    display: none;
   }
 
   .audience-card--light {
@@ -1122,6 +1127,7 @@ body {
   }
 
   .footer {
+    min-height: 598px;
     padding: 32px 0;
   }
 }
