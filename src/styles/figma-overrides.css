@@ -419,6 +419,7 @@ body {
 }
 
 .audience__grid {
+  grid-template-columns: repeat(3, 600px);
   gap: 18px;
 }
 
@@ -428,6 +429,10 @@ body {
   padding: 34px;
   border-radius: 20px;
   overflow: hidden;
+}
+
+.audience-card--light {
+  background: #4a4a4c;
 }
 
 .audience-card h3 {
@@ -460,8 +465,12 @@ body {
 .facts__items--top .fact-card:nth-child(3) {
   height: 220px;
   min-height: 220px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   padding: 34px;
   border-radius: 20px;
+  background: #4a4a4c;
   overflow: hidden;
 }
 
