@@ -78,18 +78,18 @@ function require_admin(string $secret): void
 {
     $header = $_SERVER['HTTP_AUTHORIZATION'] ?? $_SERVER['REDIRECT_HTTP_AUTHORIZATION'] ?? '';
     if (!preg_match('/^Bearer\s+(.+)$/i', $header, $matches)) {
-        send_json(401, ['ok' => false, 'error' => 'Authorization required']);
+        send_json(401, ['ok' => false, 'error' => 'Требуется вход в админку']);
     }
 
     [$payloadPart, $signature] = array_pad(explode('.', $matches[1], 2), 2, '');
     $expected = base64url_encode_string(hash_hmac('sha256', $payloadPart, $secret, true));
     if (!$payloadPart || !$signature || !hash_equals($expected, $signature)) {
-        send_json(401, ['ok' => false, 'error' => 'Invalid token']);
+        send_json(401, ['ok' => false, 'error' => 'Неверный токен']);
     }
 
     $payload = json_decode(base64url_decode_string($payloadPart), true);
     if (!is_array($payload) || (int)($payload['exp'] ?? 0) < time()) {
-        send_json(401, ['ok' => false, 'error' => 'Token expired']);
+        send_json(401, ['ok' => false, 'error' => 'Сессия истекла. Войдите снова']);
     }
 }
 
@@ -99,9 +99,19 @@ function normalize_lead(array $body): array
     $phone = trim((string)($body['phone'] ?? ''));
     $email = trim((string)($body['email'] ?? ''));
     $message = trim((string)($body['message'] ?? ''));
+    $phoneDigits = preg_replace('/\D+/', '', $phone) ?: '';
 
-    if ($name === '' || $phone === '') {
-        send_json(400, ['ok' => false, 'error' => 'Name and phone are required']);
+    $nameLength = function_exists('mb_strlen') ? mb_strlen($name) : strlen($name);
+    if ($nameLength < 2) {
+        send_json(400, ['ok' => false, 'error' => 'Введите имя']);
+    }
+
+    if (strlen($phoneDigits) < 10 || strlen($phoneDigits) > 11) {
+        send_json(400, ['ok' => false, 'error' => 'Введите корректный телефон']);
+    }
+
+    if ($email !== '' && !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        send_json(400, ['ok' => false, 'error' => 'Введите корректный email']);
     }
 
     return [
@@ -126,7 +136,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 }
 
 if ($jwtSecret === '' && ($adminPasswordHash !== '' || $adminPassword !== '')) {
-    send_json(500, ['ok' => false, 'error' => 'API secret is not configured']);
+    send_json(500, ['ok' => false, 'error' => 'API secret не настроен']);
 }
 
 $path = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) ?: '/';
@@ -143,7 +153,7 @@ if ($path === '/api/auth/login' && $method === 'POST') {
         ? password_verify($password, $adminPasswordHash)
         : ($adminPassword !== '' && hash_equals($adminPassword, $password));
     if (!$validPassword) {
-        send_json(401, ['ok' => false, 'error' => 'Invalid password']);
+        send_json(401, ['ok' => false, 'error' => 'Неверный пароль']);
     }
     send_json(200, ['ok' => true, 'data' => issue_token($jwtSecret)]);
 }
@@ -155,8 +165,8 @@ if ($path === '/api/content' && $method === 'GET') {
 if ($path === '/api/content' && $method === 'PUT') {
     require_admin($jwtSecret);
     $body = read_body();
-    if (!$body) {
-        send_json(400, ['ok' => false, 'error' => 'Invalid content']);
+    if (!$body || !isset($body['seo'], $body['hero'], $body['product']) || !is_array($body['product']['items'] ?? null)) {
+        send_json(400, ['ok' => false, 'error' => 'Некорректный content.json']);
     }
     write_json_file($contentFile, $body);
     send_json(200, ['ok' => true, 'data' => $body]);
@@ -179,6 +189,7 @@ if ($path === '/api/leads/export' && $method === 'GET') {
     require_admin($jwtSecret);
     header('Content-Type: text/csv; charset=utf-8');
     header('Content-Disposition: attachment; filename="b-power-leads.csv"');
+    echo "\xEF\xBB\xBF";
     $rows = read_json_file($leadsFile, []);
     $keys = ['id', 'name', 'phone', 'email', 'message', 'source', 'createdAt'];
     echo implode(';', $keys) . PHP_EOL;
@@ -193,7 +204,7 @@ if ($path === '/api/leads/export' && $method === 'GET') {
 }
 
 if ($path === '/api/send-lead' && $method === 'POST') {
-    send_json(501, ['ok' => false, 'error' => 'SMTP is not configured on this hosting']);
+    send_json(501, ['ok' => false, 'error' => 'SMTP не настроен на этом хостинге']);
 }
 
-send_json(404, ['ok' => false, 'error' => 'Not found']);
+send_json(404, ['ok' => false, 'error' => 'Метод API не найден']);
