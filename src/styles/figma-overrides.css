@@ -955,9 +955,16 @@ body {
   .facts__items--top .fact-card:nth-child(3) {
     height: 284px;
     min-height: 284px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
     padding: 16px;
     border-radius: 12px;
     overflow: hidden;
+  }
+
+  .fact-card p {
+    margin-top: 0;
   }
 
   .facts__image {
