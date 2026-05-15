@@ -687,11 +687,6 @@
 
   .field__icon {
     left: 18px;
-    top: 18px;
-  }
-
-  .field__icon--phone {
-    top: 15px;
   }
 
   .lead-form__button {

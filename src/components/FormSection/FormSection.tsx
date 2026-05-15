@@ -79,7 +79,7 @@ export function FormSection({ form }: { form: FormContent }) {
           <form className="lead-form" onSubmit={onSubmit} noValidate>
             <div className="field">
               <label className="sr-only" htmlFor={nameId}>Имя</label>
-              <span className="field__icon" aria-hidden="true">●</span>
+              <span className="field__icon field__icon--user" aria-hidden="true" />
               <input
                 id={nameId}
                 name="name"
@@ -99,7 +99,7 @@ export function FormSection({ form }: { form: FormContent }) {
 
             <div className="field">
               <label className="sr-only" htmlFor={phoneId}>Телефон</label>
-              <span className="field__icon field__icon--phone" aria-hidden="true">☎</span>
+              <span className="field__icon field__icon--phone" aria-hidden="true" />
               <input
                 id={phoneId}
                 name="phone"
