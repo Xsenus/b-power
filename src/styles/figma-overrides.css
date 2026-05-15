@@ -868,6 +868,7 @@ body {
 
   .features {
     margin-top: 22px;
+    gap: 12px;
     padding-bottom: 0;
   }
 
@@ -876,18 +877,19 @@ body {
     min-width: 220px;
     min-height: 202px;
     padding: 14px;
-    border-radius: 12px;
+    border-radius: 10px;
   }
 
   .feature-card h3 {
-    margin-top: 58px;
+    margin-top: 56px;
     font-size: 20px;
-    line-height: 26px;
+    line-height: 28px;
   }
 
   .feature-card p {
-    font-size: 13px;
-    line-height: 18px;
+    margin-top: 10px;
+    font-size: 14px;
+    line-height: 20px;
   }
 
   .audience,
