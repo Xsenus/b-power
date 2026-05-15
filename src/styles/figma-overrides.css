@@ -718,6 +718,14 @@ body {
     border-radius: 12px;
   }
 
+  .about__cards {
+    gap: 12px;
+  }
+
+  .about-card:nth-child(2) {
+    background: #4a4a4c;
+  }
+
   .about-card__copy {
     padding: 16px;
     display: block;
