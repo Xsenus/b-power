@@ -21,7 +21,21 @@ export function ProductSwitcher({ product }: { product: ProductContent }) {
 
         <div className="product__grid">
           <div className="product__visual" aria-live="polite">
-            <img key={active.image} src={active.image} alt={active.alt} />
+            {active.video ? (
+              <video
+                key={active.video}
+                className="product__motion"
+                src={active.video}
+                poster={active.image}
+                autoPlay
+                muted
+                loop
+                playsInline
+                aria-label={active.alt}
+              />
+            ) : (
+              <img key={active.image} src={active.image} alt={active.alt} />
+            )}
           </div>
 
           <article className="product__info" aria-live="polite">

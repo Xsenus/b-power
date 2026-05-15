@@ -478,7 +478,8 @@
     border-radius: 8px;
   }
 
-  .product__visual img {
+  .product__visual img,
+  .product__motion {
     width: 72%;
     max-height: 280px;
   }

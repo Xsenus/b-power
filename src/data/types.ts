@@ -56,6 +56,7 @@ export type ProductItem = {
   subtitle: string;
   bullets: string[];
   image: string;
+  video?: string;
   thumbnail: string;
   alt: string;
 };

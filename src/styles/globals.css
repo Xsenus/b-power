@@ -471,11 +471,16 @@ textarea:focus-visible {
   overflow: hidden;
 }
 
-.product__visual img {
+.product__visual img,
+.product__motion {
   width: min(72%, 670px);
   max-height: 780px;
   object-fit: contain;
   animation: softIn 260ms ease both;
+}
+
+.product__motion {
+  display: block;
 }
 
 .product__info {

@@ -284,7 +284,8 @@ body {
   background: #4a4a4c;
 }
 
-.product__visual img {
+.product__visual img,
+.product__motion {
   width: 100%;
   max-height: 100%;
 }
