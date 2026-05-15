@@ -1,0 +1,18 @@
+node_modules
+dist
+.env
+.DS_Store
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+server/data/leads.json
+*.local
+
+# Local tooling and verification artifacts
+.serena/
+.playwright-mcp/
+.reference/
+*.log
+bpower-*.png
+public/assets/images/figma-hero-mobile-source
+public/assets/images/figma-hero.webp

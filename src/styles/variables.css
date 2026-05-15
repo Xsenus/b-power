@@ -1,0 +1,71 @@
+@font-face {
+  font-family: "Oswald";
+  src: url("/assets/fonts/oswald-cyrillic-500-normal.woff2") format("woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Rubik";
+  src: url("/assets/fonts/rubik-cyrillic-300-normal.woff2") format("woff2");
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Rubik";
+  src: url("/assets/fonts/rubik-cyrillic-400-normal.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Rubik";
+  src: url("/assets/fonts/rubik-cyrillic-500-normal.woff2") format("woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Rubik";
+  src: url("/assets/fonts/rubik-cyrillic-600-normal.woff2") format("woff2");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Inter";
+  src: url("/assets/fonts/inter-cyrillic.woff2") format("woff2");
+  font-weight: 300 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  --page-bg: #282828;
+  --surface: #505050;
+  --surface-dark: #171717;
+  --surface-deep: #100f0f;
+  --header-bg: #303030;
+  --text: #f6f3ef;
+  --muted: #d1d1d1;
+  --muted-2: #9a9a9a;
+  --line: rgba(255, 255, 255, 0.15);
+  --accent: #b89554;
+  --accent-dark: #241c1f;
+  --danger: #ffb1a4;
+  --success: #c7f3d0;
+  --radius-sm: 8px;
+  --radius-md: 20px;
+  --radius-lg: 20px;
+  --container: 1840px;
+  --container-pad: 40px;
+  --font-body: Rubik, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+  --font-heading: Oswald, "Arial Narrow", "Roboto Condensed", sans-serif;
+  --font-footer: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+}

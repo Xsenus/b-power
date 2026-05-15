@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://buffalo-protein.ru/sitemap.xml
