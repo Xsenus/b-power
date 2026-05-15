@@ -135,6 +135,14 @@ body {
   display: none;
 }
 
+.brand-copy--mobile {
+  display: none;
+}
+
+.form-button-copy--mobile {
+  display: none;
+}
+
 .hero__subtitle {
   max-width: 989px;
   margin-top: 32px;
@@ -592,6 +600,22 @@ body {
     display: block;
   }
 
+  .brand-copy--desktop {
+    display: none;
+  }
+
+  .brand-copy--mobile {
+    display: inline;
+  }
+
+  .form-button-copy--desktop {
+    display: none;
+  }
+
+  .form-button-copy--mobile {
+    display: inline;
+  }
+
   .hero__subtitle {
     max-width: none;
     margin-top: 15px;
@@ -753,9 +777,9 @@ body {
   }
 
   .feature-card {
-    min-width: 156px;
-    min-height: 196px;
-    padding: 16px;
+    min-width: 220px;
+    min-height: 202px;
+    padding: 14px;
     border-radius: 12px;
   }
 

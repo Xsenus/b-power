@@ -1,6 +1,7 @@
 import type { CSSProperties } from 'react';
 import type { AudienceContent, FactsContent } from '../../data/types';
 import { cn } from '../../utils/classNames';
+import { brandVariant } from '../../utils/text';
 import { SectionLabel } from '../Ui/SectionLabel';
 
 type BenefitsProps = {
@@ -14,7 +15,7 @@ export function Benefits({ audience, facts }: BenefitsProps) {
       <section className="section audience" id="audience">
         <div className="container">
           <SectionLabel>{audience.sectionLabel}</SectionLabel>
-          <h2 className="section-title audience__title">{audience.title}</h2>
+          <h2 className="section-title audience__title">{brandVariant(audience.title)}</h2>
           <div className="audience__grid">
             {audience.items.map((item) => (
               <article

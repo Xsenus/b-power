@@ -102,7 +102,6 @@
           "Калий для поддержания нормального кровяного давления и здоровья сердца"
         ],
         "image": "/assets/images/figma-product-main.webp",
-        "video": "/assets/video/product-motion.mp4",
         "thumbnail": "/assets/images/figma-product-thumb-1.webp",
         "alt": "Банка B-POWER натуральный вкус"
       },
@@ -248,6 +247,7 @@
     "namePlaceholder": "Ваше Имя",
     "phonePlaceholder": "Номер телефона",
     "buttonText": "Получить уведомление о старте продаж",
+    "mobileButtonText": "Получить уведомление о старте",
     "successTitle": "Спасибо! Заявка отправлена.",
     "successText": "Мы свяжемся с вами, когда продажи B-POWER стартуют.",
     "consent": "Нажимая на кнопку «Получить уведомление о старте», вы соглашаетесь с условиями политики конфиденциальности",

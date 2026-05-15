@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react';
 import type { ProductContent } from '../../data/types';
 import { cn } from '../../utils/classNames';
+import { brandVariant } from '../../utils/text';
 import { SectionLabel } from '../Ui/SectionLabel';
 import { FeatureIcon } from '../Ui/Icon';
 
@@ -17,7 +18,7 @@ export function ProductSwitcher({ product }: { product: ProductContent }) {
     <section className="section product" id="product">
       <div className="container">
         <SectionLabel>{product.sectionLabel}</SectionLabel>
-        <h2 className="section-title product__title">{product.title}</h2>
+        <h2 className="section-title product__title">{brandVariant(product.title)}</h2>
 
         <div className="product__grid">
           <div className="product__visual" aria-live="polite">

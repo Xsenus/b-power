@@ -118,6 +118,7 @@ export type FormContent = {
   namePlaceholder: string;
   phonePlaceholder: string;
   buttonText: string;
+  mobileButtonText?: string;
   successTitle: string;
   successText: string;
   consent: string;

@@ -1,7 +1,7 @@
 import { FormEvent, useId, useState } from 'react';
 import type { CSSProperties } from 'react';
 import type { FormContent } from '../../data/types';
-import { formatPhone, isValidPhone } from '../../utils/text';
+import { brandVariant, formatPhone, isValidPhone } from '../../utils/text';
 import { submitLead } from '../../utils/api';
 import { SectionLabel } from '../Ui/SectionLabel';
 
@@ -69,7 +69,7 @@ export function FormSection({ form }: { form: FormContent }) {
         <div className="lead-panel" id="lead-form">
           <div className="lead-panel__content">
             <SectionLabel>{form.sectionLabel}</SectionLabel>
-            <h2 className="section-title lead-panel__title">{form.title}</h2>
+            <h2 className="section-title lead-panel__title">{brandVariant(form.title)}</h2>
             <p className="lead-panel__text">{form.text}</p>
           </div>
 
@@ -119,7 +119,12 @@ export function FormSection({ form }: { form: FormContent }) {
             </div>
 
             <button className="button button--light lead-form__button" type="submit" disabled={status === 'loading' || status === 'success'}>
-              {status === 'loading' ? 'Отправляем...' : form.buttonText}
+              {status === 'loading' ? 'Отправляем...' : (
+                <>
+                  <span className="form-button-copy form-button-copy--desktop">{form.buttonText}</span>
+                  <span className="form-button-copy form-button-copy--mobile">{form.mobileButtonText ?? form.buttonText}</span>
+                </>
+              )}
             </button>
           </form>
 

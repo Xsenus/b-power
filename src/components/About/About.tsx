@@ -1,4 +1,5 @@
 import type { AboutContent } from '../../data/types';
+import { brandVariant } from '../../utils/text';
 import { SectionLabel } from '../Ui/SectionLabel';
 
 export function About({ about }: { about: AboutContent }) {
@@ -8,7 +9,7 @@ export function About({ about }: { about: AboutContent }) {
         <div className="section-head section-head--split about__head">
           <div>
             <SectionLabel>{about.sectionLabel}</SectionLabel>
-            <h2 className="section-title">{about.title}</h2>
+            <h2 className="section-title">{brandVariant(about.title)}</h2>
           </div>
           <p className="about__lead">{about.lead}</p>
         </div>
