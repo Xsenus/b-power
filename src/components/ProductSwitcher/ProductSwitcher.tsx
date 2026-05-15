@@ -64,7 +64,7 @@ export function ProductSwitcher({ product }: { product: ProductContent }) {
                       key={item.id}
                       onClick={() => setActiveId(item.id)}
                     >
-                      <img src={item.thumbnail} alt="" />
+                      <img src={item.thumbnail} alt={`B-POWER ${item.name}`} />
                     </button>
                   ))}
                 </div>
