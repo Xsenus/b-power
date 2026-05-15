@@ -39,6 +39,7 @@
     "buttonText": "Узнать о старте первым",
     "buttonHref": "#lead-form",
     "image": "/assets/images/figma-hero-static.png",
+    "video": "/assets/video/hero-banner.mp4",
     "countdownLabel": "До старта продаж",
     "countdown": [
       {
