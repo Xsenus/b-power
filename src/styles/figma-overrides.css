@@ -583,6 +583,7 @@ body {
     height: 82px;
     min-height: 82px;
     padding: 16px;
+    border-radius: 0;
     background: rgba(255, 255, 255, 0.2);
     backdrop-filter: blur(3.5px);
   }
