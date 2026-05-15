@@ -932,7 +932,12 @@ body {
   }
 
   .audience__grid {
+    gap: 12px;
     padding-bottom: 0;
+  }
+
+  .audience-card--light {
+    background: #4a4a4c;
   }
 
   .facts {
