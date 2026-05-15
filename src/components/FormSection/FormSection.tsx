@@ -69,7 +69,10 @@ export function FormSection({ form }: { form: FormContent }) {
         <div className="lead-panel" id="lead-form">
           <div className="lead-panel__content">
             <SectionLabel>{form.sectionLabel}</SectionLabel>
-            <h2 className="section-title lead-panel__title">{brandVariant(form.title)}</h2>
+            <h2 className="section-title lead-panel__title">
+              <span className="responsive-copy responsive-copy--desktop">{brandVariant(form.title)}</span>
+              <span className="responsive-copy responsive-copy--mobile">{form.mobileTitle ?? brandVariant(form.title)}</span>
+            </h2>
             <p className="lead-panel__text">{form.text}</p>
           </div>
 

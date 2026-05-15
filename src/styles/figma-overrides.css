@@ -150,6 +150,10 @@ body {
   display: none;
 }
 
+.responsive-copy--mobile {
+  display: none;
+}
+
 .hero__subtitle {
   max-width: 989px;
   margin-top: 32px;
@@ -642,6 +646,14 @@ body {
     display: inline;
   }
 
+  .responsive-copy--desktop {
+    display: none;
+  }
+
+  .responsive-copy--mobile {
+    display: inline;
+  }
+
   .hero__subtitle {
     max-width: none;
     margin-top: 15px;
@@ -856,6 +868,7 @@ body {
 
   .audience-card h3,
   .fact-card h3 {
+    max-width: 264px;
     font-size: 24px;
     line-height: 32px;
   }

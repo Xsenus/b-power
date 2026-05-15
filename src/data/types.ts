@@ -53,6 +53,7 @@ export type ProductItem = {
   id: string;
   name: string;
   title: string;
+  mobileTitle?: string;
   subtitle: string;
   bullets: string[];
   image: string;
@@ -114,6 +115,7 @@ export type FactsContent = {
 export type FormContent = {
   sectionLabel: string;
   title: string;
+  mobileTitle?: string;
   text: string;
   namePlaceholder: string;
   phonePlaceholder: string;

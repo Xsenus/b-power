@@ -41,7 +41,10 @@ export function ProductSwitcher({ product }: { product: ProductContent }) {
 
           <article className="product__info" aria-live="polite">
             <div className="product__info-inner" key={active.id}>
-              <h3>{active.title}</h3>
+              <h3>
+                <span className="responsive-copy responsive-copy--desktop">{active.title}</span>
+                <span className="responsive-copy responsive-copy--mobile">{active.mobileTitle ?? active.title}</span>
+              </h3>
               <p className="product__subtitle">{active.subtitle}</p>
               <ul className="product__bullets">
                 {active.bullets.map((bullet) => <li key={bullet}>{bullet}</li>)}
