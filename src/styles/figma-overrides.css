@@ -50,7 +50,7 @@ body {
   background: rgba(255, 255, 255, 0.2);
   backdrop-filter: blur(3.5px);
   box-shadow: none;
-  grid-template-columns: 568px 1fr 260px;
+  grid-template-columns: 268px 1351px 181px;
 }
 
 .site-header__logo,
@@ -61,6 +61,7 @@ body {
 }
 
 .site-header__nav {
+  width: 761px;
   justify-content: flex-start;
   gap: 6px;
 }
@@ -77,6 +78,7 @@ body {
 }
 
 .site-header__contacts {
+  width: 181px;
   gap: 6px;
   font-family: Inter, sans-serif;
   font-size: 13px;
