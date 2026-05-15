@@ -98,6 +98,10 @@ body {
   background-size: cover;
 }
 
+.hero__video {
+  opacity: 0;
+}
+
 .hero__shade {
   display: none;
 }
@@ -726,14 +730,24 @@ body {
   }
 
   .product__visual {
+    height: 317px;
     min-height: 317px;
     border-radius: 12px;
   }
 
+  .product__visual img,
+  .product__motion {
+    width: 317px;
+    height: 317px;
+    object-fit: contain;
+  }
+
   .product__info {
-    min-height: auto;
+    height: 888px;
+    min-height: 888px;
     padding: 16px;
     border-radius: 12px;
+    overflow: hidden;
   }
 
   .product__info h3 {
@@ -773,7 +787,8 @@ body {
   }
 
   .features {
-    margin-top: 12px;
+    margin-top: 22px;
+    padding-bottom: 0;
   }
 
   .feature-card {
@@ -804,6 +819,10 @@ body {
     margin-bottom: 28px;
   }
 
+  .audience__title {
+    white-space: normal;
+  }
+
   .audience-card {
     min-width: 284px;
     min-height: 284px;
@@ -821,6 +840,10 @@ body {
   .fact-card p {
     font-size: 14px;
     line-height: 20px;
+  }
+
+  .audience__grid {
+    padding-bottom: 0;
   }
 
   .facts {
@@ -842,20 +865,90 @@ body {
 
   .fact-card,
   .facts__items--top .fact-card:nth-child(3) {
+    height: 284px;
     min-height: 284px;
     padding: 16px;
     border-radius: 12px;
+    overflow: hidden;
   }
 
   .facts__image {
+    height: 284px;
     min-height: 284px;
     border-radius: 20px;
   }
 
   .lead-panel {
-    min-height: 546px;
+    height: 508px;
+    min-height: 508px;
     padding: 20px;
     border-radius: 12px;
+    overflow: hidden;
+  }
+
+  .form-section {
+    padding-top: 0;
+    padding-bottom: 69px;
+  }
+
+  .footer {
+    padding: 32px 0;
+  }
+
+  .footer__grid {
+    min-height: 0;
+    grid-template-columns: 125px 1fr;
+    gap: 22px 11px;
+  }
+
+  .footer__brand img {
+    width: 125px;
+  }
+
+  .footer__tagline {
+    max-width: 184px;
+    margin: 2px 0 0;
+    font-size: 10px;
+    line-height: 14px;
+  }
+
+  .footer__contacts {
+    justify-items: start;
+    gap: 8px;
+    font-size: 11px;
+    line-height: 16px;
+  }
+
+  .footer__phone {
+    margin-bottom: 8px;
+    font-size: 20px;
+    line-height: 28px;
+  }
+
+  .footer__email {
+    font-size: 15px;
+    line-height: 22px;
+  }
+
+  .footer__nav {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 18px 36px;
+    font-size: 14px;
+    line-height: 20px;
+  }
+
+  .footer__legal {
+    margin-top: 7px;
+    padding-top: 18px;
+    font-size: 12px;
+    line-height: 18px;
+  }
+
+  .footer__policy {
+    margin-top: 0;
+    gap: 8px;
+    font-size: 12px;
+    line-height: 18px;
   }
 
   .lead-panel__title {
@@ -864,14 +957,14 @@ body {
   }
 
   .lead-panel__text {
-    margin-top: 28px;
+    margin-top: 22px;
     font-size: 14px;
     line-height: 20px;
   }
 
   .lead-form {
     grid-template-columns: 1fr;
-    gap: 14px;
+    gap: 10px;
   }
 
   .field input,
@@ -882,6 +975,7 @@ body {
   }
 
   .lead-panel__consent {
+    margin-top: 12px;
     font-size: 13px;
     line-height: 18px;
   }
