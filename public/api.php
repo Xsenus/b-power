@@ -120,7 +120,7 @@ function normalize_lead(array $body): array
         'phone' => $phone,
         'email' => $email,
         'message' => $message,
-        'source' => trim((string)($body['source'] ?? 'landing')),
+        'source' => trim((string)($body['source'] ?? 'B-POWER landing')),
         'createdAt' => gmdate('c'),
     ];
 }
@@ -191,7 +191,7 @@ if ($path === '/api/leads/export' && $method === 'GET') {
     header('Content-Disposition: attachment; filename="b-power-leads.csv"');
     echo "\xEF\xBB\xBF";
     $rows = read_json_file($leadsFile, []);
-    $keys = ['id', 'name', 'phone', 'email', 'message', 'source', 'createdAt'];
+    $keys = ['id', 'createdAt', 'name', 'phone', 'email', 'message', 'source'];
     echo implode(';', $keys) . PHP_EOL;
     foreach ($rows as $row) {
         $values = [];
