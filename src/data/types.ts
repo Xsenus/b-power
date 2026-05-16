@@ -32,6 +32,7 @@ export type HeroContent = {
   mobileImage?: string;
   video?: string;
   countdownLabel: string;
+  countdownTarget?: string;
   countdown: CountdownItem[];
 };
 

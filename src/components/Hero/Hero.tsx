@@ -1,5 +1,8 @@
-import type { CSSProperties, ReactNode } from 'react';
+import { useEffect, useMemo, useState, type CSSProperties, type ReactNode } from 'react';
 import type { HeroContent } from '../../data/types';
+
+const COUNTDOWN_INTERVAL = 1000;
+const TIME_UNITS = [86400000, 3600000, 60000, 1000];
 
 function renderHeroTitle(title: string): ReactNode {
   const [firstLine, ...rest] = title.split('\n');
@@ -28,7 +31,42 @@ function renderHeroTitle(title: string): ReactNode {
   );
 }
 
+function getCountdownItems(hero: HeroContent, now: number) {
+  if (!hero.countdownTarget) {
+    return hero.countdown;
+  }
+
+  const targetTime = new Date(hero.countdownTarget).getTime();
+  if (!Number.isFinite(targetTime)) {
+    return hero.countdown;
+  }
+
+  let remaining = Math.max(0, targetTime - now);
+  const values = TIME_UNITS.map((unit, index) => {
+    const value = Math.floor(remaining / unit);
+    remaining -= value * unit;
+    return index === 0 ? value : value % (index === 1 ? 24 : 60);
+  });
+
+  return values.map((value, index) => ({
+    value: String(value).padStart(2, '0'),
+    label: hero.countdown[index]?.label ?? ''
+  }));
+}
+
 export function Hero({ hero }: { hero: HeroContent }) {
+  const [now, setNow] = useState(() => Date.now());
+  const countdownItems = useMemo(() => getCountdownItems(hero, now), [hero, now]);
+
+  useEffect(() => {
+    if (!hero.countdownTarget) {
+      return undefined;
+    }
+
+    const interval = window.setInterval(() => setNow(Date.now()), COUNTDOWN_INTERVAL);
+    return () => window.clearInterval(interval);
+  }, [hero.countdownTarget]);
+
   return (
     <section
       className="hero"
@@ -63,7 +101,7 @@ export function Hero({ hero }: { hero: HeroContent }) {
         <div className="hero__bottom">
           <p className="hero__count-label">{hero.countdownLabel}</p>
           <div className="countdown" aria-label={hero.countdownLabel}>
-            {hero.countdown.map((item) => (
+            {countdownItems.map((item) => (
               <div className="countdown__item" key={item.label}>
                 <strong>{item.value}</strong>
                 <span>{item.label}</span>

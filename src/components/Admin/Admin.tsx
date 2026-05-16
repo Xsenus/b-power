@@ -164,6 +164,8 @@ export function Admin({ initialContent }: AdminProps) {
             <AdminArea label="Текст" value={content.hero.subtitle} onChange={(value) => updateContent((draft) => { draft.hero.subtitle = value; })} />
             <AdminField label="Кнопка" value={content.hero.buttonText} onChange={(value) => updateContent((draft) => { draft.hero.buttonText = value; })} />
             <AdminField label="Фон" value={content.hero.image} onChange={(value) => updateContent((draft) => { draft.hero.image = value; })} />
+            <AdminField label="Подпись счётчика" value={content.hero.countdownLabel} onChange={(value) => updateContent((draft) => { draft.hero.countdownLabel = value; })} />
+            <AdminField label="Дата старта ISO" value={content.hero.countdownTarget ?? ''} onChange={(value) => updateContent((draft) => { draft.hero.countdownTarget = value || undefined; })} />
           </section>
 
           <section className="admin-card">

@@ -41,6 +41,7 @@
     "image": "/assets/images/figma-hero-static.png",
     "video": "/assets/video/hero-banner.mp4",
     "countdownLabel": "До старта продаж",
+    "countdownTarget": "2026-06-01T12:00:00+03:00",
     "countdown": [
       {
         "value": "07",
