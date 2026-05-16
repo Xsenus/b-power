@@ -407,7 +407,18 @@ body {
   min-width: 122px;
   height: 72px;
   min-height: 72px;
+  border-color: transparent;
+  background: #4a4a4c;
   font-family: Rubik, sans-serif;
+}
+
+.weight-card:first-child {
+  background: #4a4a4c;
+}
+
+.weight-card:nth-child(2) {
+  border: 1.5px solid #fff;
+  background: #4a4a4c;
 }
 
 .product__weights {
