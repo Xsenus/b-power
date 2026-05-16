@@ -224,33 +224,62 @@ body {
   font-size: 14px;
   font-weight: 300;
   line-height: 20px;
-  opacity: 0.6;
+  color: rgba(255, 255, 255, 0.62);
+  opacity: 1;
 }
 
 .countdown {
+  position: relative;
+  width: max-content;
   gap: 8px;
 }
 
 .countdown__item {
+  position: relative;
   width: 70px;
   height: 79px;
   border-radius: 4px;
-  background: #333;
+  background: #373737;
+  justify-content: flex-start;
+  padding-top: 14px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03);
+}
+
+.countdown__item:not(:last-child)::before,
+.countdown__item:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  right: -12px;
+  z-index: 2;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #050505;
+}
+
+.countdown__item:not(:last-child)::before {
+  top: 18px;
+}
+
+.countdown__item:not(:last-child)::after {
+  top: 50px;
 }
 
 .countdown__item strong {
   font-family: Rubik, sans-serif;
   font-size: 32px;
-  font-weight: 600;
+  font-weight: 700;
   line-height: 32px;
+  letter-spacing: 0;
 }
 
 .countdown__item span {
-  margin-top: 1px;
+  margin-top: 5px;
   font-size: 13px;
-  font-weight: 400;
+  font-weight: 300;
   line-height: 20px;
-  opacity: 0.5;
+  color: rgba(255, 255, 255, 0.5);
+  opacity: 1;
 }
 
 .hero__button {
@@ -1294,6 +1323,23 @@ body {
   .countdown__item {
     width: 53px;
     height: 60px;
+    padding-top: 11px;
+    border-radius: 3px;
+  }
+
+  .countdown__item:not(:last-child)::before,
+  .countdown__item:not(:last-child)::after {
+    right: -9px;
+    width: 12px;
+    height: 12px;
+  }
+
+  .countdown__item:not(:last-child)::before {
+    top: 13px;
+  }
+
+  .countdown__item:not(:last-child)::after {
+    top: 38px;
   }
 
   .countdown__item strong {
@@ -1302,6 +1348,7 @@ body {
   }
 
   .countdown__item span {
+    margin-top: 3px;
     font-size: 10px;
     line-height: 15px;
   }
