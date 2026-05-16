@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import type { ContactsContent, NavItem } from '../../data/types';
 
-const LOGO = '/assets/images/logo.png';
-const MOBILE_LOGO = '/assets/images/logo-mobile.png';
+const LOGO = '/assets/images/logo-transparent.png';
+const MOBILE_LOGO = '/assets/images/logo-mobile-transparent.png';
 
 type HeaderProps = {
   nav: NavItem[];

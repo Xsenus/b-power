@@ -1,6 +1,7 @@
 import type { ContactsContent, FooterContent, NavItem } from '../../data/types';
 
-const LOGO = '/assets/images/logo.png';
+const LOGO = '/assets/images/logo-transparent.png';
+const MOBILE_LOGO = '/assets/images/logo-mobile-transparent.png';
 
 type FooterProps = {
   footer: FooterContent;
@@ -14,7 +15,10 @@ export function Footer({ footer, nav, contacts }: FooterProps) {
       <div className="container footer__grid">
         <div className="footer__brand">
           <a href="#top" aria-label="B-POWER">
-            <img src={LOGO} alt="B-POWER" width="263" height="95" />
+            <picture>
+              <source media="(max-width: 768px)" srcSet={MOBILE_LOGO} />
+              <img src={LOGO} alt="B-POWER" width="263" height="95" />
+            </picture>
           </a>
         </div>
 
