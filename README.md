@@ -1,5 +1,19 @@
 # B-POWER landing
 
+## Production on TimeWeb
+
+Live TimeWeb hosting uses the static Vite build plus the PHP API fallback:
+
+- `public/.htaccess` routes `/api/*` to `public/api.php` and all frontend routes to `index.html`.
+- `public/api.php` stores editable content and leads in `public/app-data/`.
+- `public/app-data/content.json` is the live editable content file on TimeWeb.
+- `public/app-data/leads.json` is the live leads file on TimeWeb.
+- `public/app-data/config.php` stores the admin password hash/secret and must not be committed.
+
+For a fresh PHP hosting deployment, upload the contents of `dist/` plus `public/api.php`, `public/.htaccess`, favicon files, and the `public/assets/` folder. Then create `public/app-data/content.json` from the current `src/data/content.json`, create `public/app-data/leads.json` as `[]`, and add `public/app-data/config.php` with the admin password settings. The `public/app-data/.htaccess` file denies direct browser access to these JSON/config files.
+
+The Node/Express backend in `server/` remains available for local development or Node hosting. On the current TimeWeb deployment, the active backend is `public/api.php`.
+
 Production-ready лендинг B-POWER на React + Vite + TypeScript с тёмной темой, адаптивной вёрсткой, интерактивным блоком продукта, формой заявки, JSON backend и минимальной React-админкой.
 
 ## Что внутри
