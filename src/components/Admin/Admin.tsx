@@ -1,4 +1,4 @@
-import { FormEvent, useEffect, useState } from 'react';
+import { FormEvent, KeyboardEvent, useEffect, useState } from 'react';
 import type { AudienceItem, FactItem, LandingContent, Lead, ProductItem } from '../../data/types';
 import { exportLeads, fetchContent, fetchLeads, loginAdmin, saveContent } from '../../utils/api';
 
@@ -7,6 +7,12 @@ type AdminProps = {
 };
 
 type AdminTab = 'content' | 'products' | 'leads';
+
+const ADMIN_TABS: Array<{ id: AdminTab; label: string }> = [
+  { id: 'content', label: 'Тексты' },
+  { id: 'products', label: 'Продукты' },
+  { id: 'leads', label: 'Заявки' }
+];
 
 export function Admin({ initialContent }: AdminProps) {
   const [token, setToken] = useState(() => sessionStorage.getItem('bpower-admin-token') ?? '');
@@ -54,6 +60,37 @@ export function Admin({ initialContent }: AdminProps) {
     if (!token) return;
     const result = await fetchLeads(token);
     if (result.ok && result.data) setLeads(result.data);
+  }
+
+  function selectTab(nextTab: AdminTab) {
+    setTab(nextTab);
+    if (nextTab === 'leads') void reloadLeads();
+  }
+
+  function onTabKeyDown(event: KeyboardEvent<HTMLButtonElement>, tabId: AdminTab) {
+    const currentIndex = ADMIN_TABS.findIndex((item) => item.id === tabId);
+    if (currentIndex < 0) return;
+
+    const lastIndex = ADMIN_TABS.length - 1;
+    let nextIndex = currentIndex;
+
+    if (event.key === 'ArrowRight' || event.key === 'ArrowDown') {
+      nextIndex = currentIndex === lastIndex ? 0 : currentIndex + 1;
+    } else if (event.key === 'ArrowLeft' || event.key === 'ArrowUp') {
+      nextIndex = currentIndex === 0 ? lastIndex : currentIndex - 1;
+    } else if (event.key === 'Home') {
+      nextIndex = 0;
+    } else if (event.key === 'End') {
+      nextIndex = lastIndex;
+    } else {
+      return;
+    }
+
+    event.preventDefault();
+    const nextTab = ADMIN_TABS[nextIndex];
+    const buttons = event.currentTarget.parentElement?.querySelectorAll<HTMLButtonElement>('[role="tab"]');
+    selectTab(nextTab.id);
+    buttons?.[nextIndex]?.focus();
   }
 
   function updateContent(mutator: (draft: LandingContent) => void) {
@@ -143,9 +180,20 @@ export function Admin({ initialContent }: AdminProps) {
       </header>
 
       <div className="admin__tabs" role="tablist" aria-label="Разделы админки">
-        <button type="button" className={tab === 'content' ? 'active' : ''} onClick={() => setTab('content')}>Тексты</button>
-        <button type="button" className={tab === 'products' ? 'active' : ''} onClick={() => setTab('products')}>Продукты</button>
-        <button type="button" className={tab === 'leads' ? 'active' : ''} onClick={() => { setTab('leads'); void reloadLeads(); }}>Заявки</button>
+        {ADMIN_TABS.map((item) => (
+          <button
+            type="button"
+            role="tab"
+            className={tab === item.id ? 'active' : ''}
+            aria-selected={tab === item.id}
+            tabIndex={tab === item.id ? 0 : -1}
+            key={item.id}
+            onClick={() => selectTab(item.id)}
+            onKeyDown={(event) => onTabKeyDown(event, item.id)}
+          >
+            {item.label}
+          </button>
+        ))}
       </div>
 
       {tab !== 'leads' && (
