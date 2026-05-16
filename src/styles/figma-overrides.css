@@ -20,6 +20,10 @@ body {
   opacity: 0.5;
 }
 
+.section {
+  scroll-margin-top: 140px;
+}
+
 .section-title {
   font-family: Oswald, sans-serif;
   font-size: 44px;
@@ -624,6 +628,7 @@ body {
   display: block;
   height: 465px;
   min-height: 465px;
+  scroll-margin-top: 140px;
   padding: 75px 40px;
   border-radius: 20px;
   background-image:
@@ -974,6 +979,10 @@ body {
     font-size: 28px;
     line-height: 36px;
     letter-spacing: 0.02em;
+  }
+
+  .section {
+    scroll-margin-top: 96px;
   }
 
   .site-header {
@@ -1549,6 +1558,7 @@ body {
   .lead-panel {
     height: 508px;
     min-height: 508px;
+    scroll-margin-top: 96px;
     padding: 20px;
     border-radius: 12px;
     background-image:

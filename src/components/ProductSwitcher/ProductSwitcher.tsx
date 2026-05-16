@@ -1,4 +1,5 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import type { KeyboardEvent } from 'react';
 import type { ProductContent } from '../../data/types';
 import { cn } from '../../utils/classNames';
 import { brandVariant } from '../../utils/text';
@@ -7,6 +8,7 @@ import { FeatureIcon } from '../Ui/Icon';
 
 export function ProductSwitcher({ product }: { product: ProductContent }) {
   const [activeId, setActiveId] = useState(product.items[0]?.id ?? '');
+  const keyboardFocusId = useRef<string | null>(null);
   const active = useMemo(
     () => product.items.find((item) => item.id === activeId) ?? product.items[0],
     [activeId, product.items]
@@ -25,7 +27,40 @@ export function ProductSwitcher({ product }: { product: ProductContent }) {
     });
   }, [product.items]);
 
+  useEffect(() => {
+    if (!keyboardFocusId.current) return;
+
+    const nextButton = document.querySelector<HTMLButtonElement>(`.product-thumb[data-product-id="${keyboardFocusId.current}"]`);
+    keyboardFocusId.current = null;
+    nextButton?.focus();
+  }, [activeId]);
+
   if (!active) return null;
+
+  function onThumbKeyDown(event: KeyboardEvent<HTMLButtonElement>, itemId: string) {
+    const currentIndex = thumbnailItems.findIndex((item) => item.id === itemId);
+    if (currentIndex < 0) return;
+
+    const lastIndex = thumbnailItems.length - 1;
+    let nextIndex = currentIndex;
+
+    if (event.key === 'ArrowRight' || event.key === 'ArrowDown') {
+      nextIndex = currentIndex === lastIndex ? 0 : currentIndex + 1;
+    } else if (event.key === 'ArrowLeft' || event.key === 'ArrowUp') {
+      nextIndex = currentIndex === 0 ? lastIndex : currentIndex - 1;
+    } else if (event.key === 'Home') {
+      nextIndex = 0;
+    } else if (event.key === 'End') {
+      nextIndex = lastIndex;
+    } else {
+      return;
+    }
+
+    event.preventDefault();
+    const nextItem = thumbnailItems[nextIndex];
+    keyboardFocusId.current = nextItem.id;
+    setActiveId(nextItem.id);
+  }
 
   return (
     <section className="section product" id="product">
@@ -74,8 +109,11 @@ export function ProductSwitcher({ product }: { product: ProductContent }) {
                       role="tab"
                       aria-selected={item.id === active.id}
                       aria-label={item.name}
+                      tabIndex={item.id === active.id ? 0 : -1}
+                      data-product-id={item.id}
                       key={item.id}
                       onClick={() => setActiveId(item.id)}
+                      onKeyDown={(event) => onThumbKeyDown(event, item.id)}
                     >
                       <img src={item.thumbnail} alt={`B-POWER ${item.name}`} />
                     </button>
