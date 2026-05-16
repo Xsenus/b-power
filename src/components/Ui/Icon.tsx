@@ -18,7 +18,7 @@ const FEATURE_ICONS: Record<string, string> = {
 };
 
 export function FeatureIcon({ name }: IconProps) {
-  const src = FEATURE_ICONS[name] ?? FEATURE_ICONS.leaf;
+  const src = name.startsWith('/') || name.startsWith('http') ? name : FEATURE_ICONS[name] ?? FEATURE_ICONS.leaf;
 
   return (
     <img
