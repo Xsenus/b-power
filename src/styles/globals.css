@@ -1075,6 +1075,10 @@ textarea:focus-visible {
   padding: 30px;
 }
 
+.admin-login__username {
+  display: none;
+}
+
 .admin-login img,
 .admin__header img {
   width: 180px;

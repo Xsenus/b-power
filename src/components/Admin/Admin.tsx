@@ -103,10 +103,20 @@ export function Admin({ initialContent }: AdminProps) {
         <form className="admin-login" onSubmit={onLogin}>
           <img src="/assets/images/figma-logo-desktop-exact.png" alt="B-POWER" />
           <h1>Админка B-POWER</h1>
+          <input
+            className="admin-login__username"
+            type="text"
+            name="username"
+            autoComplete="username"
+            value="admin"
+            readOnly
+            tabIndex={-1}
+          />
           <label>
             Пароль
             <input
               type="password"
+              name="password"
               value={password}
               autoComplete="current-password"
               onChange={(event) => setPassword(event.target.value)}
