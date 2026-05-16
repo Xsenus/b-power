@@ -1082,12 +1082,12 @@ body {
   }
 
   .feature-card svg {
-    width: 42px;
-    height: 42px;
+    width: 34px;
+    height: 34px;
   }
 
   .feature-card h3 {
-    margin-top: 56px;
+    margin-top: 42px;
     font-size: 20px;
     line-height: 28px;
   }
