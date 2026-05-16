@@ -6,7 +6,9 @@ body {
 }
 
 .container {
-  width: min(calc(100% - 80px), 1840px);
+  width: min(calc(100vw - 80px), 1840px);
+  margin-left: max(40px, calc((100vw - 1840px) / 2));
+  margin-right: 0;
 }
 
 .section-label {
@@ -835,7 +837,9 @@ body {
 
 @media (max-width: 768px) {
   .container {
-    width: calc(100% - 32px);
+    width: calc(100vw - 32px);
+    margin-left: 16px;
+    margin-right: 0;
   }
 
   .section-label {
@@ -1380,6 +1384,10 @@ body {
   }
 
   .fact-card p {
+    margin-top: 0;
+  }
+
+  .facts__items--top .fact-card:nth-child(3) p {
     margin-top: 0;
   }
 
