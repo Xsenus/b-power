@@ -17,6 +17,18 @@ export function Header({ nav, contacts }: HeaderProps) {
     return () => document.body.classList.remove('menu-opened');
   }, [open]);
 
+  useEffect(() => {
+    function onKeyDown(event: KeyboardEvent) {
+      if (event.key === 'Escape') setOpen(false);
+    }
+
+    if (open) {
+      document.addEventListener('keydown', onKeyDown);
+    }
+
+    return () => document.removeEventListener('keydown', onKeyDown);
+  }, [open]);
+
   return (
     <header className="site-header" id="top">
       <div className="site-header__inner">
@@ -56,13 +68,13 @@ export function Header({ nav, contacts }: HeaderProps) {
       <div className={`mobile-menu${open ? ' mobile-menu--open' : ''}`} aria-hidden={!open}>
         <nav className="mobile-menu__nav" aria-label="Мобильная навигация">
           {nav.map((item) => (
-            <a className="mobile-menu__link" key={item.href} href={item.href} onClick={() => setOpen(false)}>
+            <a className="mobile-menu__link" key={item.href} href={item.href} tabIndex={open ? 0 : -1} onClick={() => setOpen(false)}>
               {item.label}
             </a>
           ))}
         </nav>
-        <a className="mobile-menu__phone" href={`tel:${contacts.phone.replace(/\D/g, '')}`}>{contacts.phone}</a>
-        <a className="mobile-menu__email" href={`mailto:${contacts.email}`}>{contacts.email}</a>
+        <a className="mobile-menu__phone" href={`tel:${contacts.phone.replace(/\D/g, '')}`} tabIndex={open ? 0 : -1}>{contacts.phone}</a>
+        <a className="mobile-menu__email" href={`mailto:${contacts.email}`} tabIndex={open ? 0 : -1}>{contacts.email}</a>
       </div>
     </header>
   );
