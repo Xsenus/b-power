@@ -1013,15 +1013,25 @@ body {
 
   .product__selector-group {
     margin-top: 16px;
+    font-size: 14px;
+    line-height: 20px;
+  }
+
+  .product__selector-label,
+  .product__selector-group strong {
+    font-size: 14px;
+    line-height: 20px;
   }
 
   .product__weights {
     margin-top: 10px;
+    font-size: 14px;
+    line-height: 20px;
   }
 
   .product__cta {
     min-height: 44px;
-    margin-top: 16px;
+    margin-top: 20px;
     padding: 13px 20px;
     font-size: 14px;
     line-height: 20px;
