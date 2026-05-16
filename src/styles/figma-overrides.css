@@ -39,10 +39,15 @@ body {
 
 .site-header {
   top: 20px;
-  width: min(calc(100% - 80px), 1840px);
+  left: 50vw;
+  width: min(calc(100vw - 80px), 1840px);
 }
 
 .site-header__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0;
   height: 108px;
   min-height: 108px;
   padding: 20px;
@@ -50,7 +55,7 @@ body {
   background: rgba(255, 255, 255, 0.2);
   backdrop-filter: blur(3.5px);
   box-shadow: none;
-  grid-template-columns: 268px 1351px 181px;
+  grid-template-columns: none;
 }
 
 .site-header__logo,
@@ -60,8 +65,15 @@ body {
   object-fit: contain;
 }
 
+.site-header__logo {
+  flex: 0 0 200px;
+  margin-right: 68px;
+}
+
 .site-header__nav {
+  flex: 0 0 761px;
   width: 761px;
+  margin-right: auto;
   justify-content: flex-start;
   gap: 6px;
 }
@@ -101,7 +113,10 @@ body {
 }
 
 .site-header__contacts {
+  flex: 0 0 181px;
   width: 181px;
+  margin-left: auto;
+  align-items: flex-end;
   gap: 6px;
   font-family: Inter, sans-serif;
   font-size: 13px;
@@ -827,10 +842,13 @@ body {
 
   .site-header {
     top: 0;
-    width: 100%;
+    left: 0;
+    width: 100vw;
+    transform: none;
   }
 
   .site-header__inner {
+    width: 100%;
     height: 82px;
     min-height: 82px;
     padding: 16px;
@@ -844,6 +862,11 @@ body {
     width: 146px;
     height: 50px;
     object-fit: contain;
+  }
+
+  .site-header__logo {
+    flex: 0 0 146px;
+    margin-right: 0;
   }
 
   .site-header__burger {
@@ -876,6 +899,52 @@ body {
 
   .site-header__burger span:nth-child(3) {
     top: 33px;
+  }
+
+  .mobile-menu {
+    position: fixed;
+    top: 82px;
+    left: 0;
+    right: auto;
+    width: 100vw;
+    display: grid;
+    gap: 12px;
+    padding: 16px;
+    border-radius: 0;
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(3.5px);
+    box-shadow: none;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(-8px);
+    transition: opacity 170ms ease, transform 170ms ease;
+  }
+
+  .mobile-menu--open {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
+  }
+
+  .mobile-menu__nav {
+    display: grid;
+    gap: 6px;
+  }
+
+  .mobile-menu__link,
+  .mobile-menu__phone,
+  .mobile-menu__email {
+    display: flex;
+    align-items: center;
+    min-height: 50px;
+    padding: 14px 24px;
+    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.2);
+    color: #fff;
+    font-family: Inter, sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 22px;
   }
 
   .hero {
