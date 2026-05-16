@@ -39,7 +39,11 @@ export function Footer({ footer, nav, contacts }: FooterProps) {
         <p className="footer__legal">{footer.legal}</p>
 
         <div className="footer__policy">
-          {footer.links.map((link) => <a href={link.href} key={link.label}>{link.label}</a>)}
+          {footer.links.map((link) => (
+            link.href === '#'
+              ? <span key={link.label}>{link.label}</span>
+              : <a href={link.href} key={link.label}>{link.label}</a>
+          ))}
         </div>
       </div>
       <a className="scroll-top" href="#top" aria-label="Наверх">↑</a>
