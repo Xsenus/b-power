@@ -1049,6 +1049,20 @@ body {
     top: 33px;
   }
 
+  .site-header__burger[aria-expanded="true"] span:nth-child(1) {
+    top: 24px;
+    transform: rotate(45deg);
+  }
+
+  .site-header__burger[aria-expanded="true"] span:nth-child(2) {
+    opacity: 0;
+  }
+
+  .site-header__burger[aria-expanded="true"] span:nth-child(3) {
+    top: 24px;
+    transform: rotate(-45deg);
+  }
+
   .mobile-menu {
     position: fixed;
     top: 82px;
@@ -1059,8 +1073,8 @@ body {
     gap: 12px;
     padding: 16px;
     border-radius: 0;
-    background: rgba(255, 255, 255, 0.2);
-    backdrop-filter: blur(3.5px);
+    background: rgba(38, 38, 38, 0.92);
+    backdrop-filter: blur(8px);
     box-shadow: none;
     opacity: 0;
     pointer-events: none;
