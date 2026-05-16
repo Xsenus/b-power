@@ -717,36 +717,12 @@ body {
   left: 16px;
   width: 24px;
   height: 24px;
-}
-
-.field__icon--user::before {
-  top: 3px;
-  width: 8px;
-  height: 8px;
-}
-
-.field__icon--user::after {
-  bottom: 3px;
-  width: 16px;
-  height: 8px;
+  opacity: 0.6;
 }
 
 .field__icon--phone {
   width: 24px;
   height: 24px;
-}
-
-.field__icon--phone::before {
-  inset: 5px;
-  border-width: 3px;
-}
-
-.field__icon--phone::after {
-  left: 5px;
-  bottom: 5px;
-  width: 5px;
-  height: 5px;
-  box-shadow: 9px -9px 0 currentColor;
 }
 
 .lead-form__button {
@@ -1975,34 +1951,9 @@ body {
     height: 20px;
   }
 
-  .field__icon--user::before {
-    top: 2px;
-    width: 7px;
-    height: 7px;
-  }
-
-  .field__icon--user::after {
-    bottom: 2px;
-    width: 14px;
-    height: 7px;
-  }
-
   .field__icon--phone {
     width: 20px;
     height: 20px;
-  }
-
-  .field__icon--phone::before {
-    inset: 4px;
-    border-width: 3px;
-  }
-
-  .field__icon--phone::after {
-    left: 4px;
-    bottom: 4px;
-    width: 4px;
-    height: 4px;
-    box-shadow: 8px -8px 0 currentColor;
   }
 
   .lead-form__button {

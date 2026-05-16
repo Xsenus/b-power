@@ -848,59 +848,13 @@ textarea:focus-visible {
   top: 50%;
   width: 18px;
   height: 18px;
-  color: #858585;
+  opacity: 0.6;
   transform: translateY(-50%);
-}
-
-.field__icon--user::before,
-.field__icon--user::after {
-  content: "";
-  position: absolute;
-  left: 50%;
-  background: currentColor;
-  transform: translateX(-50%);
-}
-
-.field__icon--user::before {
-  top: 1px;
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-}
-
-.field__icon--user::after {
-  bottom: 1px;
-  width: 15px;
-  height: 8px;
-  border-radius: 8px 8px 3px 3px;
 }
 
 .field__icon--phone {
   width: 18px;
   height: 18px;
-}
-
-.field__icon--phone::before {
-  content: "";
-  position: absolute;
-  inset: 2px;
-  border: 3px solid currentColor;
-  border-top-color: transparent;
-  border-right-color: transparent;
-  border-radius: 5px;
-  transform: rotate(-45deg);
-}
-
-.field__icon--phone::after {
-  content: "";
-  position: absolute;
-  left: 2px;
-  bottom: 2px;
-  width: 5px;
-  height: 5px;
-  border-radius: 2px;
-  background: currentColor;
-  box-shadow: 9px -9px 0 currentColor;
 }
 
 .field__error {
