@@ -144,6 +144,25 @@ body {
   line-height: 24px;
 }
 
+.site-header__schedule {
+  display: flex;
+  width: 178px;
+  height: 16px;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 4px;
+  overflow: hidden;
+  font-family: Inter, sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 16px;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.site-header__schedule span {
+  white-space: nowrap;
+}
+
 .hero {
   height: 1040px;
   min-height: 1040px;

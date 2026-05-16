@@ -10,8 +10,14 @@ type HeaderProps = {
   contacts: ContactsContent;
 };
 
+function splitSchedule(schedule: string) {
+  const match = schedule.match(/^(.+?:)\s*(.+)$/);
+  return match ? { label: match[1], time: match[2] } : { label: schedule, time: '' };
+}
+
 export function Header({ nav, contacts }: HeaderProps) {
   const [open, setOpen] = useState(false);
+  const schedule = splitSchedule(contacts.schedule);
 
   useEffect(() => {
     document.body.classList.toggle('menu-opened', open);
@@ -50,7 +56,10 @@ export function Header({ nav, contacts }: HeaderProps) {
 
         <div className="site-header__contacts">
           <a className="site-header__phone" href={phoneHref(contacts.phone)}>{contacts.phone}</a>
-          <span>{contacts.schedule}</span>
+          <span className="site-header__schedule">
+            <span>{schedule.label}</span>
+            {schedule.time ? <span>{schedule.time}</span> : null}
+          </span>
         </div>
 
         <button
