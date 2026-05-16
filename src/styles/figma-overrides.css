@@ -1255,7 +1255,7 @@ body {
 
   .facts {
     padding-top: 70px;
-    padding-bottom: 74px;
+    padding-bottom: 70px;
   }
 
   .facts__layout {
@@ -1269,6 +1269,7 @@ body {
 
   .facts__items {
     width: 100%;
+    gap: 12px;
   }
 
   .fact-card,
