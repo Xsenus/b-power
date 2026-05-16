@@ -855,6 +855,17 @@ body {
   background: #231f20;
 }
 
+@media (min-width: 769px) and (max-width: 1600px) {
+  .section-head--split {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 560px);
+    gap: 40px;
+  }
+
+  .about__lead {
+    max-width: 560px;
+  }
+}
+
 @media (max-width: 768px) {
   .container {
     width: calc(100vw - 32px);
