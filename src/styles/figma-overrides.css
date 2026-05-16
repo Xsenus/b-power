@@ -117,6 +117,7 @@ body {
 .site-header__contacts {
   flex: 0 0 181px;
   width: 181px;
+  height: 46px;
   margin-left: auto;
   align-items: flex-end;
   gap: 6px;
@@ -128,6 +129,10 @@ body {
 }
 
 .site-header__phone {
+  display: block;
+  width: 193px;
+  height: 24px;
+  margin-right: 0;
   font-family: Inter, sans-serif;
   font-size: 20px;
   font-weight: 500;
