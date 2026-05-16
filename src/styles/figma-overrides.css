@@ -652,7 +652,7 @@ body {
   object-position: left top;
 }
 
-.footer__tagline {
+.footer .footer__tagline {
   position: absolute;
   left: 416px;
   top: 0;
@@ -1278,12 +1278,11 @@ body {
   }
 
   .footer__grid {
-    position: static;
-    display: grid;
-    height: auto;
-    min-height: 0;
-    grid-template-columns: 125px 1fr;
-    gap: 22px 11px;
+    position: relative;
+    display: block;
+    height: 534px;
+    min-height: 534px;
+    overflow: visible;
   }
 
   .footer__grid::before {
@@ -1296,76 +1295,105 @@ body {
   .footer__contacts,
   .footer__legal,
   .footer__policy {
-    position: static;
-    left: auto;
-    top: auto;
+    position: absolute;
     width: auto;
     max-width: none;
     height: auto;
   }
 
-  .footer__brand img {
-    width: 125px;
-    height: auto;
+  .footer__brand {
+    left: 0;
+    top: 0;
+    width: 128px;
+    height: 44px;
   }
 
-  .footer__tagline {
+  .footer__brand img {
+    width: 128px;
+    height: 44px;
+    object-fit: contain;
+  }
+
+  .footer .footer__tagline {
+    left: 144px;
+    top: 1px;
+    width: 184px;
     max-width: 184px;
-    margin: 2px 0 0;
-    font-size: 10px;
+    margin: 0;
+    font-family: Rubik, sans-serif;
+    font-size: 11px;
     line-height: 14px;
+    opacity: 0.6;
     text-align: left;
   }
 
   .footer__contacts {
+    left: 0;
+    top: 76px;
+    width: 328px;
+    height: 114px;
     display: grid;
     align-items: start;
     justify-items: start;
     gap: 8px;
-    font-size: 11px;
+    font-size: 12px;
     line-height: 16px;
     text-align: left;
   }
 
   .footer__phone {
     margin: 0 0 8px;
-    font-size: 20px;
-    line-height: 28px;
+    font-size: 18px;
+    line-height: 24px;
   }
 
   .footer__email {
     margin-top: 0;
-    font-size: 15px;
-    line-height: 22px;
+    font-size: 18px;
+    line-height: 24px;
   }
 
   .footer__nav {
+    left: 0;
+    top: 222px;
+    width: 328px;
+    height: 106px;
     display: grid;
     justify-content: stretch;
     grid-template-columns: 144px 144px;
     grid-template-rows: repeat(3, 22px);
     grid-auto-flow: column;
     gap: 20px 40px;
-    font-size: 14px;
-    line-height: 20px;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 22px;
   }
 
   .footer__legal {
-    margin-top: 7px;
-    padding-top: 18px;
-    font-size: 12px;
+    left: 0;
+    top: 360px;
+    width: 328px;
+    height: 70px;
+    margin: 0;
+    padding-top: 16px;
+    border-top: 1px solid rgba(198, 197, 197, 0.8);
+    font-size: 13px;
     line-height: 18px;
     opacity: 1;
+    text-align: center;
   }
 
   .footer__policy {
-    margin-top: 0;
-    gap: 8px;
-    font-size: 12px;
+    left: 0;
+    top: 444px;
+    width: 328px;
+    margin: 0;
+    gap: 6px;
+    font-size: 13px;
     line-height: 18px;
-    align-items: flex-start;
-    text-align: left;
-    opacity: 1;
+    align-items: center;
+    text-align: center;
+    opacity: 0.6;
   }
 
   .lead-panel__title {
