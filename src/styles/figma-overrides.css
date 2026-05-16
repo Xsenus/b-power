@@ -915,6 +915,22 @@ body {
 }
 
 @media (min-width: 769px) and (max-width: 1024px) {
+  .section-head--split {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+
+  .about__lead,
+  .product .section-label,
+  .product__title,
+  .audience .section-label,
+  .audience__title,
+  .facts .section-label,
+  .facts__title {
+    width: 100%;
+    max-width: none;
+  }
+
   .facts__layout {
     grid-template-columns: 1fr;
     grid-template-areas:
@@ -959,6 +975,94 @@ body {
     width: 100%;
     min-width: 0;
     white-space: normal;
+  }
+
+  .features {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+    overflow: visible;
+    padding-bottom: 0;
+  }
+
+  .feature-card {
+    min-width: 0;
+    min-height: 220px;
+  }
+
+  .audience__grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+    overflow: visible;
+    padding-bottom: 0;
+  }
+
+  .audience-card {
+    min-width: 0;
+    height: auto;
+    min-height: 300px;
+    padding: 24px;
+  }
+
+  .audience-card h3 {
+    max-width: none;
+    font-size: 30px;
+    line-height: 40px;
+  }
+
+  .footer {
+    padding: 60px 0;
+  }
+
+  .footer__grid {
+    display: grid;
+    grid-template-columns: 210px minmax(0, 1fr);
+    gap: 28px 40px;
+    height: auto;
+    min-height: 0;
+    overflow: visible;
+  }
+
+  .footer__grid::before {
+    content: none;
+  }
+
+  .footer__brand,
+  .footer__tagline,
+  .footer__nav,
+  .footer__contacts,
+  .footer__legal,
+  .footer__policy {
+    position: static;
+    width: auto;
+    max-width: none;
+    height: auto;
+  }
+
+  .footer .footer__tagline {
+    width: auto;
+    max-width: none;
+    text-align: left;
+  }
+
+  .footer__nav {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(138px, 1fr));
+    gap: 16px 28px;
+  }
+
+  .footer__contacts {
+    display: grid;
+    width: auto;
+    align-items: start;
+    justify-items: start;
+    text-align: left;
+  }
+
+  .footer__policy {
+    align-items: flex-start;
+    text-align: left;
   }
 }
 
