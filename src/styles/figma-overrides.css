@@ -291,7 +291,16 @@ body {
   padding-top: 150px;
 }
 
+.product .section-label,
+.audience .section-label,
+.facts .section-label {
+  width: 756px;
+  max-width: 756px;
+}
+
 .product__title {
+  width: 756px;
+  max-width: 756px;
   margin-bottom: 42px;
 }
 
@@ -421,6 +430,8 @@ body {
 
 .audience__title,
 .facts__title {
+  width: 756px;
+  max-width: 756px;
   margin-bottom: 42px;
 }
 
@@ -926,7 +937,16 @@ body {
     padding-top: 70px;
   }
 
+  .product .section-label,
+  .audience .section-label,
+  .facts .section-label {
+    width: 100%;
+    max-width: none;
+  }
+
   .product__title {
+    width: 100%;
+    max-width: none;
     margin-bottom: 28px;
   }
 
@@ -1069,6 +1089,8 @@ body {
 
   .audience__title,
   .facts__title {
+    width: 100%;
+    max-width: none;
     margin-bottom: 28px;
   }
 
