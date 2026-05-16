@@ -216,8 +216,8 @@ npm run lint
 
 ## Что проверить на реальном сервере
 
-- Указать реальные `SITE_URL`, canonical, sitemap URL и OG image absolute URL.
-- Настроить HTTPS и reverse proxy.
+- При переносе с тестового домена обновить `SITE_URL`, canonical, sitemap URL и OG image absolute URL.
+- Проверить HTTPS и routing на целевом домене.
 - Задать сильные `ADMIN_PASSWORD` и `JWT_SECRET`.
 - Настроить SMTP, если нужна отправка на email.
 - Заменить временные/извлечённые из PDF ассеты на оригинальные export-файлы из Figma, если они будут доступны.

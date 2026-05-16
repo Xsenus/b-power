@@ -1,6 +1,7 @@
 Options -MultiViews
 DirectoryIndex index.html
 SetEnvIf Authorization "(.*)" HTTP_AUTHORIZATION=$1
+AddType application/manifest+json .webmanifest
 
 <IfModule mod_rewrite.c>
   RewriteEngine On
