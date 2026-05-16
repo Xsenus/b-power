@@ -355,13 +355,18 @@ body {
 }
 
 .about-card__image {
-  right: 0;
-  bottom: -20px;
-  width: 466px;
-  height: 445px;
+  right: 3px;
+  bottom: -44px;
+  width: 519px;
+  height: 519px;
+  max-width: none;
+  object-fit: fill;
+  object-position: center;
 }
 
 .about-card:nth-child(2) .about-card__image {
+  right: 0;
+  bottom: 0;
   width: 1289px;
   height: 380px;
   object-fit: cover;
@@ -1423,10 +1428,13 @@ body {
 
   .about-card:nth-child(1) .about-card__image {
     position: absolute;
-    inset: auto 0 0;
-    height: 217px;
-    object-fit: contain;
-    object-position: 20% bottom;
+    inset: auto auto -40px 50%;
+    width: 285px;
+    max-width: none;
+    height: 284px;
+    transform: translateX(-49%);
+    object-fit: fill;
+    object-position: center;
   }
 
   .about-card:nth-child(2) .about-card__image {
