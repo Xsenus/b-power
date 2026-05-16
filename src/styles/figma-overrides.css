@@ -1118,7 +1118,7 @@ body {
     inset: auto 0 0;
     height: 217px;
     object-fit: contain;
-    object-position: center bottom;
+    object-position: 20% bottom;
   }
 
   .about-card:nth-child(2) .about-card__image {
