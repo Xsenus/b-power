@@ -478,11 +478,16 @@ body {
   min-height: 340px;
   padding: 34px;
   border-radius: 20px;
+  background: #161616;
   overflow: hidden;
 }
 
 .audience-card--light {
   background: #4a4a4c;
+}
+
+.audience-card--dark {
+  background: #161616;
 }
 
 .audience-card h3 {
