@@ -11,6 +11,19 @@ export function ProductSwitcher({ product }: { product: ProductContent }) {
     () => product.items.find((item) => item.id === activeId) ?? product.items[0],
     [activeId, product.items]
   );
+  const thumbnailItems = useMemo(() => {
+    const order = new Map([
+      ['daily', 0],
+      ['extra', 1],
+      ['natural', 2],
+    ]);
+
+    return [...product.items].sort((first, second) => {
+      const firstOrder = order.get(first.id) ?? product.items.indexOf(first);
+      const secondOrder = order.get(second.id) ?? product.items.indexOf(second);
+      return firstOrder - secondOrder;
+    });
+  }, [product.items]);
 
   if (!active) return null;
 
@@ -54,7 +67,7 @@ export function ProductSwitcher({ product }: { product: ProductContent }) {
                 <span className="product__selector-label">{product.activeLabel}</span>
                 <strong>{active.name}</strong>
                 <div className="product__thumbs" role="tablist" aria-label="Выберите вкус продукта">
-                  {product.items.map((item) => (
+                  {thumbnailItems.map((item) => (
                     <button
                       className={cn('product-thumb', item.id === active.id && 'product-thumb--active')}
                       type="button"

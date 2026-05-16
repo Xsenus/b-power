@@ -379,7 +379,7 @@ body {
 .product__subtitle {
   margin: 24px 0 12px;
   font-size: 16px;
-  font-weight: 400;
+  font-weight: 300;
   line-height: 24px;
 }
 
@@ -401,6 +401,16 @@ body {
 .product__selector-group strong {
   font-size: 16px;
   line-height: 24px;
+}
+
+.product__selector-label {
+  color: #fff;
+  font-weight: 300;
+  opacity: 0.6;
+}
+
+.product__selector-group strong {
+  font-weight: 300;
 }
 
 .product__thumbs {
@@ -427,6 +437,16 @@ body {
   border-color: transparent;
   background: #4a4a4c;
   font-family: Rubik, sans-serif;
+}
+
+.weight-card strong {
+  font-weight: 400;
+}
+
+.weight-card span {
+  color: #fff;
+  font-weight: 300;
+  opacity: 0.5;
 }
 
 .weight-card:first-child {
