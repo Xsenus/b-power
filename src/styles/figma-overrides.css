@@ -530,7 +530,8 @@ body {
   overflow: hidden;
 }
 
-.feature-card svg {
+.feature-card svg,
+.feature-card__icon {
   display: block;
   width: 54px;
   height: 54px;
@@ -1655,7 +1656,8 @@ body {
     border-radius: 10px;
   }
 
-  .feature-card svg {
+  .feature-card svg,
+  .feature-card__icon {
     width: 34px;
     height: 34px;
   }

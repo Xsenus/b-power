@@ -643,7 +643,8 @@ textarea:focus-visible {
   color: #fff;
 }
 
-.feature-card svg {
+.feature-card svg,
+.feature-card__icon {
   color: #fff;
 }
 

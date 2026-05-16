@@ -555,7 +555,8 @@
     border-radius: 7px;
   }
 
-  .feature-card svg {
+  .feature-card svg,
+  .feature-card__icon {
     width: 35px;
     height: 35px;
   }
