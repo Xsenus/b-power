@@ -51,9 +51,14 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    if (isAdmin) return;
+    if (isAdmin) {
+      document.title = 'Админка B-POWER';
+      setMeta('robots', 'noindex, nofollow');
+      return;
+    }
     document.title = content.seo.title;
     setMeta('description', content.seo.description);
+    setMeta('robots', 'index, follow');
     setCanonical(content.seo.canonical);
     setMeta('og:title', content.seo.title, true);
     setMeta('og:description', content.seo.description, true);
