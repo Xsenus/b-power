@@ -1401,6 +1401,7 @@ body {
     margin-top: 0;
     font-size: 13px;
     line-height: 18px;
+    white-space: nowrap;
   }
 
   .product-thumb {
