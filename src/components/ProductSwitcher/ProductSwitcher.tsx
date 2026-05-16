@@ -124,8 +124,14 @@ export function ProductSwitcher({ product }: { product: ProductContent }) {
               <div className="product__weights">
                 <span className="product__selector-label">{product.weightLabel}</span>
                 <div className="product__weight-list">
-                  {product.weights.map((weight) => (
-                    <button className="weight-card" type="button" key={weight.value}>
+                  {product.weights.map((weight, index) => (
+                    <button
+                      className="weight-card"
+                      type="button"
+                      key={weight.value}
+                      aria-pressed={index === 0}
+                      aria-label={`${weight.value}, ${weight.label}`}
+                    >
                       <strong>{weight.value}</strong>
                       <span>{weight.label}</span>
                     </button>
