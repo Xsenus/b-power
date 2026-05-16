@@ -1,4 +1,5 @@
 import type { ContactsContent, FooterContent, NavItem } from '../../data/types';
+import { phoneHref } from '../../utils/text';
 
 const LOGO = '/assets/images/figma-logo-desktop-exact.png';
 const MOBILE_LOGO = '/assets/images/figma-logo-footer-mobile-exact.png';
@@ -30,7 +31,7 @@ export function Footer({ footer, nav, contacts }: FooterProps) {
 
         <div className="footer__contacts">
           <span>Телефон горячей линии</span>
-          <a className="footer__phone" href={`tel:${contacts.phone.replace(/\D/g, '')}`}>{contacts.phone}</a>
+          <a className="footer__phone" href={phoneHref(contacts.phone)}>{contacts.phone}</a>
           <span>Почта</span>
           <a className="footer__email" href={`mailto:${contacts.email}`}>{contacts.email}</a>
         </div>

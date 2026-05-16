@@ -21,6 +21,11 @@ export function normalizePhoneDigits(value: string): string {
   return value.replace(/\D/g, '');
 }
 
+export function phoneHref(value: string): string {
+  const digits = normalizePhoneDigits(value).replace(/^8/, '7');
+  return digits ? `tel:+${digits}` : 'tel:';
+}
+
 export function formatPhone(value: string): string {
   const digits = normalizePhoneDigits(value).replace(/^8/, '7').slice(0, 11);
   const normalized = digits.startsWith('7') ? digits : `7${digits}`.slice(0, 11);

@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import type { ContactsContent, NavItem } from '../../data/types';
+import { phoneHref } from '../../utils/text';
 
 const LOGO = '/assets/images/figma-logo-desktop-exact.png';
 const MOBILE_LOGO = '/assets/images/figma-logo-mobile-exact.png';
@@ -48,7 +49,7 @@ export function Header({ nav, contacts }: HeaderProps) {
         </nav>
 
         <div className="site-header__contacts">
-          <a className="site-header__phone" href={`tel:${contacts.phone.replace(/\D/g, '')}`}>{contacts.phone}</a>
+          <a className="site-header__phone" href={phoneHref(contacts.phone)}>{contacts.phone}</a>
           <span>{contacts.schedule}</span>
         </div>
 
@@ -73,7 +74,7 @@ export function Header({ nav, contacts }: HeaderProps) {
             </a>
           ))}
         </nav>
-        <a className="mobile-menu__phone" href={`tel:${contacts.phone.replace(/\D/g, '')}`} tabIndex={open ? 0 : -1}>{contacts.phone}</a>
+        <a className="mobile-menu__phone" href={phoneHref(contacts.phone)} tabIndex={open ? 0 : -1}>{contacts.phone}</a>
         <a className="mobile-menu__email" href={`mailto:${contacts.email}`} tabIndex={open ? 0 : -1}>{contacts.email}</a>
       </div>
     </header>
