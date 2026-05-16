@@ -132,13 +132,13 @@ export function FormSection({ form }: { form: FormContent }) {
           </form>
 
           <p className="lead-panel__consent">{form.consent}</p>
-          {message && (
-            <div className={`lead-message lead-message--${status}`} role="status">
-              {status === 'success' && <strong>{form.successTitle}</strong>}
-              <span>{message}</span>
-            </div>
-          )}
         </div>
+        {message && (
+          <div className={`lead-message lead-message--${status}`} role="status">
+            {status === 'success' && <strong>{form.successTitle}</strong>}
+            <span>{message}</span>
+          </div>
+        )}
       </div>
     </section>
   );
