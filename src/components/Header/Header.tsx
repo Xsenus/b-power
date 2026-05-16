@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import type { ContactsContent, NavItem } from '../../data/types';
 
 const LOGO = '/assets/images/logo.png';
+const MOBILE_LOGO = '/assets/images/logo-mobile.png';
 
 type HeaderProps = {
   nav: NavItem[];
@@ -20,7 +21,10 @@ export function Header({ nav, contacts }: HeaderProps) {
     <header className="site-header" id="top">
       <div className="site-header__inner">
         <a className="site-header__logo" href="#top" aria-label="B-POWER">
-          <img src={LOGO} alt="B-POWER" width="263" height="95" />
+          <picture>
+            <source media="(max-width: 768px)" srcSet={MOBILE_LOGO} />
+            <img src={LOGO} alt="B-POWER" width="263" height="95" />
+          </picture>
         </a>
 
         <nav className="site-header__nav" aria-label="Основная навигация">
