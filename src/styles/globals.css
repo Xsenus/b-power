@@ -5,6 +5,13 @@
 html {
   scroll-behavior: smooth;
   background: var(--page-bg);
+  scrollbar-width: none;
+}
+
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+  width: 0;
+  height: 0;
 }
 
 body {

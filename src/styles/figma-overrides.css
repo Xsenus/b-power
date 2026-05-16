@@ -62,14 +62,15 @@ body {
 
 .site-header__logo,
 .site-header__logo img {
-  width: 200px;
-  height: 68px;
+  width: 210px;
+  height: 69px;
   object-fit: contain;
 }
 
 .site-header__logo {
   flex: 0 0 200px;
   margin-right: 68px;
+  overflow: visible;
 }
 
 .site-header__nav {
@@ -760,8 +761,9 @@ body {
 }
 
 .footer__brand img {
-  width: 200px;
-  height: 68px;
+  width: 210px;
+  height: 69px;
+  max-width: none;
   object-fit: contain;
   object-position: left top;
 }
@@ -992,7 +994,7 @@ body {
   }
 
   .site-header__logo,
-  .site-header__logo img {
+  .site-header__logo picture {
     width: 146px;
     height: 50px;
   }
@@ -1000,17 +1002,19 @@ body {
   .site-header__logo {
     flex: 0 0 146px;
     margin-right: 0;
+    overflow: visible;
   }
 
   .site-header__logo picture {
     display: block;
-    width: 100%;
-    height: 100%;
   }
 
   .site-header__logo img {
-    object-fit: fill;
-    transform: translateX(-8px);
+    width: 155px;
+    height: 51px;
+    max-width: none;
+    object-fit: contain;
+    transform: none;
   }
 
   .site-header__burger {
@@ -1583,11 +1587,13 @@ body {
     top: 0;
     width: 128px;
     height: 44px;
+    overflow: visible;
   }
 
   .footer__brand img {
-    width: 128px;
-    height: 44px;
+    width: 136px;
+    height: 45px;
+    max-width: none;
     object-fit: contain;
     object-position: left top;
   }

@@ -1,7 +1,7 @@
 import type { ContactsContent, FooterContent, NavItem } from '../../data/types';
 
-const LOGO = '/assets/images/logo-transparent.png';
-const MOBILE_LOGO = '/assets/images/logo-mobile-transparent.png';
+const LOGO = '/assets/images/figma-logo-desktop-exact.png';
+const MOBILE_LOGO = '/assets/images/figma-logo-footer-mobile-exact.png';
 
 type FooterProps = {
   footer: FooterContent;
