@@ -925,6 +925,56 @@ body {
 }
 
 @media (min-width: 769px) and (max-width: 1440px) {
+  .about-card:nth-child(2) .about-card__image {
+    left: min(46%, 551px);
+    right: 0;
+    width: calc(100% - min(46%, 551px));
+  }
+
+  .features {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 14px;
+  }
+
+  .feature-card {
+    min-width: 0;
+    padding: 26px 22px;
+  }
+
+  .feature-card h3 {
+    font-size: 21px;
+    line-height: 30px;
+  }
+
+  .feature-card p {
+    font-size: 14px;
+    line-height: 21px;
+  }
+
+  .audience__grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 14px;
+  }
+
+  .audience-card {
+    min-width: 0;
+    padding: 28px;
+  }
+
+  .audience-card h3 {
+    font-size: 30px;
+    line-height: 40px;
+  }
+
+  .facts__layout {
+    grid-template-columns: minmax(0, 1fr) minmax(360px, 32.6%);
+    gap: 10px 20px;
+  }
+
+  .facts__image {
+    width: 100%;
+  }
+
   .fact-card,
   .facts__items--top .fact-card:nth-child(3) {
     height: auto;
