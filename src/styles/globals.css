@@ -877,8 +877,10 @@ textarea:focus-visible {
 }
 
 .lead-message {
+  position: absolute;
+  z-index: 2;
   max-width: 620px;
-  margin-top: 16px;
+  margin-top: 0;
   padding: 12px 14px;
   border-radius: 8px;
   background: rgba(255, 255, 255, 0.09);

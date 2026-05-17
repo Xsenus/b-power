@@ -678,6 +678,7 @@ body {
 }
 
 .form-section .container {
+  position: relative;
   width: min(calc(100vw - 80px), 1840px);
   margin-left: max(40px, calc((100vw - 1840px) / 2));
   margin-right: 0;
@@ -760,6 +761,11 @@ body {
   font-size: 14px;
   line-height: 20px;
   color: rgba(255, 255, 255, 0.7);
+}
+
+.lead-message {
+  left: 40px;
+  top: 416px;
 }
 
 .footer {
@@ -2060,6 +2066,15 @@ body {
     margin-top: 14px;
     font-size: 13px;
     line-height: 18px;
+  }
+
+  .lead-message {
+    left: 20px;
+    top: 458px;
+    max-width: calc(100% - 40px);
+    padding: 8px 10px;
+    font-size: 12px;
+    line-height: 16px;
   }
 
   .footer {
