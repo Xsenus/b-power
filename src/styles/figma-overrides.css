@@ -43,6 +43,15 @@ body {
   letter-spacing: 0.01em;
 }
 
+.button:hover,
+.button:focus-visible,
+.site-header__link:hover,
+.site-header__link:focus-visible,
+.product-thumb:hover,
+.product-thumb:focus-visible {
+  transform: none;
+}
+
 .site-header {
   top: 20px;
   left: 50vw;
@@ -493,7 +502,7 @@ body {
 .product-thumb {
   width: 72px;
   height: 72px;
-  border: 0;
+  border: 1.5px solid transparent;
 }
 
 .product-thumb--active {
