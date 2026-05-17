@@ -129,7 +129,7 @@ export function ProductSwitcher({ product }: { product: ProductContent }) {
                       className="weight-card"
                       type="button"
                       key={weight.value}
-                      aria-pressed={index === 0}
+                      aria-pressed={index === 1}
                       aria-label={`${weight.value}, ${weight.label}`}
                     >
                       <strong>{weight.value}</strong>
