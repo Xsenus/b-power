@@ -375,10 +375,10 @@ body {
 }
 
 .about-card__image {
-  right: 3px;
-  bottom: -44px;
-  width: 519px;
-  height: 519px;
+  right: 0;
+  bottom: -20px;
+  width: 466px;
+  height: 445px;
   max-width: none;
   object-fit: fill;
   object-position: center;
