@@ -1354,13 +1354,16 @@ body {
     opacity: 0;
     pointer-events: none;
     transform: translateY(-8px);
-    transition: opacity 170ms ease, transform 170ms ease;
+    visibility: hidden;
+    transition: opacity 170ms ease, transform 170ms ease, visibility 0s linear 170ms;
   }
 
   .mobile-menu--open {
     opacity: 1;
     pointer-events: auto;
     transform: translateY(0);
+    visibility: visible;
+    transition-delay: 0s;
   }
 
   .mobile-menu__nav {
