@@ -1790,6 +1790,7 @@ body {
   }
 
   .audience__grid {
+    width: 100%;
     gap: 12px;
     padding-bottom: 0;
     scrollbar-width: none;
