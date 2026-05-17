@@ -1,4 +1,4 @@
-import { createElement, Fragment, type ReactNode } from 'react';
+import type { ReactNode } from 'react';
 
 export function lines(value: string): ReactNode[] {
   return value.split('\n').map((line, index, array) => (
@@ -7,14 +7,7 @@ export function lines(value: string): ReactNode[] {
 }
 
 export function brandVariant(value: string): ReactNode {
-  if (!value.includes('B-POWER')) return value;
-
-  return createElement(
-    Fragment,
-    null,
-    createElement('span', { className: 'brand-copy brand-copy--desktop' }, value),
-    createElement('span', { className: 'brand-copy brand-copy--mobile' }, value.split('B-POWER').join('B•POWER'))
-  );
+  return value;
 }
 
 export function normalizePhoneDigits(value: string): string {

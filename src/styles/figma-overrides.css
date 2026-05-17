@@ -1658,29 +1658,30 @@ body {
   }
 
   .feature-card {
-    height: 202px;
-    min-width: 220px;
-    min-height: 202px;
-    padding: 14px;
+    width: 156px;
+    height: 206px;
+    min-width: 156px;
+    min-height: 206px;
+    padding: 20px 18px;
     border-radius: 10px;
   }
 
   .feature-card svg,
   .feature-card__icon {
-    width: 34px;
-    height: 34px;
+    width: 35px;
+    height: 35px;
   }
 
   .feature-card h3 {
     margin-top: 42px;
-    font-size: 20px;
-    line-height: 28px;
+    font-size: 17px;
+    line-height: 18px;
   }
 
   .feature-card p {
-    margin-top: 10px;
-    font-size: 14px;
-    line-height: 20px;
+    margin-top: 13px;
+    font-size: 11px;
+    line-height: 15px;
   }
 
   .audience,
