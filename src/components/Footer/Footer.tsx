@@ -1,24 +1,22 @@
-import type { ContactsContent, FooterContent, NavItem } from '../../data/types';
+import type { BrandContent, ContactsContent, FooterContent, NavItem } from '../../data/types';
 import { phoneHref } from '../../utils/text';
 
-const LOGO = '/assets/images/figma-logo-desktop-exact.png';
-const MOBILE_LOGO = '/assets/images/figma-logo-footer-mobile-exact.png';
-
 type FooterProps = {
+  brand: BrandContent;
   footer: FooterContent;
   nav: NavItem[];
   contacts: ContactsContent;
 };
 
-export function Footer({ footer, nav, contacts }: FooterProps) {
+export function Footer({ brand, footer, nav, contacts }: FooterProps) {
   return (
     <footer className="footer">
       <div className="container footer__grid">
         <div className="footer__brand">
           <a href="#top" aria-label="B-POWER">
             <picture>
-              <source media="(max-width: 768px)" srcSet={MOBILE_LOGO} />
-              <img src={LOGO} alt="B-POWER" width="263" height="95" />
+              <source media="(max-width: 768px)" srcSet={brand.footerMobileLogo} />
+              <img src={brand.footerLogo} alt={brand.logoAlt} width="263" height="95" />
             </picture>
           </a>
         </div>

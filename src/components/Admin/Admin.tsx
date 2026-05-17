@@ -220,6 +220,15 @@ export function Admin({ initialContent }: AdminProps) {
           </section>
 
           <section className="admin-card">
+            <h2>Логотипы</h2>
+            <AssetField label="Header desktop" value={content.brand.logo} onChange={(value) => updateContent((draft) => { draft.brand.logo = value; })} />
+            <AssetField label="Header mobile" value={content.brand.mobileLogo} onChange={(value) => updateContent((draft) => { draft.brand.mobileLogo = value; })} />
+            <AssetField label="Footer desktop" value={content.brand.footerLogo} onChange={(value) => updateContent((draft) => { draft.brand.footerLogo = value; })} />
+            <AssetField label="Footer mobile" value={content.brand.footerMobileLogo} onChange={(value) => updateContent((draft) => { draft.brand.footerMobileLogo = value; })} />
+            <AdminField label="Alt" value={content.brand.logoAlt} onChange={(value) => updateContent((draft) => { draft.brand.logoAlt = value; })} />
+          </section>
+
+          <section className="admin-card">
             <h2>Навигация и контакты</h2>
             {content.nav.map((item, index) => (
               <div className="admin-repeat" key={`${item.href}-${index}`}>

@@ -16,6 +16,14 @@ export type ContactsContent = {
   schedule: string;
 };
 
+export type BrandContent = {
+  logo: string;
+  mobileLogo: string;
+  footerLogo: string;
+  footerMobileLogo: string;
+  logoAlt: string;
+};
+
 export type CountdownItem = {
   value: string;
   label: string;
@@ -141,6 +149,7 @@ export type FooterContent = {
 
 export type LandingContent = {
   seo: SeoContent;
+  brand: BrandContent;
   nav: NavItem[];
   contacts: ContactsContent;
   hero: HeroContent;

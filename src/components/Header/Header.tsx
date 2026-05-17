@@ -1,11 +1,9 @@
 import { useEffect, useState } from 'react';
-import type { ContactsContent, NavItem } from '../../data/types';
+import type { BrandContent, ContactsContent, NavItem } from '../../data/types';
 import { phoneHref } from '../../utils/text';
 
-const LOGO = '/assets/images/figma-logo-desktop-exact.png';
-const MOBILE_LOGO = '/assets/images/figma-logo-mobile-exact.png';
-
 type HeaderProps = {
+  brand: BrandContent;
   nav: NavItem[];
   contacts: ContactsContent;
 };
@@ -15,7 +13,7 @@ function splitSchedule(schedule: string) {
   return match ? { label: match[1], time: match[2] } : { label: schedule, time: '' };
 }
 
-export function Header({ nav, contacts }: HeaderProps) {
+export function Header({ brand, nav, contacts }: HeaderProps) {
   const [open, setOpen] = useState(false);
   const schedule = splitSchedule(contacts.schedule);
 
@@ -41,8 +39,8 @@ export function Header({ nav, contacts }: HeaderProps) {
       <div className="site-header__inner">
         <a className="site-header__logo" href="#top" aria-label="B-POWER">
           <picture>
-            <source media="(max-width: 768px)" srcSet={MOBILE_LOGO} />
-            <img src={LOGO} alt="B-POWER" width="263" height="95" />
+            <source media="(max-width: 768px)" srcSet={brand.mobileLogo} />
+            <img src={brand.logo} alt={brand.logoAlt} width="263" height="95" />
           </picture>
         </a>
 

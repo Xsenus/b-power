@@ -5,6 +5,13 @@
     "canonical": "https://cp042132.tw1.ru/",
     "ogImage": "https://cp042132.tw1.ru/assets/images/product-set.webp"
   },
+  "brand": {
+    "logo": "/assets/images/figma-logo-desktop-exact.png",
+    "mobileLogo": "/assets/images/figma-logo-mobile-exact.png",
+    "footerLogo": "/assets/images/figma-logo-desktop-exact.png",
+    "footerMobileLogo": "/assets/images/figma-logo-footer-mobile-exact.png",
+    "logoAlt": "B-POWER"
+  },
   "nav": [
     {
       "label": "Основа продукта",

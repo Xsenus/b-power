@@ -12,6 +12,14 @@ import { Footer } from './components/Footer/Footer';
 import { Admin } from './components/Admin/Admin';
 
 const defaultContent = defaultContentJson as LandingContent;
+const defaultBrand = defaultContent.brand;
+
+function normalizeContent(content: LandingContent): LandingContent {
+  return {
+    ...content,
+    brand: content.brand ?? defaultBrand,
+  };
+}
 
 function setMeta(name: string, content: string, property = false) {
   const selector = property ? `meta[property="${name}"]` : `meta[name="${name}"]`;
@@ -42,7 +50,7 @@ export default function App() {
     let cancelled = false;
     fetchContent()
       .then((result) => {
-        if (!cancelled && result.ok && result.data) setContent(result.data);
+        if (!cancelled && result.ok && result.data) setContent(normalizeContent(result.data));
       })
       .catch(() => undefined);
     return () => {
@@ -72,7 +80,7 @@ export default function App() {
 
   return (
     <>
-      <Header nav={content.nav} contacts={content.contacts} />
+      <Header brand={content.brand} nav={content.nav} contacts={content.contacts} />
       <main>
         <Hero hero={content.hero} />
         <About about={content.about} />
@@ -80,7 +88,7 @@ export default function App() {
         <Benefits audience={content.audience} facts={content.facts} />
         <FormSection form={content.form} />
       </main>
-      <Footer footer={content.footer} nav={content.nav} contacts={content.contacts} />
+      <Footer brand={content.brand} footer={content.footer} nav={content.nav} contacts={content.contacts} />
     </>
   );
 }
