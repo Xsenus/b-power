@@ -97,6 +97,7 @@ body {
   font-size: 16px;
   font-weight: 500;
   line-height: 22px;
+  white-space: nowrap;
 }
 
 .site-header__link:nth-child(1) {
