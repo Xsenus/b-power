@@ -17,6 +17,13 @@ const ADMIN_TABS: Array<{ id: AdminTab; label: string }> = [
   { id: 'leads', label: 'Заявки' }
 ];
 
+function normalizeAdminContent(nextContent: LandingContent, fallbackContent: LandingContent): LandingContent {
+  return {
+    ...nextContent,
+    brand: nextContent.brand ?? fallbackContent.brand
+  };
+}
+
 export function Admin({ initialContent }: AdminProps) {
   const [token, setToken] = useState(() => sessionStorage.getItem('bpower-admin-token') ?? '');
   const [password, setPassword] = useState('');
@@ -32,15 +39,16 @@ export function Admin({ initialContent }: AdminProps) {
 
     fetchContent().then((result) => {
       if (result.ok && result.data) {
-        setContent(result.data);
-        setJsonDraft(JSON.stringify(result.data, null, 2));
+        const nextContent = normalizeAdminContent(result.data, initialContent);
+        setContent(nextContent);
+        setJsonDraft(JSON.stringify(nextContent, null, 2));
       }
     });
 
     fetchLeads(token).then((result) => {
       if (result.ok && result.data) setLeads(result.data);
     });
-  }, [token]);
+  }, [token, initialContent]);
 
   async function onLogin(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -61,8 +69,9 @@ export function Admin({ initialContent }: AdminProps) {
   async function reloadContent() {
     const result = await fetchContent();
     if (result.ok && result.data) {
-      setContent(result.data);
-      setJsonDraft(JSON.stringify(result.data, null, 2));
+      const nextContent = normalizeAdminContent(result.data, initialContent);
+      setContent(nextContent);
+      setJsonDraft(JSON.stringify(nextContent, null, 2));
       setStatus('Контент загружен с сервера.');
     }
   }
@@ -110,7 +119,7 @@ export function Admin({ initialContent }: AdminProps) {
 
   function applyJsonToContent() {
     try {
-      const parsed = JSON.parse(jsonDraft) as LandingContent;
+      const parsed = normalizeAdminContent(JSON.parse(jsonDraft) as LandingContent, initialContent);
       setContent(parsed);
       setJsonDraft(JSON.stringify(parsed, null, 2));
       setStatus('JSON применён. Нажмите «Сохранить изменения», чтобы обновить сайт.');
@@ -128,8 +137,9 @@ export function Admin({ initialContent }: AdminProps) {
       setStatus(result.error ?? 'Не удалось сохранить контент');
       return;
     }
-    setContent(result.data);
-    setJsonDraft(JSON.stringify(result.data, null, 2));
+    const nextContent = normalizeAdminContent(result.data, initialContent);
+    setContent(nextContent);
+    setJsonDraft(JSON.stringify(nextContent, null, 2));
     setStatus('Контент сохранён. Обновите лендинг, чтобы увидеть изменения.');
   }
 
