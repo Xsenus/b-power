@@ -1,6 +1,6 @@
-import { FormEvent, KeyboardEvent, useEffect, useState } from 'react';
+import { FormEvent, KeyboardEvent, ReactNode, useEffect, useState } from 'react';
 import type { AudienceItem, FactItem, LandingContent, Lead, ProductItem } from '../../data/types';
-import { exportLeads, fetchContent, fetchLeads, loginAdmin, saveContent } from '../../utils/api';
+import { deleteLead, exportLeads, fetchContent, fetchLeads, loginAdmin, saveContent } from '../../utils/api';
 
 type AdminProps = {
   initialContent: LandingContent;
@@ -31,6 +31,7 @@ export function Admin({ initialContent }: AdminProps) {
   const [jsonDraft, setJsonDraft] = useState(() => JSON.stringify(initialContent, null, 2));
   const [leads, setLeads] = useState<Lead[]>([]);
   const [tab, setTab] = useState<AdminTab>('main');
+  const [activeItems, setActiveItems] = useState<Record<string, number>>({});
   const [status, setStatus] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -117,6 +118,14 @@ export function Admin({ initialContent }: AdminProps) {
     });
   }
 
+  function activeItem(group: string, length: number) {
+    return Math.min(activeItems[group] ?? 0, Math.max(length - 1, 0));
+  }
+
+  function selectItem(group: string, index: number) {
+    setActiveItems((current) => ({ ...current, [group]: index }));
+  }
+
   function applyJsonToContent() {
     try {
       const parsed = normalizeAdminContent(JSON.parse(jsonDraft) as LandingContent, initialContent);
@@ -155,6 +164,23 @@ export function Admin({ initialContent }: AdminProps) {
     link.download = 'b-power-leads.csv';
     link.click();
     URL.revokeObjectURL(url);
+  }
+
+  async function onDeleteLead(id: string) {
+    if (!token) return;
+    const confirmed = window.confirm('Удалить эту заявку? Действие нельзя отменить.');
+    if (!confirmed) return;
+
+    setLoading(true);
+    setStatus('');
+    const result = await deleteLead(id, token);
+    setLoading(false);
+    if (!result.ok) {
+      setStatus(result.error ?? 'Не удалось удалить заявку');
+      return;
+    }
+    setLeads((current) => current.filter((lead) => lead.id !== id));
+    setStatus('Заявка удалена.');
   }
 
   function onLogout() {
@@ -240,13 +266,21 @@ export function Admin({ initialContent }: AdminProps) {
 
           <section className="admin-card">
             <h2>Навигация и контакты</h2>
-            {content.nav.map((item, index) => (
-              <div className="admin-repeat" key={`${item.href}-${index}`}>
-                <h3>Пункт меню {index + 1}</h3>
-                <AdminField label="Текст" value={item.label} onChange={(value) => updateContent((draft) => { draft.nav[index].label = value; })} />
-                <AdminField label="Ссылка" value={item.href} onChange={(value) => updateContent((draft) => { draft.nav[index].href = value; })} />
-              </div>
-            ))}
+            <AdminItemTabs
+              group="nav"
+              items={content.nav}
+              activeIndex={activeItem('nav', content.nav.length)}
+              onSelect={(index) => selectItem('nav', index)}
+              getLabel={(item, index) => item.label || `Пункт ${index + 1}`}
+            >
+              {(item, index) => (
+                <div className="admin-repeat">
+                  <h3>Пункт меню {index + 1}</h3>
+                  <AdminField label="Текст" value={item.label} onChange={(value) => updateContent((draft) => { draft.nav[index].label = value; })} />
+                  <AdminField label="Ссылка" value={item.href} onChange={(value) => updateContent((draft) => { draft.nav[index].href = value; })} />
+                </div>
+              )}
+            </AdminItemTabs>
             <hr />
             <AdminField label="Телефон" value={content.contacts.phone} onChange={(value) => updateContent((draft) => { draft.contacts.phone = value; })} />
             <AdminField label="Email" value={content.contacts.email} onChange={(value) => updateContent((draft) => { draft.contacts.email = value; })} />
@@ -266,13 +300,21 @@ export function Admin({ initialContent }: AdminProps) {
             <AssetField label="Видео hero" value={content.hero.video ?? ''} onChange={(value) => updateContent((draft) => { draft.hero.video = value || undefined; })} />
             <AdminField label="Подпись таймера" value={content.hero.countdownLabel} onChange={(value) => updateContent((draft) => { draft.hero.countdownLabel = value; })} />
             <AdminField label="Дата старта ISO" value={content.hero.countdownTarget ?? ''} onChange={(value) => updateContent((draft) => { draft.hero.countdownTarget = value || undefined; })} />
-            {content.hero.countdown.map((item, index) => (
-              <div className="admin-repeat" key={`${item.label}-${index}`}>
-                <h3>Таймер {index + 1}</h3>
-                <AdminField label="Значение fallback" value={item.value} onChange={(value) => updateContent((draft) => { draft.hero.countdown[index].value = value; })} />
-                <AdminField label="Подпись" value={item.label} onChange={(value) => updateContent((draft) => { draft.hero.countdown[index].label = value; })} />
-              </div>
-            ))}
+            <AdminItemTabs
+              group="countdown"
+              items={content.hero.countdown}
+              activeIndex={activeItem('countdown', content.hero.countdown.length)}
+              onSelect={(index) => selectItem('countdown', index)}
+              getLabel={(item, index) => item.label || `Таймер ${index + 1}`}
+            >
+              {(item, index) => (
+                <div className="admin-repeat">
+                  <h3>Таймер {index + 1}</h3>
+                  <AdminField label="Значение fallback" value={item.value} onChange={(value) => updateContent((draft) => { draft.hero.countdown[index].value = value; })} />
+                  <AdminField label="Подпись" value={item.label} onChange={(value) => updateContent((draft) => { draft.hero.countdown[index].label = value; })} />
+                </div>
+              )}
+            </AdminItemTabs>
           </section>
 
           <section className="admin-card admin-card--wide">
@@ -303,33 +345,55 @@ export function Admin({ initialContent }: AdminProps) {
             <AdminField label="Ссылка кнопки" value={content.product.buttonHref} onChange={(value) => updateContent((draft) => { draft.product.buttonHref = value; })} />
             <AdminField label="Подпись вкуса" value={content.product.activeLabel} onChange={(value) => updateContent((draft) => { draft.product.activeLabel = value; })} />
             <AdminField label="Подпись веса" value={content.product.weightLabel} onChange={(value) => updateContent((draft) => { draft.product.weightLabel = value; })} />
-            {content.product.items.map((item, index) => (
-              <ProductEditor key={item.id} item={item} index={index} updateContent={updateContent} />
-            ))}
+            <AdminItemTabs
+              group="product-items"
+              items={content.product.items}
+              activeIndex={activeItem('product-items', content.product.items.length)}
+              onSelect={(index) => selectItem('product-items', index)}
+              getLabel={(item, index) => item.name || item.title || `Продукт ${index + 1}`}
+            >
+              {(item, index) => <ProductEditor item={item} index={index} updateContent={updateContent} />}
+            </AdminItemTabs>
           </section>
 
           <section className="admin-card">
             <h2>Вес</h2>
-            {content.product.weights.map((weight, index) => (
-              <div className="admin-repeat" key={`${weight.value}-${index}`}>
-                <h3>Вес {index + 1}</h3>
-                <AdminField label="Значение" value={weight.value} onChange={(value) => updateContent((draft) => { draft.product.weights[index].value = value; })} />
-                <AdminField label="Подпись" value={weight.label} onChange={(value) => updateContent((draft) => { draft.product.weights[index].label = value; })} />
-              </div>
-            ))}
+            <AdminItemTabs
+              group="weights"
+              items={content.product.weights}
+              activeIndex={activeItem('weights', content.product.weights.length)}
+              onSelect={(index) => selectItem('weights', index)}
+              getLabel={(weight, index) => weight.value || `Вес ${index + 1}`}
+            >
+              {(weight, index) => (
+                <div className="admin-repeat">
+                  <h3>Вес {index + 1}</h3>
+                  <AdminField label="Значение" value={weight.value} onChange={(value) => updateContent((draft) => { draft.product.weights[index].value = value; })} />
+                  <AdminField label="Подпись" value={weight.label} onChange={(value) => updateContent((draft) => { draft.product.weights[index].label = value; })} />
+                </div>
+              )}
+            </AdminItemTabs>
           </section>
 
           <section className="admin-card">
             <h2>Фичи и иконки</h2>
-            {content.product.features.map((feature, index) => (
-              <div className="admin-repeat" key={feature.id}>
-                <h3>Фича {index + 1}</h3>
-                <AdminField label="ID" value={feature.id} onChange={(value) => updateContent((draft) => { draft.product.features[index].id = value; })} />
-                <AdminField label="Название" value={feature.title} onChange={(value) => updateContent((draft) => { draft.product.features[index].title = value; })} />
-                <AdminArea label="Текст" value={feature.text} onChange={(value) => updateContent((draft) => { draft.product.features[index].text = value; })} />
-                <AssetField label="Иконка: ключ или /assets/icons/file.svg" value={feature.icon} onChange={(value) => updateContent((draft) => { draft.product.features[index].icon = value; })} />
-              </div>
-            ))}
+            <AdminItemTabs
+              group="features"
+              items={content.product.features}
+              activeIndex={activeItem('features', content.product.features.length)}
+              onSelect={(index) => selectItem('features', index)}
+              getLabel={(feature, index) => feature.title || `Фича ${index + 1}`}
+            >
+              {(feature, index) => (
+                <div className="admin-repeat">
+                  <h3>Фича {index + 1}</h3>
+                  <AdminField label="ID" value={feature.id} onChange={(value) => updateContent((draft) => { draft.product.features[index].id = value; })} />
+                  <AdminField label="Название" value={feature.title} onChange={(value) => updateContent((draft) => { draft.product.features[index].title = value; })} />
+                  <AdminArea label="Текст" value={feature.text} onChange={(value) => updateContent((draft) => { draft.product.features[index].text = value; })} />
+                  <AssetField label="Иконка: ключ или /assets/icons/file.svg" value={feature.icon} onChange={(value) => updateContent((draft) => { draft.product.features[index].icon = value; })} />
+                </div>
+              )}
+            </AdminItemTabs>
           </section>
         </div>
       )}
@@ -341,24 +405,38 @@ export function Admin({ initialContent }: AdminProps) {
             <AdminField label="Лейбл" value={content.about.sectionLabel} onChange={(value) => updateContent((draft) => { draft.about.sectionLabel = value; })} />
             <AdminArea label="Заголовок" value={content.about.title} onChange={(value) => updateContent((draft) => { draft.about.title = value; })} />
             <AdminArea label="Лид" value={content.about.lead} onChange={(value) => updateContent((draft) => { draft.about.lead = value; })} />
-            {content.about.cards.map((card, index) => (
-              <div className="admin-repeat" key={`${card.title}-${index}`}>
-                <h3>Карточка {index + 1}</h3>
-                <AdminField label="Название" value={card.title} onChange={(value) => updateContent((draft) => { draft.about.cards[index].title = value; })} />
-                <AdminArea label="Текст" value={card.text} onChange={(value) => updateContent((draft) => { draft.about.cards[index].text = value; })} />
-                <AssetField label="Картинка" value={card.image} onChange={(value) => updateContent((draft) => { draft.about.cards[index].image = value; })} />
-                <AdminField label="Alt" value={card.alt} onChange={(value) => updateContent((draft) => { draft.about.cards[index].alt = value; })} />
-              </div>
-            ))}
+            <AdminItemTabs
+              group="about-cards"
+              items={content.about.cards}
+              activeIndex={activeItem('about-cards', content.about.cards.length)}
+              onSelect={(index) => selectItem('about-cards', index)}
+              getLabel={(card, index) => card.title || `Карточка ${index + 1}`}
+            >
+              {(card, index) => (
+                <div className="admin-repeat">
+                  <h3>Карточка {index + 1}</h3>
+                  <AdminField label="Название" value={card.title} onChange={(value) => updateContent((draft) => { draft.about.cards[index].title = value; })} />
+                  <AdminArea label="Текст" value={card.text} onChange={(value) => updateContent((draft) => { draft.about.cards[index].text = value; })} />
+                  <AssetField label="Картинка" value={card.image} onChange={(value) => updateContent((draft) => { draft.about.cards[index].image = value; })} />
+                  <AdminField label="Alt" value={card.alt} onChange={(value) => updateContent((draft) => { draft.about.cards[index].alt = value; })} />
+                </div>
+              )}
+            </AdminItemTabs>
           </section>
 
           <section className="admin-card">
             <h2>Для кого</h2>
             <AdminField label="Лейбл" value={content.audience.sectionLabel} onChange={(value) => updateContent((draft) => { draft.audience.sectionLabel = value; })} />
             <AdminArea label="Заголовок" value={content.audience.title} onChange={(value) => updateContent((draft) => { draft.audience.title = value; })} />
-            {content.audience.items.map((item, index) => (
-              <AudienceEditor key={`${item.title}-${index}`} item={item} index={index} updateContent={updateContent} />
-            ))}
+            <AdminItemTabs
+              group="audience"
+              items={content.audience.items}
+              activeIndex={activeItem('audience', content.audience.items.length)}
+              onSelect={(index) => selectItem('audience', index)}
+              getLabel={(item, index) => item.title || `Карточка ${index + 1}`}
+            >
+              {(item, index) => <AudienceEditor item={item} index={index} updateContent={updateContent} />}
+            </AdminItemTabs>
           </section>
 
           <section className="admin-card admin-card--wide">
@@ -367,9 +445,15 @@ export function Admin({ initialContent }: AdminProps) {
             <AdminArea label="Заголовок" value={content.facts.title} onChange={(value) => updateContent((draft) => { draft.facts.title = value; })} />
             <AssetField label="Картинка" value={content.facts.image} onChange={(value) => updateContent((draft) => { draft.facts.image = value; })} />
             <AdminField label="Alt картинки" value={content.facts.imageAlt} onChange={(value) => updateContent((draft) => { draft.facts.imageAlt = value; })} />
-            {content.facts.items.map((item, index) => (
-              <FactEditor key={`${item.title}-${index}`} item={item} index={index} updateContent={updateContent} />
-            ))}
+            <AdminItemTabs
+              group="facts"
+              items={content.facts.items}
+              activeIndex={activeItem('facts', content.facts.items.length)}
+              onSelect={(index) => selectItem('facts', index)}
+              getLabel={(item, index) => item.title || `Факт ${index + 1}`}
+            >
+              {(item, index) => <FactEditor item={item} index={index} updateContent={updateContent} />}
+            </AdminItemTabs>
           </section>
         </div>
       )}
@@ -380,13 +464,21 @@ export function Admin({ initialContent }: AdminProps) {
             <h2>Футер</h2>
             <AdminArea label="Слоган" value={content.footer.tagline} onChange={(value) => updateContent((draft) => { draft.footer.tagline = value; })} />
             <AdminArea label="Юридический текст" value={content.footer.legal} onChange={(value) => updateContent((draft) => { draft.footer.legal = value; })} />
-            {content.footer.links.map((item, index) => (
-              <div className="admin-repeat" key={`${item.label}-${index}`}>
-                <h3>Ссылка {index + 1}</h3>
-                <AdminField label="Текст" value={item.label} onChange={(value) => updateContent((draft) => { draft.footer.links[index].label = value; })} />
-                <AdminField label="Href" value={item.href} onChange={(value) => updateContent((draft) => { draft.footer.links[index].href = value; })} />
-              </div>
-            ))}
+            <AdminItemTabs
+              group="footer-links"
+              items={content.footer.links}
+              activeIndex={activeItem('footer-links', content.footer.links.length)}
+              onSelect={(index) => selectItem('footer-links', index)}
+              getLabel={(item, index) => item.label || `Ссылка ${index + 1}`}
+            >
+              {(item, index) => (
+                <div className="admin-repeat">
+                  <h3>Ссылка {index + 1}</h3>
+                  <AdminField label="Текст" value={item.label} onChange={(value) => updateContent((draft) => { draft.footer.links[index].label = value; })} />
+                  <AdminField label="Href" value={item.href} onChange={(value) => updateContent((draft) => { draft.footer.links[index].href = value; })} />
+                </div>
+              )}
+            </AdminItemTabs>
           </section>
         </div>
       )}
@@ -426,6 +518,7 @@ export function Admin({ initialContent }: AdminProps) {
                   <th>Email</th>
                   <th>Сообщение</th>
                   <th>Источник</th>
+                  <th></th>
                 </tr>
               </thead>
               <tbody>
@@ -437,15 +530,56 @@ export function Admin({ initialContent }: AdminProps) {
                     <td>{lead.email ?? '—'}</td>
                     <td>{lead.message ?? '—'}</td>
                     <td>{lead.source}</td>
+                    <td>
+                      <button className="admin-table__delete" type="button" onClick={() => void onDeleteLead(lead.id)} disabled={loading}>
+                        Удалить
+                      </button>
+                    </td>
                   </tr>
                 ))}
-                {!leads.length && <tr><td colSpan={6}>Заявок пока нет.</td></tr>}
+                {!leads.length && <tr><td colSpan={7}>Заявок пока нет.</td></tr>}
               </tbody>
             </table>
           </div>
         </section>
       )}
     </main>
+  );
+}
+
+type AdminItemTabsProps<T> = {
+  group: string;
+  items: T[];
+  activeIndex: number;
+  onSelect: (index: number) => void;
+  getLabel: (item: T, index: number) => string;
+  children: (item: T, index: number) => ReactNode;
+};
+
+function AdminItemTabs<T>({ group, items, activeIndex, onSelect, getLabel, children }: AdminItemTabsProps<T>) {
+  if (!items.length) return <p className="admin-help">Элементов пока нет.</p>;
+
+  const currentIndex = Math.min(activeIndex, items.length - 1);
+  return (
+    <div className="admin-subtabs" data-group={group}>
+      <div className="admin-subtabs__list" role="tablist" aria-label={group}>
+        {items.map((item, index) => (
+          <button
+            type="button"
+            role="tab"
+            key={`${group}-${index}`}
+            className={index === currentIndex ? 'active' : ''}
+            aria-selected={index === currentIndex}
+            onClick={() => onSelect(index)}
+          >
+            {getLabel(item, index)}
+          </button>
+        ))}
+      </div>
+      <div className="admin-subtabs__panel" role="tabpanel">
+        {children(items[currentIndex], currentIndex)}
+      </div>
+    </div>
   );
 }
 

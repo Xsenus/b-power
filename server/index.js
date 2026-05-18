@@ -204,6 +204,18 @@ app.get('/api/leads', requireAdmin, async (_req, res) => {
   }
 });
 
+app.delete('/api/leads/:id', requireAdmin, async (req, res) => {
+  try {
+    const leads = await readJson(leadsFile, []);
+    const nextLeads = leads.filter((lead) => String(lead.id) !== String(req.params.id));
+    if (nextLeads.length === leads.length) return sendError(res, 404, 'Заявка не найдена');
+    await writeJson(leadsFile, nextLeads);
+    sendOk(res, { id: req.params.id });
+  } catch {
+    sendError(res, 500, 'Не удалось удалить заявку');
+  }
+});
+
 app.get('/api/leads/export', requireAdmin, async (_req, res) => {
   try {
     const leads = await readJson(leadsFile, []);

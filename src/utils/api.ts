@@ -50,6 +50,14 @@ export async function fetchLeads(token: string): Promise<ApiResult<Lead[]>> {
   return parseJson<Lead[]>(response);
 }
 
+export async function deleteLead(id: string, token: string): Promise<ApiResult<{ id: string }>> {
+  const response = await fetch(`${API_BASE}/api/leads/${encodeURIComponent(id)}`, {
+    method: 'DELETE',
+    headers: { Authorization: `Bearer ${token}` }
+  });
+  return parseJson<{ id: string }>(response);
+}
+
 export async function exportLeads(token: string): Promise<ApiResult<Blob>> {
   const response = await fetch(`${API_BASE}/api/leads/export`, {
     headers: { Authorization: `Bearer ${token}` }

@@ -185,6 +185,20 @@ if ($path === '/api/leads' && $method === 'GET') {
     send_json(200, ['ok' => true, 'data' => read_json_file($leadsFile, [])]);
 }
 
+if (preg_match('#^/api/leads/([^/]+)$#', $path, $matches) && $method === 'DELETE') {
+    require_admin($jwtSecret);
+    $id = rawurldecode($matches[1]);
+    $leads = read_json_file($leadsFile, []);
+    $nextLeads = array_values(array_filter($leads, static function ($lead) use ($id): bool {
+        return (string)($lead['id'] ?? '') !== $id;
+    }));
+    if (count($nextLeads) === count($leads)) {
+        send_json(404, ['ok' => false, 'error' => 'Заявка не найдена']);
+    }
+    write_json_file($leadsFile, $nextLeads);
+    send_json(200, ['ok' => true, 'data' => ['id' => $id]]);
+}
+
 if ($path === '/api/leads/export' && $method === 'GET') {
     require_admin($jwtSecret);
     header('Content-Type: text/csv; charset=utf-8');
