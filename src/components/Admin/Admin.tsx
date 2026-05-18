@@ -7,6 +7,7 @@ type AdminProps = {
 };
 
 type AdminTab = 'main' | 'product' | 'sections' | 'footer' | 'json' | 'leads';
+type CountdownMode = 'target' | 'manual';
 
 const ADMIN_TABS: Array<{ id: AdminTab; label: string }> = [
   { id: 'main', label: 'Основное' },
@@ -22,6 +23,29 @@ function normalizeAdminContent(nextContent: LandingContent, fallbackContent: Lan
     ...nextContent,
     brand: nextContent.brand ?? fallbackContent.brand
   };
+}
+
+function getCountdownMode(content: LandingContent): CountdownMode {
+  return content.hero.countdownMode === 'manual' ? 'manual' : 'target';
+}
+
+function getCountdownDate(target?: string) {
+  return target?.match(/^(\d{4}-\d{2}-\d{2})T/)?.[1] ?? '';
+}
+
+function getCountdownTime(target?: string) {
+  return target?.match(/T(\d{2}:\d{2})/)?.[1] ?? '00:00';
+}
+
+function getCountdownOffset(target?: string) {
+  return target?.match(/([+-]\d{2}:\d{2}|Z)$/)?.[1] ?? '+03:00';
+}
+
+function buildCountdownTarget(date: string, time: string, offset: string) {
+  if (!date) return undefined;
+  const normalizedTime = time || '00:00';
+  const normalizedOffset = offset || '+03:00';
+  return `${date}T${normalizedTime}:00${normalizedOffset}`;
 }
 
 export function Admin({ initialContent }: AdminProps) {
@@ -299,7 +323,45 @@ export function Admin({ initialContent }: AdminProps) {
             <AssetField label="Фон mobile" value={content.hero.mobileImage ?? ''} onChange={(value) => updateContent((draft) => { draft.hero.mobileImage = value || undefined; })} />
             <AssetField label="Видео hero" value={content.hero.video ?? ''} onChange={(value) => updateContent((draft) => { draft.hero.video = value || undefined; })} />
             <AdminField label="Подпись таймера" value={content.hero.countdownLabel} onChange={(value) => updateContent((draft) => { draft.hero.countdownLabel = value; })} />
+            <AdminSelect
+              label="Режим таймера"
+              value={getCountdownMode(content)}
+              options={[
+                { value: 'target', label: 'Авто: считать до даты' },
+                { value: 'manual', label: 'Ручной: значения ниже' }
+              ]}
+              onChange={(value) => updateContent((draft) => { draft.hero.countdownMode = value; })}
+            />
+            <div className="admin-inline-fields">
+              <AdminField
+                label="Дата старта"
+                type="date"
+                value={getCountdownDate(content.hero.countdownTarget)}
+                onChange={(value) => updateContent((draft) => {
+                  draft.hero.countdownMode = 'target';
+                  draft.hero.countdownTarget = buildCountdownTarget(value, getCountdownTime(draft.hero.countdownTarget), getCountdownOffset(draft.hero.countdownTarget));
+                })}
+              />
+              <AdminField
+                label="Время старта"
+                type="time"
+                value={getCountdownTime(content.hero.countdownTarget)}
+                onChange={(value) => updateContent((draft) => {
+                  draft.hero.countdownMode = 'target';
+                  draft.hero.countdownTarget = buildCountdownTarget(getCountdownDate(draft.hero.countdownTarget), value, getCountdownOffset(draft.hero.countdownTarget));
+                })}
+              />
+              <AdminField
+                label="Часовой пояс"
+                value={getCountdownOffset(content.hero.countdownTarget)}
+                onChange={(value) => updateContent((draft) => {
+                  draft.hero.countdownMode = 'target';
+                  draft.hero.countdownTarget = buildCountdownTarget(getCountdownDate(draft.hero.countdownTarget), getCountdownTime(draft.hero.countdownTarget), value);
+                })}
+              />
+            </div>
             <AdminField label="Дата старта ISO" value={content.hero.countdownTarget ?? ''} onChange={(value) => updateContent((draft) => { draft.hero.countdownTarget = value || undefined; })} />
+            <p className="admin-help">В авто-режиме сайт сам считает время до даты старта. В ручном режиме показываются значения из вкладок таймера ниже.</p>
             <AdminItemTabs
               group="countdown"
               items={content.hero.countdown}
@@ -588,13 +650,34 @@ type FieldProps = {
   label: string;
   value: string;
   onChange: (value: string) => void;
+  type?: string;
 };
 
-function AdminField({ label, value, onChange }: FieldProps) {
+function AdminField({ label, value, onChange, type = 'text' }: FieldProps) {
   return (
     <label className="admin-field">
       <span>{label}</span>
-      <input type="text" value={value} onChange={(event) => onChange(event.target.value)} />
+      <input type={type} value={value} onChange={(event) => onChange(event.target.value)} />
+    </label>
+  );
+}
+
+type SelectProps = {
+  label: string;
+  value: CountdownMode;
+  options: Array<{ value: CountdownMode; label: string }>;
+  onChange: (value: CountdownMode) => void;
+};
+
+function AdminSelect({ label, value, options, onChange }: SelectProps) {
+  return (
+    <label className="admin-field">
+      <span>{label}</span>
+      <select value={value} onChange={(event) => onChange(event.target.value as CountdownMode)}>
+        {options.map((option) => (
+          <option key={option.value} value={option.value}>{option.label}</option>
+        ))}
+      </select>
     </label>
   );
 }

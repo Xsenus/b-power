@@ -32,7 +32,7 @@ function renderHeroTitle(title: string): ReactNode {
 }
 
 function getCountdownItems(hero: HeroContent, now: number) {
-  if (!hero.countdownTarget) {
+  if (hero.countdownMode === 'manual' || !hero.countdownTarget) {
     return hero.countdown;
   }
 
@@ -59,13 +59,13 @@ export function Hero({ hero }: { hero: HeroContent }) {
   const countdownItems = useMemo(() => getCountdownItems(hero, now), [hero, now]);
 
   useEffect(() => {
-    if (!hero.countdownTarget) {
+    if (hero.countdownMode === 'manual' || !hero.countdownTarget) {
       return undefined;
     }
 
     const interval = window.setInterval(() => setNow(Date.now()), COUNTDOWN_INTERVAL);
     return () => window.clearInterval(interval);
-  }, [hero.countdownTarget]);
+  }, [hero.countdownMode, hero.countdownTarget]);
 
   return (
     <section

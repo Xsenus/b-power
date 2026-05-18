@@ -40,6 +40,7 @@ export type HeroContent = {
   mobileImage?: string;
   video?: string;
   countdownLabel: string;
+  countdownMode?: 'target' | 'manual' | string;
   countdownTarget?: string;
   countdown: CountdownItem[];
 };

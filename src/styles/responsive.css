@@ -203,6 +203,10 @@
     grid-template-columns: 1fr;
   }
 
+  .admin-inline-fields {
+    grid-template-columns: 1fr;
+  }
+
   .facts__layout {
     grid-template-areas:
       "top"

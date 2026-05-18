@@ -1060,6 +1060,7 @@ textarea:focus-visible {
 
 .admin-login input,
 .admin-field input,
+.admin-field select,
 .admin-field textarea {
   width: 100%;
   border: 1px solid rgba(255, 255, 255, 0.14);
@@ -1069,9 +1070,16 @@ textarea:focus-visible {
 }
 
 .admin-login input,
-.admin-field input {
+.admin-field input,
+.admin-field select {
   min-height: 44px;
   padding: 0 12px;
+}
+
+.admin-inline-fields {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
 }
 
 .admin-field textarea {
