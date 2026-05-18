@@ -1601,6 +1601,13 @@ body {
     padding-top: 70px;
   }
 
+  .product .container {
+    width: 328px;
+    max-width: calc(100vw - 32px);
+    margin-left: auto;
+    margin-right: auto;
+  }
+
   .product .section-label,
   .audience .section-label,
   .facts .section-label {
