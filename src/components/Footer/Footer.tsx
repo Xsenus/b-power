@@ -1,4 +1,6 @@
+import type { MouseEvent } from 'react';
 import type { BrandContent, ContactsContent, FooterContent, NavItem } from '../../data/types';
+import { scrollPageToTop } from '../../utils/scroll';
 import { phoneHref } from '../../utils/text';
 
 type FooterProps = {
@@ -9,11 +11,19 @@ type FooterProps = {
 };
 
 export function Footer({ brand, footer, nav, contacts }: FooterProps) {
+  function scrollToTop(event: MouseEvent<HTMLAnchorElement>) {
+    event.preventDefault();
+    scrollPageToTop();
+    if (window.location.hash) {
+      window.history.replaceState(null, document.title, `${window.location.pathname}${window.location.search}`);
+    }
+  }
+
   return (
     <footer className="footer">
       <div className="container footer__grid">
         <div className="footer__brand">
-          <a href="#top" aria-label="B-POWER">
+          <a href="#top" aria-label="Наверх" onClick={scrollToTop}>
             <picture>
               <source media="(max-width: 768px)" srcSet={brand.footerMobileLogo} />
               <img src={brand.footerLogo} alt={brand.logoAlt} width="263" height="95" />
@@ -44,7 +54,7 @@ export function Footer({ brand, footer, nav, contacts }: FooterProps) {
           ))}
         </div>
       </div>
-      <a className="scroll-top" href="#top" aria-label="Наверх">↑</a>
+      <a className="scroll-top" href="#top" aria-label="Наверх" onClick={scrollToTop}>↑</a>
     </footer>
   );
 }

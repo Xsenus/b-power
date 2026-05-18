@@ -31,6 +31,15 @@ body.menu-opened {
   overflow: hidden;
 }
 
+.page-top-anchor {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1px;
+  height: 1px;
+  pointer-events: none;
+}
+
 a {
   color: inherit;
   text-decoration: none;

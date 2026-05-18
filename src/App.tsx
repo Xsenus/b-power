@@ -80,6 +80,7 @@ export default function App() {
 
   return (
     <>
+      <div className="page-top-anchor" id="top" aria-hidden="true" />
       <Header brand={content.brand} nav={content.nav} contacts={content.contacts} />
       <main>
         <Hero hero={content.hero} />

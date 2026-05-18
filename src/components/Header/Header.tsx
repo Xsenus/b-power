@@ -1,5 +1,6 @@
 import { MouseEvent, useEffect, useState } from 'react';
 import type { BrandContent, ContactsContent, NavItem } from '../../data/types';
+import { scrollPageToTop } from '../../utils/scroll';
 import { phoneHref } from '../../utils/text';
 
 type HeaderProps = {
@@ -26,7 +27,7 @@ export function Header({ brand, nav, contacts }: HeaderProps) {
   function scrollToTop(event: MouseEvent<HTMLAnchorElement>) {
     event.preventDefault();
     setOpen(false);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    scrollPageToTop();
     if (window.location.hash) {
       window.history.replaceState(null, document.title, `${window.location.pathname}${window.location.search}`);
     }
@@ -50,7 +51,7 @@ export function Header({ brand, nav, contacts }: HeaderProps) {
   }, [open]);
 
   return (
-    <header className="site-header" id="top">
+    <header className="site-header">
       <div className="site-header__inner">
         {brand.logoScrollTop === false ? (
           <div className="site-header__logo" aria-label="B-POWER">
