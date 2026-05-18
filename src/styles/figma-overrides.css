@@ -397,6 +397,10 @@ body {
   object-position: center;
 }
 
+.about-card:nth-child(1) .about-card__image {
+  transform: scaleX(-1);
+}
+
 .about-card:nth-child(2) .about-card__image {
   right: 0;
   bottom: 0;
@@ -1577,7 +1581,7 @@ body {
     width: 285px;
     max-width: none;
     height: 284px;
-    transform: translateX(-49%);
+    transform: translateX(-49%) scaleX(-1);
     object-fit: fill;
     object-position: center;
   }
