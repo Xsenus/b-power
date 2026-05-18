@@ -677,34 +677,65 @@ export function Admin({ initialContent }: AdminProps) {
               <button className="button button--light" type="button" onClick={() => void onSaveEmailSettings()} disabled={loading}>Сохранить настройки почты</button>
             </div>
 
-            <AdminCheckbox
-              label="Отправлять заявки на email"
-              checked={emailSettings.enabled}
-              onChange={(checked) => updateEmailSettings((draft) => { draft.enabled = checked; })}
-            />
-            <label className="admin-field">
-              <span>Способ отправки</span>
-              <select value={emailSettings.method} onChange={(event) => updateEmailSettings((draft) => { draft.method = event.target.value; })}>
-                <option value="mail">mail() хостинга</option>
-                <option value="smtp">SMTP</option>
-              </select>
-            </label>
-            <AdminField label="Email получателя" value={emailSettings.toEmail} onChange={(value) => updateEmailSettings((draft) => { draft.toEmail = value; })} />
-            <AdminField label="Email отправителя" value={emailSettings.fromEmail} onChange={(value) => updateEmailSettings((draft) => { draft.fromEmail = value; })} />
-            <AdminField label="Тема письма" value={emailSettings.subject} onChange={(value) => updateEmailSettings((draft) => { draft.subject = value; })} />
+            <div className="admin-settings-grid">
+              <div className="admin-settings-card">
+                <h3>1. Основные поля</h3>
+                <AdminCheckbox
+                  label="Отправлять заявки на email"
+                  checked={emailSettings.enabled}
+                  onChange={(checked) => updateEmailSettings((draft) => { draft.enabled = checked; })}
+                />
+                <label className="admin-field">
+                  <span>Способ отправки</span>
+                  <select value={emailSettings.method} onChange={(event) => updateEmailSettings((draft) => { draft.method = event.target.value; })}>
+                    <option value="mail">mail() хостинга</option>
+                    <option value="smtp">SMTP</option>
+                  </select>
+                  <small>Для Яндекс Почты выбирайте SMTP. Для почты, созданной в панели хостинга, можно попробовать mail() хостинга.</small>
+                </label>
+                <AdminField label="Email получателя" value={emailSettings.toEmail} onChange={(value) => updateEmailSettings((draft) => { draft.toEmail = value; })} />
+                <p className="admin-help">На этот адрес будут приходить заявки с сайта.</p>
+                <AdminField label="Тема письма" value={emailSettings.subject} onChange={(value) => updateEmailSettings((draft) => { draft.subject = value; })} />
+              </div>
 
-            <div className="admin-inline-fields">
-              <AdminField label="SMTP host" value={emailSettings.smtpHost} onChange={(value) => updateEmailSettings((draft) => { draft.smtpHost = value; })} />
-              <AdminField label="SMTP port" value={emailSettings.smtpPort} onChange={(value) => updateEmailSettings((draft) => { draft.smtpPort = value; })} />
-              <AdminCheckbox label="SSL/TLS" checked={emailSettings.smtpSecure} onChange={(checked) => updateEmailSettings((draft) => { draft.smtpSecure = checked; })} />
+              <div className="admin-settings-card">
+                <h3>2. Отправитель и SMTP</h3>
+                <AdminField label="Email отправителя" value={emailSettings.fromEmail} onChange={(value) => updateEmailSettings((draft) => { draft.fromEmail = value; })} />
+                <p className="admin-help">Для Яндекса обычно должен совпадать с SMTP user.</p>
+                <AdminField label="SMTP host" value={emailSettings.smtpHost} onChange={(value) => updateEmailSettings((draft) => { draft.smtpHost = value; })} />
+                <div className="admin-inline-fields admin-inline-fields--mail">
+                  <AdminField label="SMTP port" value={emailSettings.smtpPort} onChange={(value) => updateEmailSettings((draft) => { draft.smtpPort = value; })} />
+                  <AdminCheckbox label="SSL/TLS" checked={emailSettings.smtpSecure} onChange={(checked) => updateEmailSettings((draft) => { draft.smtpSecure = checked; })} />
+                </div>
+                <AdminField label="SMTP user" value={emailSettings.smtpUser} onChange={(value) => updateEmailSettings((draft) => { draft.smtpUser = value; })} />
+                <AdminField
+                  label={emailSettings.hasSmtpPass ? 'SMTP password (уже сохранён, введите новый только для замены)' : 'SMTP password'}
+                  type="password"
+                  value={emailSettings.smtpPass ?? ''}
+                  onChange={(value) => updateEmailSettings((draft) => { draft.smtpPass = value; })}
+                />
+              </div>
+
+              <div className="admin-settings-card admin-settings-card--hint">
+                <h3>3. Подсказки</h3>
+                <div className="admin-settings-note">
+                  <strong>Яндекс Почта</strong>
+                  <span>Способ: SMTP</span>
+                  <span>SMTP host: smtp.yandex.ru</span>
+                  <span>SMTP port: 465</span>
+                  <span>SSL/TLS: включено</span>
+                  <span>SMTP user: полный email</span>
+                  <span>SMTP password: пароль приложения</span>
+                </div>
+                <div className="admin-settings-note">
+                  <strong>Почта хостинга</strong>
+                  <span>Способ: mail() хостинга</span>
+                  <span>Email получателя: рабочая почта</span>
+                  <span>Email отправителя: почта домена</span>
+                  <span>SMTP-поля можно оставить пустыми.</span>
+                </div>
+              </div>
             </div>
-            <AdminField label="SMTP user" value={emailSettings.smtpUser} onChange={(value) => updateEmailSettings((draft) => { draft.smtpUser = value; })} />
-            <AdminField
-              label={emailSettings.hasSmtpPass ? 'SMTP password (уже сохранён, введите новый только для замены)' : 'SMTP password'}
-              type="password"
-              value={emailSettings.smtpPass ?? ''}
-              onChange={(value) => updateEmailSettings((draft) => { draft.smtpPass = value; })}
-            />
           </section>
         </div>
       )}

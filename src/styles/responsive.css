@@ -207,6 +207,10 @@
     grid-template-columns: 1fr;
   }
 
+  .admin-settings-grid {
+    grid-template-columns: 1fr;
+  }
+
   .facts__layout {
     grid-template-areas:
       "top"
