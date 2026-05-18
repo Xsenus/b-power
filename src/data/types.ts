@@ -22,6 +22,7 @@ export type BrandContent = {
   footerLogo: string;
   footerMobileLogo: string;
   logoAlt: string;
+  logoScrollTop?: boolean;
 };
 
 export type CountdownItem = {

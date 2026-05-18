@@ -16,6 +16,12 @@ function splitSchedule(schedule: string) {
 export function Header({ brand, nav, contacts }: HeaderProps) {
   const [open, setOpen] = useState(false);
   const schedule = splitSchedule(contacts.schedule);
+  const logo = (
+    <picture>
+      <source media="(max-width: 768px)" srcSet={brand.mobileLogo} />
+      <img src={brand.logo} alt={brand.logoAlt} width="263" height="95" />
+    </picture>
+  );
 
   useEffect(() => {
     document.body.classList.toggle('menu-opened', open);
@@ -37,12 +43,15 @@ export function Header({ brand, nav, contacts }: HeaderProps) {
   return (
     <header className="site-header" id="top">
       <div className="site-header__inner">
-        <a className="site-header__logo" href="#top" aria-label="B-POWER">
-          <picture>
-            <source media="(max-width: 768px)" srcSet={brand.mobileLogo} />
-            <img src={brand.logo} alt={brand.logoAlt} width="263" height="95" />
-          </picture>
-        </a>
+        {brand.logoScrollTop === false ? (
+          <div className="site-header__logo" aria-label="B-POWER">
+            {logo}
+          </div>
+        ) : (
+          <a className="site-header__logo" href="#top" aria-label="Наверх">
+            {logo}
+          </a>
+        )}
 
         <nav className="site-header__nav" aria-label="Основная навигация">
           {nav.map((item) => (

@@ -303,6 +303,11 @@ export function Admin({ initialContent }: AdminProps) {
             <AssetField label="Footer desktop" value={content.brand.footerLogo} onChange={(value) => updateContent((draft) => { draft.brand.footerLogo = value; })} />
             <AssetField label="Footer mobile" value={content.brand.footerMobileLogo} onChange={(value) => updateContent((draft) => { draft.brand.footerMobileLogo = value; })} />
             <AdminField label="Alt" value={content.brand.logoAlt} onChange={(value) => updateContent((draft) => { draft.brand.logoAlt = value; })} />
+            <AdminCheckbox
+              label="Клик по логотипу поднимает вверх"
+              checked={content.brand.logoScrollTop !== false}
+              onChange={(checked) => updateContent((draft) => { draft.brand.logoScrollTop = checked; })}
+            />
           </section>
 
           <section className="admin-card">
@@ -701,6 +706,21 @@ function AdminSelect({ label, value, options, onChange }: SelectProps) {
           <option key={option.value} value={option.value}>{option.label}</option>
         ))}
       </select>
+    </label>
+  );
+}
+
+type CheckboxProps = {
+  label: string;
+  checked: boolean;
+  onChange: (checked: boolean) => void;
+};
+
+function AdminCheckbox({ label, checked, onChange }: CheckboxProps) {
+  return (
+    <label className="admin-field admin-checkbox">
+      <input type="checkbox" checked={checked} onChange={(event) => onChange(event.target.checked)} />
+      <span>{label}</span>
     </label>
   );
 }
