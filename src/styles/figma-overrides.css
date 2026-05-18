@@ -447,6 +447,8 @@ body {
   height: 100%;
   max-height: 100%;
   object-fit: cover;
+  scale: 1.06;
+  transform-origin: center;
 }
 
 .product__info {
@@ -1636,6 +1638,8 @@ body {
     width: 100%;
     height: 100%;
     object-fit: contain;
+    scale: 1.08;
+    transform-origin: center;
     box-shadow:
       82.946px 55.857px 80px rgba(20, 14, 0, 0.07),
       53.761px 36.204px 46.852px rgba(20, 14, 0, 0.05),
