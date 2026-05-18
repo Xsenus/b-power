@@ -1910,9 +1910,10 @@ body {
   }
 
   .form-section .container {
-    width: calc(100vw - 32px);
-    margin-left: 16px;
-    margin-right: 0;
+    width: 328px;
+    max-width: calc(100vw - 32px);
+    margin-left: auto;
+    margin-right: auto;
   }
 
   .footer {
