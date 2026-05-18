@@ -612,11 +612,12 @@ body {
 }
 
 .audience__grid {
-  grid-template-columns: repeat(3, 600px);
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 560px), 1fr));
   gap: 18px;
 }
 
 .audience-card {
+  min-width: 0;
   height: 340px;
   min-height: 340px;
   padding: 34px;
@@ -991,7 +992,7 @@ body {
   }
 
   .audience__grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 480px), 1fr));
     gap: 14px;
   }
 
