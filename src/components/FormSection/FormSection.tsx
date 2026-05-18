@@ -86,19 +86,15 @@ export function FormSection({ form }: { form: FormContent }) {
             </div>
           ) : (
             <>
-              <a className="lead-panel__close" href="#top" aria-label="Закрыть форму" />
               <div className="lead-panel__content">
-                <SectionLabel>{form.sectionLabel}</SectionLabel>
-                <h2 className="section-title lead-panel__title">
-                  <span className="responsive-copy responsive-copy--desktop">{brandVariant(form.title)}</span>
-                  <span className="responsive-copy responsive-copy--mobile">Откройте B•POWER первыми</span>
-                </h2>
-                <p className="lead-panel__text">
-                  <span className="responsive-copy responsive-copy--desktop">{form.text}</span>
-                  <span className="responsive-copy responsive-copy--mobile">
-                    Получите ранний доступ к линейке B•POWER и узнайте о старте продаж раньше остальных
-                  </span>
-                </p>
+                <div className="lead-panel__heading">
+                  <SectionLabel>{form.sectionLabel}</SectionLabel>
+                  <h2 className="section-title lead-panel__title">
+                    <span className="responsive-copy responsive-copy--desktop">{brandVariant(form.title)}</span>
+                    <span className="responsive-copy responsive-copy--mobile">{form.mobileTitle ?? brandVariant(form.title)}</span>
+                  </h2>
+                </div>
+                <p className="lead-panel__text">{form.text}</p>
               </div>
 
               <div className="lead-panel__form-block">
