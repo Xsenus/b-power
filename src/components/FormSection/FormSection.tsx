@@ -66,76 +66,104 @@ export function FormSection({ form }: { form: FormContent }) {
       style={{ '--form-image': `url(${form.background})` } as CSSProperties}
     >
       <div className="container">
-        <div className="lead-panel" id="lead-form">
-          <div className="lead-panel__content">
-            <SectionLabel>{form.sectionLabel}</SectionLabel>
-            <h2 className="section-title lead-panel__title">
-              <span className="responsive-copy responsive-copy--desktop">{brandVariant(form.title)}</span>
-              <span className="responsive-copy responsive-copy--mobile">{form.mobileTitle ?? brandVariant(form.title)}</span>
-            </h2>
-            <p className="lead-panel__text">{form.text}</p>
-          </div>
-
-          <form className="lead-form" onSubmit={onSubmit} noValidate>
-            <div className="field">
-              <label className="sr-only" htmlFor={nameId}>Имя</label>
-              <img className="field__icon field__icon--user" src="/assets/icons/form-user.svg" alt="" aria-hidden="true" />
-              <input
-                id={nameId}
-                name="name"
-                type="text"
-                autoComplete="name"
-                placeholder={form.namePlaceholder}
-                value={values.name}
-                aria-invalid={Boolean(errors.name)}
-                aria-describedby={errors.name ? `${nameId}-error` : undefined}
-                onChange={(event) => {
-                  setValues((current) => ({ ...current, name: event.target.value }));
-                  setErrors((current) => ({ ...current, name: undefined }));
-                }}
-              />
-              {errors.name && <span className="field__error" id={`${nameId}-error`}>{errors.name}</span>}
+        <div className={`lead-panel${status === 'success' ? ' lead-panel--success' : ''}`} id="lead-form">
+          {status === 'success' ? (
+            <div className="lead-panel__success" role="status">
+              <a className="lead-panel__close" href="#top" aria-label="Вернуться наверх" />
+              <div className="lead-panel__success-copy">
+                <h2 className="section-title lead-panel__title">
+                  <span className="responsive-copy responsive-copy--desktop">{form.successTitle}</span>
+                  <span className="responsive-copy responsive-copy--mobile">Спасибо за интерес{'\n'}к B•POWER</span>
+                </h2>
+                <p className="lead-panel__text">
+                  <span className="responsive-copy responsive-copy--desktop">{form.successText}</span>
+                  <span className="responsive-copy responsive-copy--mobile">
+                    Вы в списке — сообщим, как только продукт станет доступен
+                  </span>
+                </p>
+              </div>
+              <a className="button lead-panel__home-button" href="#top">Вернуться на главную</a>
             </div>
+          ) : (
+            <>
+              <a className="lead-panel__close" href="#top" aria-label="Закрыть форму" />
+              <div className="lead-panel__content">
+                <SectionLabel>{form.sectionLabel}</SectionLabel>
+                <h2 className="section-title lead-panel__title">
+                  <span className="responsive-copy responsive-copy--desktop">{brandVariant(form.title)}</span>
+                  <span className="responsive-copy responsive-copy--mobile">Откройте B•POWER первыми</span>
+                </h2>
+                <p className="lead-panel__text">
+                  <span className="responsive-copy responsive-copy--desktop">{form.text}</span>
+                  <span className="responsive-copy responsive-copy--mobile">
+                    Получите ранний доступ к линейке B•POWER и узнайте о старте продаж раньше остальных
+                  </span>
+                </p>
+              </div>
 
-            <div className="field">
-              <label className="sr-only" htmlFor={phoneId}>Телефон</label>
-              <img className="field__icon field__icon--phone" src="/assets/icons/form-phone.svg" alt="" aria-hidden="true" />
-              <input
-                id={phoneId}
-                name="phone"
-                type="tel"
-                inputMode="tel"
-                autoComplete="tel"
-                placeholder={form.phonePlaceholder}
-                value={values.phone}
-                aria-invalid={Boolean(errors.phone)}
-                aria-describedby={errors.phone ? `${phoneId}-error` : undefined}
-                onChange={(event) => {
-                  setValues((current) => ({ ...current, phone: formatPhone(event.target.value) }));
-                  setErrors((current) => ({ ...current, phone: undefined }));
-                }}
-                onFocus={() => {
-                  if (!values.phone) setValues((current) => ({ ...current, phone: '+7 ' }));
-                }}
-              />
-              {errors.phone && <span className="field__error" id={`${phoneId}-error`}>{errors.phone}</span>}
-            </div>
+              <div className="lead-panel__form-block">
+                <form className="lead-form" onSubmit={onSubmit} noValidate>
+                  <div className="field">
+                    <label className="sr-only" htmlFor={nameId}>Имя</label>
+                    <img className="field__icon field__icon--user" src="/assets/icons/form-user.svg" alt="" aria-hidden="true" />
+                    <input
+                      id={nameId}
+                      name="name"
+                      type="text"
+                      autoComplete="name"
+                      placeholder={form.namePlaceholder}
+                      value={values.name}
+                      aria-invalid={Boolean(errors.name)}
+                      aria-describedby={errors.name ? `${nameId}-error` : undefined}
+                      onChange={(event) => {
+                        setValues((current) => ({ ...current, name: event.target.value }));
+                        setErrors((current) => ({ ...current, name: undefined }));
+                      }}
+                    />
+                    {errors.name && <span className="field__error" id={`${nameId}-error`}>{errors.name}</span>}
+                  </div>
 
-            <button className="button button--light lead-form__button" type="submit" disabled={status === 'loading' || status === 'success'}>
-              {status === 'loading' ? 'Отправляем...' : (
-                <>
-                  <span className="form-button-copy form-button-copy--desktop">{form.buttonText}</span>
-                  <span className="form-button-copy form-button-copy--mobile">{form.mobileButtonText ?? form.buttonText}</span>
-                </>
-              )}
-            </button>
-          </form>
+                  <div className="field">
+                    <label className="sr-only" htmlFor={phoneId}>Телефон</label>
+                    <img className="field__icon field__icon--phone" src="/assets/icons/form-phone.svg" alt="" aria-hidden="true" />
+                    <input
+                      id={phoneId}
+                      name="phone"
+                      type="tel"
+                      inputMode="tel"
+                      autoComplete="tel"
+                      placeholder={form.phonePlaceholder}
+                      value={values.phone}
+                      aria-invalid={Boolean(errors.phone)}
+                      aria-describedby={errors.phone ? `${phoneId}-error` : undefined}
+                      onChange={(event) => {
+                        setValues((current) => ({ ...current, phone: formatPhone(event.target.value) }));
+                        setErrors((current) => ({ ...current, phone: undefined }));
+                      }}
+                      onFocus={() => {
+                        if (!values.phone) setValues((current) => ({ ...current, phone: '+7 ' }));
+                      }}
+                    />
+                    {errors.phone && <span className="field__error" id={`${phoneId}-error`}>{errors.phone}</span>}
+                  </div>
 
-          <p className="lead-panel__consent">{form.consent}</p>
+                  <button className="button button--light lead-form__button" type="submit" disabled={status === 'loading'}>
+                    {status === 'loading' ? 'Отправляем...' : (
+                      <>
+                        <span className="form-button-copy form-button-copy--desktop">{form.buttonText}</span>
+                        <span className="form-button-copy form-button-copy--mobile">{form.mobileButtonText ?? form.buttonText}</span>
+                      </>
+                    )}
+                  </button>
+                </form>
+
+                <p className="lead-panel__consent">{form.consent}</p>
+              </div>
+            </>
+          )}
         </div>
-        {message && (
+        {message && status !== 'success' && (
           <div className={`lead-message lead-message--${status}`} role="status">
-            {status === 'success' && <strong>{form.successTitle}</strong>}
             <span>{message}</span>
           </div>
         )}
