@@ -444,6 +444,7 @@ export function Admin({ initialContent }: AdminProps) {
             <AdminField label="Лейбл" value={content.facts.sectionLabel} onChange={(value) => updateContent((draft) => { draft.facts.sectionLabel = value; })} />
             <AdminArea label="Заголовок" value={content.facts.title} onChange={(value) => updateContent((draft) => { draft.facts.title = value; })} />
             <AssetField label="Картинка" value={content.facts.image} onChange={(value) => updateContent((draft) => { draft.facts.image = value; })} />
+            <AssetField label="Картинка mobile" value={content.facts.mobileImage ?? ''} onChange={(value) => updateContent((draft) => { draft.facts.mobileImage = value || undefined; })} />
             <AdminField label="Alt картинки" value={content.facts.imageAlt} onChange={(value) => updateContent((draft) => { draft.facts.imageAlt = value; })} />
             <AdminItemTabs
               group="facts"

@@ -117,6 +117,7 @@ export type FactsContent = {
   sectionLabel: string;
   title: string;
   image: string;
+  mobileImage?: string;
   imageAlt: string;
   items: FactItem[];
 };

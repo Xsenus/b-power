@@ -1888,6 +1888,7 @@ body {
     height: 284px;
     min-height: 284px;
     border-radius: 20px;
+    object-position: center top;
   }
 
   .lead-panel {

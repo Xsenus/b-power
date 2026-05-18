@@ -44,7 +44,10 @@ export function Benefits({ audience, facts }: BenefitsProps) {
                 </article>
               ))}
             </div>
-            <img className="facts__image" src={facts.image} alt={facts.imageAlt} />
+            <picture>
+              {facts.mobileImage ? <source media="(max-width: 768px)" srcSet={facts.mobileImage} /> : null}
+              <img className="facts__image" src={facts.image} alt={facts.imageAlt} />
+            </picture>
             <div className="facts__items facts__items--bottom">
               {facts.items.slice(3).map((item) => (
                 <article className="fact-card" key={item.title}>
