@@ -1942,6 +1942,11 @@ body {
     object-position: center center;
   }
 
+  .facts__media {
+    position: static;
+    display: block;
+  }
+
   .lead-panel {
     display: flex;
     flex-direction: column;

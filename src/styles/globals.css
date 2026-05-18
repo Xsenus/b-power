@@ -756,8 +756,15 @@ textarea:focus-visible {
   min-height: 214px;
 }
 
-.facts__image {
+.facts__media {
   grid-area: image;
+  position: sticky;
+  top: 132px;
+  align-self: start;
+  display: block;
+}
+
+.facts__image {
   width: 100%;
   height: 100%;
   min-height: 794px;

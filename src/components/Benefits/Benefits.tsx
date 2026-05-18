@@ -44,7 +44,7 @@ export function Benefits({ audience, facts }: BenefitsProps) {
                 </article>
               ))}
             </div>
-            <picture>
+            <picture className="facts__media">
               {facts.mobileImage ? <source media="(max-width: 768px)" srcSet={facts.mobileImage} /> : null}
               <img className="facts__image" src={facts.image} alt={facts.imageAlt} />
             </picture>
