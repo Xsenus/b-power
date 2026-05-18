@@ -16,3 +16,4 @@ server/data/leads.json
 bpower-*.png
 public/assets/images/figma-hero-mobile-source
 public/assets/images/figma-hero.webp
+public/assets/docs/*.pdf

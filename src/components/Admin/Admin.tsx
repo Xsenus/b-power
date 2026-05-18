@@ -1,6 +1,6 @@
 import { FormEvent, KeyboardEvent, ReactNode, useEffect, useState } from 'react';
 import type { AudienceItem, FactItem, LandingContent, Lead, ProductItem } from '../../data/types';
-import { deleteLead, exportLeads, fetchContent, fetchLeads, loginAdmin, saveContent } from '../../utils/api';
+import { deleteLead, exportLeads, fetchContent, fetchLeads, loginAdmin, saveContent, uploadDocument } from '../../utils/api';
 
 type AdminProps = {
   initialContent: LandingContent;
@@ -174,6 +174,23 @@ export function Admin({ initialContent }: AdminProps) {
     setContent(nextContent);
     setJsonDraft(JSON.stringify(nextContent, null, 2));
     setStatus('Контент сохранён. Обновите лендинг, чтобы увидеть изменения.');
+  }
+
+  async function onUploadFooterPdf(index: number, file: File) {
+    setLoading(true);
+    setStatus('');
+    const result = await uploadDocument(file, token);
+    setLoading(false);
+    if (!result.ok || !result.data) {
+      setStatus(result.error ?? 'Не удалось загрузить PDF');
+      return;
+    }
+    const uploaded = result.data;
+    updateContent((draft) => {
+      draft.footer.links[index].href = uploaded.url;
+      draft.footer.links[index].noIndex = true;
+    });
+    setStatus('PDF загружен. Нажмите «Сохранить изменения», чтобы обновить ссылку на сайте.');
   }
 
   async function onExport() {
@@ -538,7 +555,13 @@ export function Admin({ initialContent }: AdminProps) {
                 <div className="admin-repeat">
                   <h3>Ссылка {index + 1}</h3>
                   <AdminField label="Текст" value={item.label} onChange={(value) => updateContent((draft) => { draft.footer.links[index].label = value; })} />
-                  <AdminField label="Href" value={item.href} onChange={(value) => updateContent((draft) => { draft.footer.links[index].href = value; })} />
+                  <DocumentField
+                    label="PDF / ссылка"
+                    value={item.href}
+                    disabled={loading}
+                    onChange={(value) => updateContent((draft) => { draft.footer.links[index].href = value; })}
+                    onUpload={(file) => void onUploadFooterPdf(index, file)}
+                  />
                 </div>
               )}
             </AdminItemTabs>
@@ -697,6 +720,31 @@ function AssetField({ label, value, onChange }: FieldProps) {
       <span>{label}</span>
       <input type="text" value={value} onChange={(event) => onChange(event.target.value)} placeholder="/assets/images/file.webp" />
       {value && <small>Файл должен лежать в public/assets или быть внешним URL.</small>}
+    </label>
+  );
+}
+
+type DocumentFieldProps = FieldProps & {
+  disabled?: boolean;
+  onUpload: (file: File) => void;
+};
+
+function DocumentField({ label, value, onChange, disabled = false, onUpload }: DocumentFieldProps) {
+  return (
+    <label className="admin-field admin-field--document">
+      <span>{label}</span>
+      <input type="text" value={value} onChange={(event) => onChange(event.target.value)} placeholder="/assets/docs/file.pdf" />
+      <input
+        type="file"
+        accept="application/pdf,.pdf"
+        disabled={disabled}
+        onChange={(event) => {
+          const file = event.target.files?.[0];
+          event.target.value = '';
+          if (file) onUpload(file);
+        }}
+      />
+      <small>PDF открывается в новой вкладке. Файлы из загрузки сервер отдаёт с запретом индексации.</small>
     </label>
   );
 }

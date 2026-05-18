@@ -27,7 +27,7 @@ app.use((req, res, next) => {
   if (origin) res.setHeader('Access-Control-Allow-Origin', origin);
   res.setHeader('Access-Control-Allow-Credentials', 'true');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, OPTIONS');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
   if (req.method === 'OPTIONS') return res.sendStatus(204);
   next();
 });
@@ -145,6 +145,54 @@ function leadsToCsv(leads) {
   return `\uFEFF${header.join(';')}\n${rows.join('\n')}\n`;
 }
 
+function parseMultipartPdf(contentType, body) {
+  const boundaryMatch = String(contentType || '').match(/boundary=(?:"([^"]+)"|([^;]+))/i);
+  const boundaryValue = boundaryMatch?.[1] || boundaryMatch?.[2];
+  if (!boundaryValue || !Buffer.isBuffer(body)) return null;
+
+  const boundary = Buffer.from(`--${boundaryValue}`);
+  let cursor = body.indexOf(boundary);
+  while (cursor !== -1) {
+    const partStart = cursor + boundary.length + 2;
+    const nextBoundary = body.indexOf(boundary, partStart);
+    if (nextBoundary === -1) break;
+
+    const headerEnd = body.indexOf(Buffer.from('\r\n\r\n'), partStart);
+    if (headerEnd > partStart && headerEnd < nextBoundary) {
+      const header = body.subarray(partStart, headerEnd).toString('utf8');
+      if (/name="file"/i.test(header) && /filename="/i.test(header)) {
+        const fileName = header.match(/filename="([^"]*)"/i)?.[1] || 'document.pdf';
+        const dataEnd = body.subarray(nextBoundary - 2, nextBoundary).toString() === '\r\n' ? nextBoundary - 2 : nextBoundary;
+        return { fileName, data: body.subarray(headerEnd + 4, dataEnd) };
+      }
+    }
+
+    cursor = nextBoundary;
+  }
+
+  return null;
+}
+
+async function saveUploadedPdf(req) {
+  const file = parseMultipartPdf(req.headers['content-type'], req.body);
+  if (!file) return { error: 'PDF файл не передан', status: 400 };
+  if (file.data.length > 15 * 1024 * 1024) return { error: 'PDF больше 15 МБ', status: 413 };
+  if (path.extname(file.fileName).toLowerCase() !== '.pdf') return { error: 'Можно загружать только PDF', status: 400 };
+  if (!file.data.subarray(0, 5).equals(Buffer.from('%PDF-'))) return { error: 'Файл должен быть PDF', status: 400 };
+
+  const docsDir = path.join(rootDir, 'public', 'assets', 'docs');
+  await fs.mkdir(docsDir, { recursive: true });
+  await fs.writeFile(
+    path.join(docsDir, '.htaccess'),
+    'Options -Indexes\n<IfModule mod_headers.c>\nHeader set X-Robots-Tag "noindex, nofollow, noarchive"\n</IfModule>\n',
+    'utf8'
+  );
+
+  const storedName = `document-${new Date().toISOString().replace(/[-:T.Z]/g, '').slice(0, 14)}-${crypto.randomBytes(4).toString('hex')}.pdf`;
+  await fs.writeFile(path.join(docsDir, storedName), file.data);
+  return { data: { url: `/assets/docs/${storedName}`, name: storedName } };
+}
+
 async function saveLead(lead) {
   const leads = await readJson(leadsFile, []);
   leads.unshift(lead);
@@ -180,6 +228,16 @@ app.put('/api/content', requireAdmin, async (req, res) => {
     sendOk(res, req.body);
   } catch {
     sendError(res, 500, 'Не удалось сохранить content.json');
+  }
+});
+
+app.post('/api/assets/upload', requireAdmin, express.raw({ type: 'multipart/form-data', limit: '15mb' }), async (req, res) => {
+  try {
+    const result = await saveUploadedPdf(req);
+    if (result.error) return sendError(res, result.status, result.error);
+    sendOk(res, result.data);
+  } catch {
+    sendError(res, 500, 'Не удалось сохранить PDF');
   }
 });
 

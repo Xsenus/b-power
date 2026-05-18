@@ -131,6 +131,53 @@ function csv_escape($value): string
     return '"' . str_replace('"', '""', $value) . '"';
 }
 
+function upload_pdf_document(): array
+{
+    if (!isset($_FILES['file']) || !is_array($_FILES['file'])) {
+        send_json(400, ['ok' => false, 'error' => 'PDF файл не передан']);
+    }
+
+    $file = $_FILES['file'];
+    if (($file['error'] ?? UPLOAD_ERR_NO_FILE) !== UPLOAD_ERR_OK) {
+        send_json(400, ['ok' => false, 'error' => 'Не удалось загрузить PDF']);
+    }
+
+    if (($file['size'] ?? 0) > 15 * 1024 * 1024) {
+        send_json(413, ['ok' => false, 'error' => 'PDF больше 15 МБ']);
+    }
+
+    $originalName = (string)($file['name'] ?? 'document.pdf');
+    $extension = strtolower(pathinfo($originalName, PATHINFO_EXTENSION));
+    if ($extension !== 'pdf') {
+        send_json(400, ['ok' => false, 'error' => 'Можно загружать только PDF']);
+    }
+
+    $tmpPath = (string)($file['tmp_name'] ?? '');
+    $mime = is_file($tmpPath) && function_exists('mime_content_type') ? (string)mime_content_type($tmpPath) : '';
+    if ($mime !== '' && !in_array($mime, ['application/pdf', 'application/x-pdf'], true)) {
+        send_json(400, ['ok' => false, 'error' => 'Файл должен быть PDF']);
+    }
+
+    $uploadDir = __DIR__ . '/assets/docs';
+    if (!is_dir($uploadDir)) {
+        mkdir($uploadDir, 0755, true);
+    }
+
+    $htaccess = "Options -Indexes\n<IfModule mod_headers.c>\nHeader set X-Robots-Tag \"noindex, nofollow, noarchive\"\n</IfModule>\n";
+    file_put_contents($uploadDir . '/.htaccess', $htaccess);
+
+    $fileName = 'document-' . gmdate('Ymd-His') . '-' . bin2hex(random_bytes(4)) . '.pdf';
+    $targetPath = $uploadDir . '/' . $fileName;
+    if (!move_uploaded_file($tmpPath, $targetPath)) {
+        send_json(500, ['ok' => false, 'error' => 'Не удалось сохранить PDF']);
+    }
+
+    return [
+        'url' => '/assets/docs/' . $fileName,
+        'name' => $fileName,
+    ];
+}
+
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     send_json(200, ['ok' => true]);
 }
@@ -170,6 +217,11 @@ if ($path === '/api/content' && $method === 'PUT') {
     }
     write_json_file($contentFile, $body);
     send_json(200, ['ok' => true, 'data' => $body]);
+}
+
+if ($path === '/api/assets/upload' && $method === 'POST') {
+    require_admin($jwtSecret);
+    send_json(200, ['ok' => true, 'data' => upload_pdf_document()]);
 }
 
 if ($path === '/api/leads' && $method === 'POST') {

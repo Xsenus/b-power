@@ -38,9 +38,9 @@ export function Footer({ brand, footer, nav, contacts }: FooterProps) {
 
         <div className="footer__policy">
           {footer.links.map((link) => (
-            link.href === '#'
+            !link.href || link.href === '#'
               ? <span key={link.label}>{link.label}</span>
-              : <a href={link.href} key={link.label}>{link.label}</a>
+              : <a href={link.href} key={link.label} target="_blank" rel="nofollow noopener noreferrer">{link.label}</a>
           ))}
         </div>
       </div>

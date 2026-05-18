@@ -141,6 +141,7 @@ export type FormContent = {
 export type FooterLink = {
   label: string;
   href: string;
+  noIndex?: boolean;
 };
 
 export type FooterContent = {

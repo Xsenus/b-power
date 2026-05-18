@@ -43,6 +43,19 @@ export async function saveContent(content: LandingContent, token: string): Promi
   return parseJson<LandingContent>(response);
 }
 
+export async function uploadDocument(file: File, token: string): Promise<ApiResult<{ url: string; name: string }>> {
+  const formData = new FormData();
+  formData.append('file', file);
+
+  const response = await fetch(`${API_BASE}/api/assets/upload`, {
+    method: 'POST',
+    headers: { Authorization: `Bearer ${token}` },
+    body: formData
+  });
+
+  return parseJson<{ url: string; name: string }>(response);
+}
+
 export async function fetchLeads(token: string): Promise<ApiResult<Lead[]>> {
   const response = await fetch(`${API_BASE}/api/leads`, {
     headers: { Authorization: `Bearer ${token}` }

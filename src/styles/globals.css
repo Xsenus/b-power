@@ -1088,6 +1088,10 @@ textarea:focus-visible {
   line-height: 1.45;
 }
 
+.admin-field input[type="file"] {
+  padding: 10px 12px;
+}
+
 .admin-field small {
   color: #a8a8a8;
   font-size: 12px;
