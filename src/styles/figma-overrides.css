@@ -1660,10 +1660,10 @@ body {
   }
 
   .product .container {
-    width: 328px;
-    max-width: calc(100vw - 32px);
-    margin-left: auto;
-    margin-right: auto;
+    width: calc(100vw - 32px);
+    max-width: none;
+    margin-left: 16px;
+    margin-right: 0;
   }
 
   .product .section-label,
@@ -1684,8 +1684,9 @@ body {
   }
 
   .product__visual {
-    height: 317px;
-    min-height: 317px;
+    aspect-ratio: 328 / 317;
+    height: auto;
+    min-height: 0;
     border-radius: 12px;
   }
 
