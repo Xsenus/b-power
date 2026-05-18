@@ -1953,8 +1953,8 @@ body {
     flex-direction: column;
     align-items: flex-start;
     gap: 20px;
-    width: 328px;
-    max-width: calc(100vw - 32px);
+    width: 100%;
+    max-width: none;
     height: 508px;
     min-height: 508px;
     scroll-margin-top: 96px;
@@ -1979,10 +1979,10 @@ body {
   }
 
   .form-section .container {
-    width: 328px;
-    max-width: calc(100vw - 32px);
-    margin-left: auto;
-    margin-right: auto;
+    width: calc(100vw - 32px);
+    max-width: none;
+    margin-left: 16px;
+    margin-right: 0;
   }
 
   .footer {
