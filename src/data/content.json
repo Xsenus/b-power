@@ -274,19 +274,23 @@
     "links": [
       {
         "label": "Политика обработки персональных данных",
-        "href": "#"
+        "href": "/assets/docs/personal-data-policy.pdf",
+        "noIndex": true
       },
       {
         "label": "Политика конфиденциальности",
-        "href": "#"
+        "href": "/assets/docs/privacy-policy.pdf",
+        "noIndex": true
       },
       {
         "label": "Публичная оферта интернет-магазина",
-        "href": "#"
+        "href": "/assets/docs/public-offer.pdf",
+        "noIndex": true
       },
       {
         "label": "Политика обработки файлов cookie",
-        "href": "#"
+        "href": "/assets/docs/cookie-policy.pdf",
+        "noIndex": true
       }
     ]
   }

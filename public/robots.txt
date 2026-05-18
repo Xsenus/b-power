@@ -1,5 +1,6 @@
 User-agent: *
 Allow: /
 Disallow: /admin
+Disallow: /assets/docs/
 
 Sitemap: https://cp042132.tw1.ru/sitemap.xml
