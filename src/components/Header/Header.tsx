@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { MouseEvent, useEffect, useState } from 'react';
 import type { BrandContent, ContactsContent, NavItem } from '../../data/types';
 import { phoneHref } from '../../utils/text';
 
@@ -22,6 +22,15 @@ export function Header({ brand, nav, contacts }: HeaderProps) {
       <img src={brand.logo} alt={brand.logoAlt} width="263" height="95" />
     </picture>
   );
+
+  function scrollToTop(event: MouseEvent<HTMLAnchorElement>) {
+    event.preventDefault();
+    setOpen(false);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    if (window.location.hash) {
+      window.history.replaceState(null, document.title, `${window.location.pathname}${window.location.search}`);
+    }
+  }
 
   useEffect(() => {
     document.body.classList.toggle('menu-opened', open);
@@ -48,7 +57,7 @@ export function Header({ brand, nav, contacts }: HeaderProps) {
             {logo}
           </div>
         ) : (
-          <a className="site-header__logo" href="#top" aria-label="Наверх">
+          <a className="site-header__logo" href="#top" aria-label="Наверх" onClick={scrollToTop}>
             {logo}
           </a>
         )}
