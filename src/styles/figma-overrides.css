@@ -1587,10 +1587,10 @@ body {
   }
 
   .about-card:nth-child(2) .about-card__image {
-    left: -57px;
-    right: auto;
-    bottom: -28px;
-    width: 385px;
+    left: auto;
+    right: -14px;
+    bottom: -18px;
+    width: 354px;
     max-width: none;
     height: 245px;
     object-fit: cover;
