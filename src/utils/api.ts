@@ -1,4 +1,4 @@
-import type { ApiResult, LandingContent, Lead, LeadPayload } from '../data/types';
+import type { ApiResult, EmailSettings, LandingContent, Lead, LeadPayload } from '../data/types';
 
 const API_BASE = import.meta.env.VITE_API_BASE ?? '';
 
@@ -41,6 +41,22 @@ export async function saveContent(content: LandingContent, token: string): Promi
     body: JSON.stringify(content)
   });
   return parseJson<LandingContent>(response);
+}
+
+export async function fetchEmailSettings(token: string): Promise<ApiResult<EmailSettings>> {
+  const response = await fetch(`${API_BASE}/api/settings/email`, {
+    headers: { Authorization: `Bearer ${token}` }
+  });
+  return parseJson<EmailSettings>(response);
+}
+
+export async function saveEmailSettings(settings: EmailSettings, token: string): Promise<ApiResult<EmailSettings>> {
+  const response = await fetch(`${API_BASE}/api/settings/email`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+    body: JSON.stringify(settings)
+  });
+  return parseJson<EmailSettings>(response);
 }
 
 export async function uploadDocument(file: File, token: string): Promise<ApiResult<{ url: string; name: string }>> {

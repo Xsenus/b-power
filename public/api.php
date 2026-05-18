@@ -6,6 +6,7 @@ header('Content-Type: application/json; charset=utf-8');
 $dataDir = __DIR__ . '/app-data';
 $contentFile = $dataDir . '/content.json';
 $leadsFile = $dataDir . '/leads.json';
+$emailSettingsFile = $dataDir . '/email-settings.json';
 $configFile = $dataDir . '/config.php';
 
 $config = is_file($configFile) ? require $configFile : [];
@@ -131,6 +132,144 @@ function csv_escape($value): string
     return '"' . str_replace('"', '""', $value) . '"';
 }
 
+function default_email_settings(): array
+{
+    return [
+        'enabled' => false,
+        'method' => 'mail',
+        'toEmail' => '',
+        'fromEmail' => '',
+        'subject' => 'Новая заявка B-POWER',
+        'smtpHost' => '',
+        'smtpPort' => '465',
+        'smtpSecure' => true,
+        'smtpUser' => '',
+        'smtpPass' => '',
+    ];
+}
+
+function normalize_email_settings(array $body, array $current = []): array
+{
+    $base = array_merge(default_email_settings(), $current);
+    return [
+        'enabled' => (bool)($body['enabled'] ?? false),
+        'method' => (($body['method'] ?? $base['method']) === 'smtp') ? 'smtp' : 'mail',
+        'toEmail' => trim((string)($body['toEmail'] ?? '')),
+        'fromEmail' => trim((string)($body['fromEmail'] ?? '')),
+        'subject' => trim((string)($body['subject'] ?? $base['subject'])) ?: 'Новая заявка B-POWER',
+        'smtpHost' => trim((string)($body['smtpHost'] ?? '')),
+        'smtpPort' => trim((string)($body['smtpPort'] ?? $base['smtpPort'] ?? '465')),
+        'smtpSecure' => (bool)($body['smtpSecure'] ?? false),
+        'smtpUser' => trim((string)($body['smtpUser'] ?? '')),
+        'smtpPass' => ($body['smtpPass'] ?? '') !== '' ? (string)$body['smtpPass'] : (string)($base['smtpPass'] ?? ''),
+    ];
+}
+
+function public_email_settings(array $settings): array
+{
+    $settings['hasSmtpPass'] = ($settings['smtpPass'] ?? '') !== '';
+    unset($settings['smtpPass']);
+    return $settings;
+}
+
+function lead_email_text(array $lead): string
+{
+    return implode("\n", [
+        'Имя: ' . ($lead['name'] ?? ''),
+        'Телефон: ' . ($lead['phone'] ?? ''),
+        'Email: ' . (($lead['email'] ?? '') ?: '-'),
+        'Сообщение: ' . (($lead['message'] ?? '') ?: '-'),
+        'Источник: ' . ($lead['source'] ?? ''),
+        'Дата: ' . ($lead['createdAt'] ?? ''),
+    ]);
+}
+
+function smtp_read($socket): string
+{
+    $data = '';
+    while (($line = fgets($socket, 515)) !== false) {
+        $data .= $line;
+        if (isset($line[3]) && $line[3] === ' ') {
+            break;
+        }
+    }
+    return $data;
+}
+
+function smtp_command($socket, string $command, array $expected): void
+{
+    fwrite($socket, $command . "\r\n");
+    $response = smtp_read($socket);
+    $code = (int)substr($response, 0, 3);
+    if (!in_array($code, $expected, true)) {
+        throw new RuntimeException('SMTP error');
+    }
+}
+
+function send_smtp_mail(array $settings, array $lead): void
+{
+    $host = $settings['smtpHost'] ?? '';
+    $port = (int)($settings['smtpPort'] ?? 465);
+    if ($host === '' || ($settings['toEmail'] ?? '') === '') {
+        return;
+    }
+
+    $remote = !empty($settings['smtpSecure']) ? 'ssl://' . $host : $host;
+    $socket = @stream_socket_client($remote . ':' . $port, $errno, $errstr, 12, STREAM_CLIENT_CONNECT);
+    if (!$socket) {
+        throw new RuntimeException('SMTP connection failed');
+    }
+    stream_set_timeout($socket, 12);
+    smtp_read($socket);
+    smtp_command($socket, 'EHLO buffalo-protein.ru', [250]);
+    if (($settings['smtpUser'] ?? '') !== '') {
+        smtp_command($socket, 'AUTH LOGIN', [334]);
+        smtp_command($socket, base64_encode((string)$settings['smtpUser']), [334]);
+        smtp_command($socket, base64_encode((string)($settings['smtpPass'] ?? '')), [235]);
+    }
+
+    $from = ($settings['fromEmail'] ?? '') ?: (($settings['smtpUser'] ?? '') ?: 'no-reply@buffalo-protein.ru');
+    $to = (string)$settings['toEmail'];
+    $subject = (string)(($settings['subject'] ?? '') ?: 'Новая заявка B-POWER');
+    $body = lead_email_text($lead);
+    $headers = [
+        'From: ' . $from,
+        'To: ' . $to,
+        'Subject: =?UTF-8?B?' . base64_encode($subject) . '?=',
+        'MIME-Version: 1.0',
+        'Content-Type: text/plain; charset=UTF-8',
+    ];
+    $message = implode("\r\n", $headers) . "\r\n\r\n" . $body . "\r\n";
+
+    smtp_command($socket, 'MAIL FROM:<' . $from . '>', [250]);
+    smtp_command($socket, 'RCPT TO:<' . $to . '>', [250, 251]);
+    smtp_command($socket, 'DATA', [354]);
+    smtp_command($socket, str_replace("\n.", "\n..", $message) . "\r\n.", [250]);
+    smtp_command($socket, 'QUIT', [221]);
+    fclose($socket);
+}
+
+function send_lead_email(array $lead, string $settingsFile): void
+{
+    $settings = normalize_email_settings(read_json_file($settingsFile, default_email_settings()), read_json_file($settingsFile, default_email_settings()));
+    if (empty($settings['enabled']) || empty($settings['toEmail'])) {
+        return;
+    }
+
+    if ($settings['method'] === 'smtp') {
+        send_smtp_mail($settings, $lead);
+        return;
+    }
+
+    $from = $settings['fromEmail'] ?: 'no-reply@buffalo-protein.ru';
+    $headers = [
+        'From: ' . $from,
+        'MIME-Version: 1.0',
+        'Content-Type: text/plain; charset=UTF-8',
+    ];
+    @mail($settings['toEmail'], '=?UTF-8?B?' . base64_encode($settings['subject']) . '?=', lead_email_text($lead), implode("\r\n", $headers));
+}
+
 function upload_pdf_document(): array
 {
     if (!isset($_FILES['file']) || !is_array($_FILES['file'])) {
@@ -219,6 +358,20 @@ if ($path === '/api/content' && $method === 'PUT') {
     send_json(200, ['ok' => true, 'data' => $body]);
 }
 
+if ($path === '/api/settings/email' && $method === 'GET') {
+    require_admin($jwtSecret);
+    $settings = normalize_email_settings(read_json_file($emailSettingsFile, default_email_settings()), read_json_file($emailSettingsFile, default_email_settings()));
+    send_json(200, ['ok' => true, 'data' => public_email_settings($settings)]);
+}
+
+if ($path === '/api/settings/email' && $method === 'PUT') {
+    require_admin($jwtSecret);
+    $current = read_json_file($emailSettingsFile, default_email_settings());
+    $settings = normalize_email_settings(read_body(), $current);
+    write_json_file($emailSettingsFile, $settings);
+    send_json(200, ['ok' => true, 'data' => public_email_settings($settings)]);
+}
+
 if ($path === '/api/assets/upload' && $method === 'POST') {
     require_admin($jwtSecret);
     send_json(200, ['ok' => true, 'data' => upload_pdf_document()]);
@@ -229,6 +382,11 @@ if ($path === '/api/leads' && $method === 'POST') {
     $leads = read_json_file($leadsFile, []);
     array_unshift($leads, $lead);
     write_json_file($leadsFile, $leads);
+    try {
+        send_lead_email($lead, $emailSettingsFile);
+    } catch (Throwable $error) {
+        error_log('Lead email failed: ' . $error->getMessage());
+    }
     send_json(200, ['ok' => true, 'data' => $lead]);
 }
 

@@ -14,6 +14,7 @@ const rootDir = path.resolve(__dirname, '..');
 const dataDir = path.join(__dirname, 'data');
 const contentFile = path.join(dataDir, 'content.json');
 const leadsFile = path.join(dataDir, 'leads.json');
+const emailSettingsFile = path.join(dataDir, 'email-settings.json');
 const distDir = path.join(rootDir, 'dist');
 const port = Number(process.env.PORT || 5174);
 const adminPassword = process.env.ADMIN_PASSWORD || 'admin';
@@ -21,6 +22,19 @@ const jwtSecret = process.env.JWT_SECRET || adminPassword;
 const tokenTtlMs = 1000 * 60 * 60 * 12;
 
 const app = express();
+
+const defaultEmailSettings = {
+  enabled: false,
+  method: 'mail',
+  toEmail: '',
+  fromEmail: '',
+  subject: 'Новая заявка B-POWER',
+  smtpHost: '',
+  smtpPort: '465',
+  smtpSecure: true,
+  smtpUser: '',
+  smtpPass: ''
+};
 
 app.use((req, res, next) => {
   const origin = req.headers.origin;
@@ -57,6 +71,67 @@ async function writeJson(filePath, data) {
   const tempPath = `${filePath}.tmp`;
   await fs.writeFile(tempPath, `${JSON.stringify(data, null, 2)}\n`, 'utf8');
   await fs.rename(tempPath, filePath);
+}
+
+function publicEmailSettings(settings) {
+  const { smtpPass, ...publicSettings } = settings;
+  return { ...publicSettings, hasSmtpPass: Boolean(smtpPass) };
+}
+
+function normalizeEmailSettings(payload, current = defaultEmailSettings) {
+  return {
+    ...defaultEmailSettings,
+    ...current,
+    enabled: Boolean(payload?.enabled),
+    method: String(payload?.method || current.method || 'mail') === 'smtp' ? 'smtp' : 'mail',
+    toEmail: String(payload?.toEmail || '').trim(),
+    fromEmail: String(payload?.fromEmail || '').trim(),
+    subject: String(payload?.subject || defaultEmailSettings.subject).trim(),
+    smtpHost: String(payload?.smtpHost || '').trim(),
+    smtpPort: String(payload?.smtpPort || current.smtpPort || '465').trim(),
+    smtpSecure: Boolean(payload?.smtpSecure),
+    smtpUser: String(payload?.smtpUser || '').trim(),
+    smtpPass: payload?.smtpPass ? String(payload.smtpPass) : String(current.smtpPass || '')
+  };
+}
+
+function leadEmailText(lead) {
+  return [
+    `Имя: ${lead.name}`,
+    `Телефон: ${lead.phone}`,
+    `Email: ${lead.email || '-'}`,
+    `Сообщение: ${lead.message || '-'}`,
+    `Источник: ${lead.source}`,
+    `Дата: ${lead.createdAt}`
+  ].join('\n');
+}
+
+async function sendLeadEmail(lead) {
+  const settings = await readJson(emailSettingsFile, defaultEmailSettings);
+  const normalized = normalizeEmailSettings(settings, settings);
+  if (!normalized.enabled || !normalized.toEmail) return;
+
+  const from = normalized.fromEmail || normalized.smtpUser || 'no-reply@localhost';
+  if (normalized.method !== 'smtp') {
+    if (!process.env.SENDMAIL_PATH) return;
+  }
+
+  const transporter = nodemailer.createTransport({
+    host: normalized.smtpHost || process.env.SMTP_HOST,
+    port: Number(normalized.smtpPort || process.env.SMTP_PORT || 465),
+    secure: Boolean(normalized.smtpSecure),
+    auth: normalized.smtpUser ? { user: normalized.smtpUser, pass: normalized.smtpPass } : undefined,
+    sendmail: normalized.method === 'mail',
+    newline: 'unix',
+    path: process.env.SENDMAIL_PATH
+  });
+
+  await transporter.sendMail({
+    from,
+    to: normalized.toEmail,
+    subject: normalized.subject || defaultEmailSettings.subject,
+    text: leadEmailText(lead)
+  });
 }
 
 function sendOk(res, data) {
@@ -231,6 +306,22 @@ app.put('/api/content', requireAdmin, async (req, res) => {
   }
 });
 
+app.get('/api/settings/email', requireAdmin, async (_req, res) => {
+  const settings = await readJson(emailSettingsFile, defaultEmailSettings);
+  sendOk(res, publicEmailSettings(normalizeEmailSettings(settings, settings)));
+});
+
+app.put('/api/settings/email', requireAdmin, async (req, res) => {
+  try {
+    const current = await readJson(emailSettingsFile, defaultEmailSettings);
+    const next = normalizeEmailSettings(req.body, current);
+    await writeJson(emailSettingsFile, next);
+    sendOk(res, publicEmailSettings(next));
+  } catch {
+    sendError(res, 500, 'Не удалось сохранить настройки почты');
+  }
+});
+
 app.post('/api/assets/upload', requireAdmin, express.raw({ type: 'multipart/form-data', limit: '15mb' }), async (req, res) => {
   try {
     const result = await saveUploadedPdf(req);
@@ -247,6 +338,7 @@ app.post('/api/leads', async (req, res) => {
 
   try {
     const lead = await saveLead(result.lead);
+    sendLeadEmail(lead).catch((error) => console.error('Lead email failed:', error.message));
     sendOk(res, lead);
   } catch {
     sendError(res, 500, 'Не удалось сохранить заявку');

@@ -1,12 +1,12 @@
 import { FormEvent, KeyboardEvent, ReactNode, useEffect, useState } from 'react';
-import type { AudienceItem, FactItem, LandingContent, Lead, ProductItem } from '../../data/types';
-import { deleteLead, exportLeads, fetchContent, fetchLeads, loginAdmin, saveContent, uploadDocument } from '../../utils/api';
+import type { AudienceItem, EmailSettings, FactItem, LandingContent, Lead, ProductItem } from '../../data/types';
+import { deleteLead, exportLeads, fetchContent, fetchLeads, fetchEmailSettings, loginAdmin, saveContent, saveEmailSettings, uploadDocument } from '../../utils/api';
 
 type AdminProps = {
   initialContent: LandingContent;
 };
 
-type AdminTab = 'main' | 'product' | 'sections' | 'footer' | 'json' | 'leads';
+type AdminTab = 'main' | 'product' | 'sections' | 'footer' | 'settings' | 'json' | 'leads';
 type CountdownMode = 'target' | 'manual';
 
 const ADMIN_TABS: Array<{ id: AdminTab; label: string }> = [
@@ -14,9 +14,24 @@ const ADMIN_TABS: Array<{ id: AdminTab; label: string }> = [
   { id: 'product', label: 'Продукт' },
   { id: 'sections', label: 'Разделы' },
   { id: 'footer', label: 'Футер' },
+  { id: 'settings', label: 'Настройки' },
   { id: 'json', label: 'Полный JSON' },
   { id: 'leads', label: 'Заявки' }
 ];
+
+const DEFAULT_EMAIL_SETTINGS: EmailSettings = {
+  enabled: false,
+  method: 'mail',
+  toEmail: '',
+  fromEmail: '',
+  subject: 'Новая заявка B-POWER',
+  smtpHost: '',
+  smtpPort: '465',
+  smtpSecure: true,
+  smtpUser: '',
+  smtpPass: '',
+  hasSmtpPass: false
+};
 
 function normalizeAdminContent(nextContent: LandingContent, fallbackContent: LandingContent): LandingContent {
   return {
@@ -52,6 +67,7 @@ export function Admin({ initialContent }: AdminProps) {
   const [token, setToken] = useState(() => sessionStorage.getItem('bpower-admin-token') ?? '');
   const [password, setPassword] = useState('');
   const [content, setContent] = useState<LandingContent>(initialContent);
+  const [emailSettings, setEmailSettings] = useState<EmailSettings>(DEFAULT_EMAIL_SETTINGS);
   const [jsonDraft, setJsonDraft] = useState(() => JSON.stringify(initialContent, null, 2));
   const [leads, setLeads] = useState<Lead[]>([]);
   const [tab, setTab] = useState<AdminTab>('main');
@@ -72,6 +88,10 @@ export function Admin({ initialContent }: AdminProps) {
 
     fetchLeads(token).then((result) => {
       if (result.ok && result.data) setLeads(result.data);
+    });
+
+    fetchEmailSettings(token).then((result) => {
+      if (result.ok && result.data) setEmailSettings({ ...DEFAULT_EMAIL_SETTINGS, ...result.data, smtpPass: '' });
     });
   }, [token, initialContent]);
 
@@ -138,6 +158,14 @@ export function Admin({ initialContent }: AdminProps) {
       const draft = structuredClone(current);
       mutator(draft);
       setJsonDraft(JSON.stringify(draft, null, 2));
+      return draft;
+    });
+  }
+
+  function updateEmailSettings(mutator: (draft: EmailSettings) => void) {
+    setEmailSettings((current) => {
+      const draft = { ...current };
+      mutator(draft);
       return draft;
     });
   }
@@ -213,6 +241,19 @@ export function Admin({ initialContent }: AdminProps) {
     setContent(nextContent);
     setJsonDraft(JSON.stringify(nextContent, null, 2));
     setStatus('Контент сохранён. Обновите лендинг, чтобы увидеть изменения.');
+  }
+
+  async function onSaveEmailSettings() {
+    setLoading(true);
+    setStatus('');
+    const result = await saveEmailSettings(emailSettings, token);
+    setLoading(false);
+    if (!result.ok || !result.data) {
+      setStatus(result.error ?? 'Не удалось сохранить настройки почты');
+      return;
+    }
+    setEmailSettings({ ...DEFAULT_EMAIL_SETTINGS, ...result.data, smtpPass: '' });
+    setStatus('Настройки почты сохранены.');
   }
 
   async function onUploadFooterPdf(index: number, file: File) {
@@ -621,6 +662,49 @@ export function Admin({ initialContent }: AdminProps) {
                 </div>
               )}
             </AdminItemTabs>
+          </section>
+        </div>
+      )}
+
+      {tab === 'settings' && (
+        <div className="admin-grid">
+          <section className="admin-card admin-card--wide">
+            <div className="admin-card__top">
+              <div>
+                <h2>Отправка заявок на почту</h2>
+                <p className="admin-help">Заявки всегда сохраняются в JSON. Если включить почту, сервер дополнительно отправит письмо после сохранения заявки.</p>
+              </div>
+              <button className="button button--light" type="button" onClick={() => void onSaveEmailSettings()} disabled={loading}>Сохранить настройки почты</button>
+            </div>
+
+            <AdminCheckbox
+              label="Отправлять заявки на email"
+              checked={emailSettings.enabled}
+              onChange={(checked) => updateEmailSettings((draft) => { draft.enabled = checked; })}
+            />
+            <label className="admin-field">
+              <span>Способ отправки</span>
+              <select value={emailSettings.method} onChange={(event) => updateEmailSettings((draft) => { draft.method = event.target.value; })}>
+                <option value="mail">mail() хостинга</option>
+                <option value="smtp">SMTP</option>
+              </select>
+            </label>
+            <AdminField label="Email получателя" value={emailSettings.toEmail} onChange={(value) => updateEmailSettings((draft) => { draft.toEmail = value; })} />
+            <AdminField label="Email отправителя" value={emailSettings.fromEmail} onChange={(value) => updateEmailSettings((draft) => { draft.fromEmail = value; })} />
+            <AdminField label="Тема письма" value={emailSettings.subject} onChange={(value) => updateEmailSettings((draft) => { draft.subject = value; })} />
+
+            <div className="admin-inline-fields">
+              <AdminField label="SMTP host" value={emailSettings.smtpHost} onChange={(value) => updateEmailSettings((draft) => { draft.smtpHost = value; })} />
+              <AdminField label="SMTP port" value={emailSettings.smtpPort} onChange={(value) => updateEmailSettings((draft) => { draft.smtpPort = value; })} />
+              <AdminCheckbox label="SSL/TLS" checked={emailSettings.smtpSecure} onChange={(checked) => updateEmailSettings((draft) => { draft.smtpSecure = checked; })} />
+            </div>
+            <AdminField label="SMTP user" value={emailSettings.smtpUser} onChange={(value) => updateEmailSettings((draft) => { draft.smtpUser = value; })} />
+            <AdminField
+              label={emailSettings.hasSmtpPass ? 'SMTP password (уже сохранён, введите новый только для замены)' : 'SMTP password'}
+              type="password"
+              value={emailSettings.smtpPass ?? ''}
+              onChange={(value) => updateEmailSettings((draft) => { draft.smtpPass = value; })}
+            />
           </section>
         </div>
       )}

@@ -179,6 +179,20 @@ export type Lead = LeadPayload & {
   createdAt: string;
 };
 
+export type EmailSettings = {
+  enabled: boolean;
+  method: 'mail' | 'smtp' | string;
+  toEmail: string;
+  fromEmail: string;
+  subject: string;
+  smtpHost: string;
+  smtpPort: string;
+  smtpSecure: boolean;
+  smtpUser: string;
+  smtpPass?: string;
+  hasSmtpPass?: boolean;
+};
+
 export type ApiResult<T> = {
   ok: boolean;
   data?: T;
