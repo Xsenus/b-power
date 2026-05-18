@@ -150,6 +150,45 @@ export function Admin({ initialContent }: AdminProps) {
     setActiveItems((current) => ({ ...current, [group]: index }));
   }
 
+  function addProduct() {
+    const nextIndex = content.product.items.length;
+    const baseProduct = content.product.items[0];
+    const nextProduct: ProductItem = {
+      id: `product-${Date.now().toString(36)}`,
+      name: 'Новый продукт',
+      title: 'Новый продукт B-POWER',
+      mobileTitle: '',
+      subtitle: baseProduct?.subtitle ?? '',
+      bullets: baseProduct?.bullets?.length ? [...baseProduct.bullets] : ['Описание преимущества продукта'],
+      image: baseProduct?.image ?? '/assets/images/figma-product-main.webp',
+      thumbnail: baseProduct?.thumbnail ?? baseProduct?.image ?? '/assets/images/figma-product-main.webp',
+      alt: 'B-POWER'
+    };
+
+    updateContent((draft) => {
+      draft.product.items.push(nextProduct);
+    });
+    selectItem('product-items', nextIndex);
+    setStatus('Продукт добавлен. Заполните поля и нажмите «Сохранить изменения».');
+  }
+
+  function deleteProduct(index: number) {
+    if (content.product.items.length <= 1) {
+      setStatus('Нельзя удалить последний продукт.');
+      return;
+    }
+
+    const productName = content.product.items[index]?.name || `продукт ${index + 1}`;
+    const confirmed = window.confirm(`Удалить ${productName}? Действие нельзя отменить.`);
+    if (!confirmed) return;
+
+    updateContent((draft) => {
+      draft.product.items.splice(index, 1);
+    });
+    selectItem('product-items', Math.max(0, index - 1));
+    setStatus('Продукт удалён. Нажмите «Сохранить изменения», чтобы обновить сайт.');
+  }
+
   function applyJsonToContent() {
     try {
       const parsed = normalizeAdminContent(JSON.parse(jsonDraft) as LandingContent, initialContent);
@@ -429,6 +468,9 @@ export function Admin({ initialContent }: AdminProps) {
             <AdminField label="Ссылка кнопки" value={content.product.buttonHref} onChange={(value) => updateContent((draft) => { draft.product.buttonHref = value; })} />
             <AdminField label="Подпись вкуса" value={content.product.activeLabel} onChange={(value) => updateContent((draft) => { draft.product.activeLabel = value; })} />
             <AdminField label="Подпись веса" value={content.product.weightLabel} onChange={(value) => updateContent((draft) => { draft.product.weightLabel = value; })} />
+            <div className="admin-card__buttons">
+              <button className="button button--light" type="button" onClick={addProduct}>Добавить продукт</button>
+            </div>
             <AdminItemTabs
               group="product-items"
               items={content.product.items}
@@ -436,7 +478,15 @@ export function Admin({ initialContent }: AdminProps) {
               onSelect={(index) => selectItem('product-items', index)}
               getLabel={(item, index) => item.name || item.title || `Продукт ${index + 1}`}
             >
-              {(item, index) => <ProductEditor item={item} index={index} updateContent={updateContent} />}
+              {(item, index) => (
+                <ProductEditor
+                  item={item}
+                  index={index}
+                  updateContent={updateContent}
+                  canDelete={content.product.items.length > 1}
+                  onDelete={() => deleteProduct(index)}
+                />
+              )}
             </AdminItemTabs>
           </section>
 
@@ -776,10 +826,18 @@ type EditorProps<T> = {
   updateContent: (mutator: (draft: LandingContent) => void) => void;
 };
 
-function ProductEditor({ item, index, updateContent }: EditorProps<ProductItem>) {
+type ProductEditorProps = EditorProps<ProductItem> & {
+  canDelete: boolean;
+  onDelete: () => void;
+};
+
+function ProductEditor({ item, index, updateContent, canDelete, onDelete }: ProductEditorProps) {
   return (
     <div className="admin-repeat">
-      <h3>Продукт {index + 1}</h3>
+      <div className="admin-repeat__top">
+        <h3>Продукт {index + 1}</h3>
+        <button className="admin-danger-button" type="button" onClick={onDelete} disabled={!canDelete}>Удалить продукт</button>
+      </div>
       <AdminField label="ID" value={item.id} onChange={(value) => updateContent((draft) => { draft.product.items[index].id = value; })} />
       <AdminField label="Вкус / название" value={item.name} onChange={(value) => updateContent((draft) => { draft.product.items[index].name = value; })} />
       <AdminArea label="Заголовок desktop" value={item.title} onChange={(value) => updateContent((draft) => { draft.product.items[index].title = value; })} />
