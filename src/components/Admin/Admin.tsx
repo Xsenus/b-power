@@ -454,6 +454,7 @@ export function Admin({ initialContent }: AdminProps) {
                   <h3>Вес {index + 1}</h3>
                   <AdminField label="Значение" value={weight.value} onChange={(value) => updateContent((draft) => { draft.product.weights[index].value = value; })} />
                   <AdminField label="Подпись" value={weight.label} onChange={(value) => updateContent((draft) => { draft.product.weights[index].label = value; })} />
+                  <AssetField label="Фото при наведении" value={weight.image ?? ''} onChange={(value) => updateContent((draft) => { draft.product.weights[index].image = value || undefined; })} />
                 </div>
               )}
             </AdminItemTabs>

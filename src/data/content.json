@@ -150,11 +150,13 @@
     "weights": [
       {
         "value": "750 г",
-        "label": "25 порций"
+        "label": "25 порций",
+        "image": "/assets/images/figma-product-main.webp"
       },
       {
         "value": "1020 г",
-        "label": "34 порции"
+        "label": "34 порции",
+        "image": "/assets/images/figma-product-thumb-natural.png"
       }
     ],
     "features": [

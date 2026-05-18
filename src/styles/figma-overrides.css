@@ -521,7 +521,7 @@ body {
   min-width: 122px;
   height: 72px;
   min-height: 72px;
-  border-color: transparent;
+  border-color: transparent !important;
   background: #4a4a4c;
   font-family: Rubik, sans-serif;
 }
@@ -536,12 +536,11 @@ body {
   opacity: 0.5;
 }
 
-.weight-card:first-child {
-  background: #4a4a4c;
-}
-
-.weight-card:nth-child(2) {
-  border: 1.5px solid #fff;
+.weight-card:first-child,
+.weight-card:nth-child(2),
+.weight-card:hover,
+.weight-card:focus-visible {
+  border-color: transparent !important;
   background: #4a4a4c;
 }
 

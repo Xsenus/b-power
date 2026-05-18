@@ -76,6 +76,7 @@ export type ProductItem = {
 export type ProductWeight = {
   value: string;
   label: string;
+  image?: string;
 };
 
 export type ProductFeature = {
