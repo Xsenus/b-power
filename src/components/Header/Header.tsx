@@ -81,8 +81,13 @@ export function Header({ brand, nav, contacts }: HeaderProps) {
             </a>
           ))}
         </nav>
-        <a className="mobile-menu__phone" href={phoneHref(contacts.phone)} tabIndex={open ? 0 : -1}>{contacts.phone}</a>
-        <a className="mobile-menu__email" href={`mailto:${contacts.email}`} tabIndex={open ? 0 : -1}>{contacts.email}</a>
+        <div className="mobile-menu__contacts">
+          <a className="mobile-menu__phone" href={phoneHref(contacts.phone)} tabIndex={open ? 0 : -1}>{contacts.phone}</a>
+          <span className="mobile-menu__schedule">
+            <span>{schedule.label}</span>
+            {schedule.time ? <span>{schedule.time}</span> : null}
+          </span>
+        </div>
       </div>
     </header>
   );
