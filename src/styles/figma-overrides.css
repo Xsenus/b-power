@@ -556,6 +556,14 @@ body {
 
 .product__cta {
   margin-top: 0;
+  transition: background 180ms ease, color 180ms ease, border-color 180ms ease;
+}
+
+.button--dark.product__cta:hover,
+.button--dark.product__cta:focus-visible,
+.button--dark.product__cta:active {
+  background: #b3832a !important;
+  color: #fff;
 }
 
 .features {
