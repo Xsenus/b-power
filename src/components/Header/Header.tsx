@@ -1,6 +1,6 @@
 import { MouseEvent, useEffect, useState } from 'react';
 import type { BrandContent, ContactsContent, NavItem } from '../../data/types';
-import { scrollPageToTop } from '../../utils/scroll';
+import { scrollPageToAnchor, scrollPageToTop } from '../../utils/scroll';
 import { phoneHref } from '../../utils/text';
 
 type HeaderProps = {
@@ -31,6 +31,13 @@ export function Header({ brand, nav, contacts }: HeaderProps) {
     if (window.location.hash) {
       window.history.replaceState(null, document.title, `${window.location.pathname}${window.location.search}`);
     }
+  }
+
+  function scrollToNavItem(event: MouseEvent<HTMLAnchorElement>, href: string) {
+    if (!href.startsWith('#')) return;
+    event.preventDefault();
+    setOpen(false);
+    scrollPageToAnchor(href);
   }
 
   useEffect(() => {
@@ -65,7 +72,7 @@ export function Header({ brand, nav, contacts }: HeaderProps) {
 
         <nav className="site-header__nav" aria-label="Основная навигация">
           {nav.map((item) => (
-            <a className="site-header__link" key={item.href} href={item.href}>
+            <a className="site-header__link" key={item.href} href={item.href} onClick={(event) => scrollToNavItem(event, item.href)}>
               {item.label}
             </a>
           ))}
@@ -95,7 +102,7 @@ export function Header({ brand, nav, contacts }: HeaderProps) {
       <div className={`mobile-menu${open ? ' mobile-menu--open' : ''}`} aria-hidden={!open}>
         <nav className="mobile-menu__nav" aria-label="Мобильная навигация">
           {nav.map((item) => (
-            <a className="mobile-menu__link" key={item.href} href={item.href} tabIndex={open ? 0 : -1} onClick={() => setOpen(false)}>
+            <a className="mobile-menu__link" key={item.href} href={item.href} tabIndex={open ? 0 : -1} onClick={(event) => scrollToNavItem(event, item.href)}>
               {item.label}
             </a>
           ))}

@@ -10,6 +10,7 @@ import { Benefits } from './components/Benefits/Benefits';
 import { FormSection } from './components/FormSection/FormSection';
 import { Footer } from './components/Footer/Footer';
 import { Admin } from './components/Admin/Admin';
+import { scrollPageToAnchor } from './utils/scroll';
 
 const defaultContent = defaultContentJson as LandingContent;
 const defaultBrand = defaultContent.brand;
@@ -72,6 +73,16 @@ export default function App() {
     setMeta('og:description', content.seo.description, true);
     setMeta('og:image', content.seo.ogImage, true);
     setMeta('twitter:card', 'summary_large_image');
+  }, [content, isAdmin]);
+
+  useEffect(() => {
+    if (isAdmin || !window.location.hash) return undefined;
+
+    const timer = window.setTimeout(() => {
+      scrollPageToAnchor(window.location.hash, false);
+    }, 80);
+
+    return () => window.clearTimeout(timer);
   }, [content, isAdmin]);
 
   if (isAdmin) {

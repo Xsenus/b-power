@@ -1,6 +1,6 @@
 import type { MouseEvent } from 'react';
 import type { BrandContent, ContactsContent, FooterContent, NavItem } from '../../data/types';
-import { scrollPageToTop } from '../../utils/scroll';
+import { scrollPageToAnchor, scrollPageToTop } from '../../utils/scroll';
 import { phoneHref } from '../../utils/text';
 
 type FooterProps = {
@@ -19,6 +19,12 @@ export function Footer({ brand, footer, nav, contacts }: FooterProps) {
     }
   }
 
+  function scrollToNavItem(event: MouseEvent<HTMLAnchorElement>, href: string) {
+    if (!href.startsWith('#')) return;
+    event.preventDefault();
+    scrollPageToAnchor(href);
+  }
+
   return (
     <footer className="footer">
       <div className="container footer__grid">
@@ -34,7 +40,7 @@ export function Footer({ brand, footer, nav, contacts }: FooterProps) {
         <p className="footer__tagline">{footer.tagline}</p>
 
         <nav className="footer__nav" aria-label="Навигация в подвале">
-          {nav.map((item) => <a href={item.href} key={item.href}>{item.label}</a>)}
+          {nav.map((item) => <a href={item.href} key={item.href} onClick={(event) => scrollToNavItem(event, item.href)}>{item.label}</a>)}
         </nav>
 
         <div className="footer__contacts">

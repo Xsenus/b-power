@@ -1,5 +1,6 @@
-import { useEffect, useMemo, useState, type CSSProperties, type ReactNode } from 'react';
+import { useEffect, useMemo, useState, type CSSProperties, type MouseEvent, type ReactNode } from 'react';
 import type { HeroContent } from '../../data/types';
+import { scrollPageToAnchor } from '../../utils/scroll';
 
 const COUNTDOWN_INTERVAL = 1000;
 const TIME_UNITS = [86400000, 3600000, 60000, 1000];
@@ -58,6 +59,12 @@ export function Hero({ hero }: { hero: HeroContent }) {
   const [now, setNow] = useState(() => Date.now());
   const countdownItems = useMemo(() => getCountdownItems(hero, now), [hero, now]);
 
+  function scrollToButtonTarget(event: MouseEvent<HTMLAnchorElement>) {
+    if (!hero.buttonHref.startsWith('#')) return;
+    event.preventDefault();
+    scrollPageToAnchor(hero.buttonHref);
+  }
+
   useEffect(() => {
     if (hero.countdownMode === 'manual' || !hero.countdownTarget) {
       return undefined;
@@ -108,7 +115,7 @@ export function Hero({ hero }: { hero: HeroContent }) {
               </div>
             ))}
           </div>
-          <a className="button button--light hero__button" href={hero.buttonHref}>{hero.buttonText}</a>
+          <a className="button button--light hero__button" href={hero.buttonHref} onClick={scrollToButtonTarget}>{hero.buttonText}</a>
         </div>
       </div>
     </section>

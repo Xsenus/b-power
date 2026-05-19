@@ -1,7 +1,8 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import type { KeyboardEvent } from 'react';
+import type { KeyboardEvent, MouseEvent } from 'react';
 import type { ProductContent } from '../../data/types';
 import { cn } from '../../utils/classNames';
+import { scrollPageToAnchor } from '../../utils/scroll';
 import { brandVariant } from '../../utils/text';
 import { SectionLabel } from '../Ui/SectionLabel';
 import { FeatureIcon } from '../Ui/Icon';
@@ -28,6 +29,12 @@ export function ProductSwitcher({ product }: { product: ProductContent }) {
       return firstOrder - secondOrder;
     });
   }, [product.items]);
+
+  function scrollToButtonTarget(event: MouseEvent<HTMLAnchorElement>) {
+    if (!product.buttonHref.startsWith('#')) return;
+    event.preventDefault();
+    scrollPageToAnchor(product.buttonHref);
+  }
 
   useEffect(() => {
     if (!keyboardFocusId.current) return;
@@ -147,7 +154,7 @@ export function ProductSwitcher({ product }: { product: ProductContent }) {
                 </div>
               </div>
             </div>
-            <a className="button button--dark product__cta" href={product.buttonHref}>{product.buttonText}</a>
+            <a className="button button--dark product__cta" href={product.buttonHref} onClick={scrollToButtonTarget}>{product.buttonText}</a>
           </article>
         </div>
 
