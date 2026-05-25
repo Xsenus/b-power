@@ -217,6 +217,31 @@ export function Admin({ initialContent }: AdminProps) {
     setStatus('Продукт удалён. Нажмите «Сохранить изменения», чтобы обновить сайт.');
   }
 
+  function addFooterLink() {
+    const nextIndex = content.footer.links.length;
+
+    updateContent((draft) => {
+      draft.footer.links.push({
+        label: 'Новая ссылка',
+        href: '#'
+      });
+    });
+    selectItem('footer-links', nextIndex);
+    setStatus('Ссылка добавлена. Заполните поля и нажмите «Сохранить изменения», чтобы обновить сайт.');
+  }
+
+  function deleteFooterLink(index: number) {
+    const linkLabel = content.footer.links[index]?.label || `ссылку ${index + 1}`;
+    const confirmed = window.confirm(`Удалить «${linkLabel}»? Действие нельзя отменить.`);
+    if (!confirmed) return;
+
+    updateContent((draft) => {
+      draft.footer.links.splice(index, 1);
+    });
+    selectItem('footer-links', Math.max(0, index - 1));
+    setStatus('Ссылка удалена. Нажмите «Сохранить изменения», чтобы обновить сайт.');
+  }
+
   function applyJsonToContent() {
     try {
       const parsed = normalizeAdminContent(JSON.parse(jsonDraft) as LandingContent, initialContent);
@@ -641,6 +666,9 @@ export function Admin({ initialContent }: AdminProps) {
             <h2>Футер</h2>
             <AdminArea label="Слоган" value={content.footer.tagline} onChange={(value) => updateContent((draft) => { draft.footer.tagline = value; })} />
             <AdminArea label="Юридический текст" value={content.footer.legal} onChange={(value) => updateContent((draft) => { draft.footer.legal = value; })} />
+            <div className="admin-card__buttons">
+              <button className="button button--light" type="button" onClick={addFooterLink}>Добавить ссылку</button>
+            </div>
             <AdminItemTabs
               group="footer-links"
               items={content.footer.links}
@@ -650,7 +678,10 @@ export function Admin({ initialContent }: AdminProps) {
             >
               {(item, index) => (
                 <div className="admin-repeat">
-                  <h3>Ссылка {index + 1}</h3>
+                  <div className="admin-repeat__top">
+                    <h3>Ссылка {index + 1}</h3>
+                    <button className="admin-danger-button" type="button" onClick={() => deleteFooterLink(index)}>Удалить ссылку</button>
+                  </div>
                   <AdminField label="Текст" value={item.label} onChange={(value) => updateContent((draft) => { draft.footer.links[index].label = value; })} />
                   <DocumentField
                     label="PDF / ссылка"

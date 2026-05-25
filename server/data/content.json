@@ -273,11 +273,6 @@
     "legal": "©2012–2025, ООО \"Ингредиенты. Развитие\"\nИНН - 7805591077\nКПП - 780501001",
     "links": [
       {
-        "label": "Политика обработки персональных данных",
-        "href": "/assets/docs/personal-data-policy.pdf",
-        "noIndex": true
-      },
-      {
         "label": "Политика конфиденциальности",
         "href": "/assets/docs/privacy-policy.pdf",
         "noIndex": true
