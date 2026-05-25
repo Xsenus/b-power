@@ -1,9 +1,10 @@
-/* Figma parity layer for B-Power dark landing. Source nodes: 1560:29096 and 1561:30445. */
+﻿/* Figma parity layer for B-Power dark landing. Source nodes: 1560:29096 and 1561:30445. */
 body {
   background: #262626;
   font-family: var(--font-body);
   font-weight: 300;
 }
+
 
 .container {
   width: min(calc(100vw - 80px), 1840px);
@@ -2484,5 +2485,287 @@ body {
   .footer {
     min-height: 598px;
     padding: 32px 0;
+  }
+}
+
+/* Stable footer layout: replaces earlier fixed-coordinate Figma slices. */
+.footer {
+  min-height: 0 !important;
+  padding: clamp(48px, 5vw, 80px) 0 !important;
+  background: #4a4a4c;
+}
+
+.footer__grid {
+  position: relative !important;
+  display: grid !important;
+  grid-template-columns:
+    minmax(170px, 0.8fr)
+    minmax(280px, 1.35fr)
+    minmax(170px, 0.7fr)
+    minmax(260px, 1fr) !important;
+  grid-template-areas:
+    "brand tagline nav contacts"
+    "legal policy nav contacts" !important;
+  gap: 56px 48px !important;
+  align-items: start !important;
+  height: auto !important;
+  min-height: 0 !important;
+  overflow: visible !important;
+}
+
+.footer__grid::before {
+  content: none !important;
+}
+
+.footer__brand,
+.footer__tagline,
+.footer__nav,
+.footer__contacts,
+.footer__legal,
+.footer__policy {
+  position: static !important;
+  width: auto !important;
+  max-width: none !important;
+  height: auto !important;
+  min-height: 0 !important;
+}
+
+.footer__brand {
+  grid-area: brand;
+}
+
+.footer__brand picture {
+  display: block;
+}
+
+.footer__brand img {
+  display: block;
+  width: min(200px, 100%) !important;
+  height: auto !important;
+  max-width: 100% !important;
+  object-fit: contain;
+  object-position: left top;
+}
+
+.footer .footer__tagline {
+  grid-area: tagline;
+  margin: 0 !important;
+  color: rgba(255, 255, 255, 0.9);
+  font-family: Rubik, sans-serif;
+  font-size: 14px !important;
+  font-weight: 300;
+  line-height: 22px !important;
+  text-align: right;
+}
+
+.footer__nav {
+  grid-area: nav;
+  display: flex !important;
+  flex-direction: column;
+  gap: 28px !important;
+  padding-left: 30px;
+  border-left: 1px solid rgba(255, 255, 255, 0.2);
+  font-size: 16px !important;
+  font-weight: 600;
+  line-height: 22px !important;
+}
+
+.footer__contacts {
+  grid-area: contacts;
+  display: flex !important;
+  flex-direction: column;
+  align-items: flex-end !important;
+  justify-items: end !important;
+  gap: 9px !important;
+  text-align: right !important;
+  overflow-wrap: anywhere;
+}
+
+.footer__contacts span {
+  color: rgba(255, 255, 255, 0.55);
+  font-size: 13px;
+  line-height: 18px;
+}
+
+.footer__phone,
+.footer__email {
+  color: #ffffff;
+  font-weight: 600;
+  line-height: 24px !important;
+}
+
+.footer__phone {
+  margin: 0 0 14px !important;
+  font-size: 18px !important;
+}
+
+.footer__email {
+  margin: 0 !important;
+  font-size: 18px !important;
+}
+
+.footer__legal {
+  grid-area: legal;
+  margin: 0 !important;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 13px !important;
+  line-height: 18px !important;
+  text-align: left;
+  white-space: pre-line;
+}
+
+.footer__policy {
+  grid-area: policy;
+  display: flex !important;
+  flex-direction: column;
+  align-items: flex-end !important;
+  gap: 8px !important;
+  margin: 0 !important;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 13px !important;
+  line-height: 18px !important;
+  text-align: right !important;
+}
+
+.scroll-top {
+  right: max(24px, calc((100vw - min(100vw - 48px, var(--container-max))) / 2)) !important;
+  bottom: 48px !important;
+}
+
+@media (max-width: 1280px) {
+  .footer__grid {
+    grid-template-columns: minmax(160px, 0.7fr) minmax(260px, 1.2fr) minmax(230px, 1fr) !important;
+    grid-template-areas:
+      "brand tagline contacts"
+      "legal policy nav" !important;
+    gap: 40px 42px !important;
+  }
+
+  .footer__nav {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(120px, 1fr));
+    gap: 18px 28px !important;
+    padding-left: 0;
+    border-left: 0;
+  }
+}
+
+@media (max-width: 1024px) {
+  .footer__grid {
+    grid-template-columns: minmax(150px, 0.55fr) minmax(0, 1fr) !important;
+    grid-template-areas:
+      "brand tagline"
+      "contacts contacts"
+      "nav nav"
+      "legal policy" !important;
+    gap: 28px 34px !important;
+  }
+
+  .footer__contacts {
+    align-items: flex-start !important;
+    justify-items: start !important;
+    text-align: left !important;
+  }
+
+  .footer .footer__tagline,
+  .footer__policy {
+    text-align: left !important;
+  }
+
+  .footer__policy {
+    align-items: flex-start !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .footer {
+    padding: 36px 0 !important;
+  }
+
+  .footer__grid {
+    width: min(calc(100vw - 32px), 540px) !important;
+    max-width: none !important;
+    margin-inline: auto !important;
+    grid-template-columns: 136px minmax(0, 1fr) !important;
+    grid-template-areas:
+      "brand tagline"
+      "contacts contacts"
+      "nav nav"
+      "legal legal"
+      "policy policy" !important;
+    gap: 24px 16px !important;
+  }
+
+  .footer__brand img {
+    width: 136px !important;
+  }
+
+  .footer .footer__tagline {
+    font-size: 11px !important;
+    line-height: 15px !important;
+  }
+
+  .footer__contacts {
+    gap: 8px !important;
+  }
+
+  .footer__nav {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px 28px !important;
+    font-size: 16px !important;
+  }
+
+  .footer__legal {
+    padding-top: 18px;
+    border-top: 1px solid rgba(198, 197, 197, 0.55);
+    text-align: center;
+  }
+
+  .footer__policy {
+    align-items: center !important;
+    text-align: center !important;
+  }
+
+  .scroll-top {
+    display: none !important;
+  }
+}
+
+@media (max-width: 520px) {
+  .footer__grid {
+    grid-template-columns: 1fr !important;
+    grid-template-areas:
+      "brand"
+      "tagline"
+      "contacts"
+      "nav"
+      "legal"
+      "policy" !important;
+    gap: 22px !important;
+    justify-items: center;
+  }
+
+  .footer__brand img {
+    width: 150px !important;
+    object-position: center top;
+  }
+
+  .footer .footer__tagline,
+  .footer__contacts,
+  .footer__legal,
+  .footer__policy {
+    text-align: center !important;
+  }
+
+  .footer__contacts,
+  .footer__policy {
+    align-items: center !important;
+  }
+
+  .footer__nav {
+    width: 100% !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    text-align: left;
   }
 }

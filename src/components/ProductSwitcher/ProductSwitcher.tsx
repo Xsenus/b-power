@@ -9,13 +9,11 @@ import { FeatureIcon } from '../Ui/Icon';
 
 export function ProductSwitcher({ product }: { product: ProductContent }) {
   const [activeId, setActiveId] = useState(product.items[0]?.id ?? '');
-  const [previewWeightIndex, setPreviewWeightIndex] = useState<number | null>(null);
   const keyboardFocusId = useRef<string | null>(null);
   const active = useMemo(
     () => product.items.find((item) => item.id === activeId) ?? product.items[0],
     [activeId, product.items]
   );
-  const previewWeight = previewWeightIndex === null ? null : product.weights[previewWeightIndex];
   const thumbnailItems = useMemo(() => {
     const order = new Map([
       ['daily', 0],
@@ -44,14 +42,7 @@ export function ProductSwitcher({ product }: { product: ProductContent }) {
     nextButton?.focus();
   }, [activeId]);
 
-  useEffect(() => {
-    setPreviewWeightIndex(null);
-  }, [activeId]);
-
   if (!active) return null;
-
-  const previewImage = previewWeight?.image;
-  const visualAlt = previewWeight ? `${active.alt}, ${previewWeight.value}` : active.alt;
 
   function onThumbKeyDown(event: KeyboardEvent<HTMLButtonElement>, itemId: string) {
     const currentIndex = thumbnailItems.findIndex((item) => item.id === itemId);
@@ -86,7 +77,7 @@ export function ProductSwitcher({ product }: { product: ProductContent }) {
 
         <div className="product__grid">
           <div className="product__visual" aria-live="polite">
-            {active.video && !previewImage ? (
+            {active.video ? (
               <video
                 key={active.video}
                 className="product__motion"
@@ -99,7 +90,7 @@ export function ProductSwitcher({ product }: { product: ProductContent }) {
                 aria-label={active.alt}
               />
             ) : (
-              <img key={previewImage ?? active.image} src={previewImage ?? active.image} alt={visualAlt} />
+              <img key={active.image} src={active.image} alt={active.alt} />
             )}
           </div>
 
@@ -140,12 +131,10 @@ export function ProductSwitcher({ product }: { product: ProductContent }) {
               <div className="product__weights">
                 <span className="product__selector-label">{product.weightLabel}</span>
                 <div className="product__weight-list">
-                  {product.weights.map((weight, index) => (
+                  {product.weights.map((weight) => (
                     <div
                       className="weight-card"
                       key={weight.value}
-                      onPointerEnter={() => setPreviewWeightIndex(index)}
-                      onPointerLeave={() => setPreviewWeightIndex(null)}
                     >
                       <strong>{weight.value}</strong>
                       <span>{weight.label}</span>

@@ -13,6 +13,7 @@ server/data/email-settings.json
 .serena/
 .playwright-mcp/
 .reference/
+.deploy-backups/
 *.log
 bpower-*.png
 public/assets/images/figma-hero-mobile-source
