@@ -49,6 +49,69 @@ function write_json_file(string $path, array $data): void
     rename($tmp, $path);
 }
 
+function html_attr(string $value): string
+{
+    return htmlspecialchars($value, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+}
+
+function html_text(string $value): string
+{
+    return htmlspecialchars($value, ENT_NOQUOTES | ENT_SUBSTITUTE, 'UTF-8');
+}
+
+function replace_or_insert_head_tag(string $html, string $pattern, string $replacement): string
+{
+    $next = preg_replace($pattern, $replacement, $html, 1, $count);
+    if ($next !== null && $count > 0) {
+        return $next;
+    }
+
+    return preg_replace('/<\/head>/i', "    {$replacement}\n  </head>", $html, 1) ?? $html;
+}
+
+function sync_index_seo(array $content): void
+{
+    $seo = $content['seo'] ?? [];
+    if (!is_array($seo)) {
+        return;
+    }
+
+    $indexFile = __DIR__ . '/index.html';
+    if (!is_file($indexFile) || !is_writable($indexFile)) {
+        return;
+    }
+
+    $title = trim((string)($seo['title'] ?? ''));
+    $description = trim((string)($seo['description'] ?? ''));
+    $canonical = trim((string)($seo['canonical'] ?? ''));
+    $ogImage = trim((string)($seo['ogImage'] ?? ''));
+
+    $html = file_get_contents($indexFile);
+    if ($html === false) {
+        return;
+    }
+
+    if ($title !== '') {
+        $html = replace_or_insert_head_tag($html, '/<title>.*?<\/title>/is', '<title>' . html_text($title) . '</title>');
+        $html = replace_or_insert_head_tag($html, '/<meta\s+property=["\']og:title["\']\s+content=["\'][^"\']*["\']\s*\/?>/i', '<meta property="og:title" content="' . html_attr($title) . '" />');
+    }
+
+    if ($description !== '') {
+        $html = replace_or_insert_head_tag($html, '/<meta\s+name=["\']description["\']\s+content=["\'][^"\']*["\']\s*\/?>/i', '<meta name="description" content="' . html_attr($description) . '" />');
+        $html = replace_or_insert_head_tag($html, '/<meta\s+property=["\']og:description["\']\s+content=["\'][^"\']*["\']\s*\/?>/i', '<meta property="og:description" content="' . html_attr($description) . '" />');
+    }
+
+    if ($canonical !== '') {
+        $html = replace_or_insert_head_tag($html, '/<link\s+rel=["\']canonical["\']\s+href=["\'][^"\']*["\']\s*\/?>/i', '<link rel="canonical" href="' . html_attr($canonical) . '" />');
+    }
+
+    if ($ogImage !== '') {
+        $html = replace_or_insert_head_tag($html, '/<meta\s+property=["\']og:image["\']\s+content=["\'][^"\']*["\']\s*\/?>/i', '<meta property="og:image" content="' . html_attr($ogImage) . '" />');
+    }
+
+    file_put_contents($indexFile, $html, LOCK_EX);
+}
+
 function base64url_encode_string(string $value): string
 {
     return rtrim(strtr(base64_encode($value), '+/', '-_'), '=');
@@ -355,6 +418,7 @@ if ($path === '/api/content' && $method === 'PUT') {
         send_json(400, ['ok' => false, 'error' => 'Некорректный content.json']);
     }
     write_json_file($contentFile, $body);
+    sync_index_seo($body);
     send_json(200, ['ok' => true, 'data' => $body]);
 }
 

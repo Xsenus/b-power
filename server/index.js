@@ -73,6 +73,57 @@ async function writeJson(filePath, data) {
   await fs.rename(tempPath, filePath);
 }
 
+function escapeHtmlText(value) {
+  return String(value).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
+function escapeHtmlAttr(value) {
+  return escapeHtmlText(value).replace(/"/g, '&quot;').replace(/'/g, '&#039;');
+}
+
+function replaceOrInsertHeadTag(html, pattern, replacement) {
+  if (pattern.test(html)) return html.replace(pattern, replacement);
+  return html.replace(/<\/head>/i, `    ${replacement}\n  </head>`);
+}
+
+async function syncIndexSeo(content) {
+  const seo = content?.seo;
+  if (!seo || typeof seo !== 'object') return;
+
+  const indexFile = path.join(distDir, 'index.html');
+  let html;
+  try {
+    html = await fs.readFile(indexFile, 'utf8');
+  } catch {
+    return;
+  }
+
+  const title = String(seo.title || '').trim();
+  const description = String(seo.description || '').trim();
+  const canonical = String(seo.canonical || '').trim();
+  const ogImage = String(seo.ogImage || '').trim();
+
+  if (title) {
+    html = replaceOrInsertHeadTag(html, /<title>.*?<\/title>/is, `<title>${escapeHtmlText(title)}</title>`);
+    html = replaceOrInsertHeadTag(html, /<meta\s+property=["']og:title["']\s+content=["'][^"']*["']\s*\/?>/i, `<meta property="og:title" content="${escapeHtmlAttr(title)}" />`);
+  }
+
+  if (description) {
+    html = replaceOrInsertHeadTag(html, /<meta\s+name=["']description["']\s+content=["'][^"']*["']\s*\/?>/i, `<meta name="description" content="${escapeHtmlAttr(description)}" />`);
+    html = replaceOrInsertHeadTag(html, /<meta\s+property=["']og:description["']\s+content=["'][^"']*["']\s*\/?>/i, `<meta property="og:description" content="${escapeHtmlAttr(description)}" />`);
+  }
+
+  if (canonical) {
+    html = replaceOrInsertHeadTag(html, /<link\s+rel=["']canonical["']\s+href=["'][^"']*["']\s*\/?>/i, `<link rel="canonical" href="${escapeHtmlAttr(canonical)}" />`);
+  }
+
+  if (ogImage) {
+    html = replaceOrInsertHeadTag(html, /<meta\s+property=["']og:image["']\s+content=["'][^"']*["']\s*\/?>/i, `<meta property="og:image" content="${escapeHtmlAttr(ogImage)}" />`);
+  }
+
+  await fs.writeFile(indexFile, html, 'utf8');
+}
+
 function publicEmailSettings(settings) {
   const { smtpPass, ...publicSettings } = settings;
   return { ...publicSettings, hasSmtpPass: Boolean(smtpPass) };
@@ -300,6 +351,7 @@ app.put('/api/content', requireAdmin, async (req, res) => {
   if (error) return sendError(res, 400, error);
   try {
     await writeJson(contentFile, req.body);
+    await syncIndexSeo(req.body);
     sendOk(res, req.body);
   } catch {
     sendError(res, 500, 'Не удалось сохранить content.json');
