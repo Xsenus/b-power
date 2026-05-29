@@ -73,7 +73,7 @@ export function FormSection({ form }: { form: FormContent }) {
               <div className="lead-panel__success-copy">
                 <h2 className="section-title lead-panel__title">
                   <span className="responsive-copy responsive-copy--desktop">{form.successTitle}</span>
-                  <span className="responsive-copy responsive-copy--mobile">Спасибо за интерес{'\n'}к B•POWER</span>
+                  <span className="responsive-copy responsive-copy--mobile">Спасибо за интерес{'\n'}к B-POWER</span>
                 </h2>
                 <p className="lead-panel__text">
                   <span className="responsive-copy responsive-copy--desktop">{form.successText}</span>

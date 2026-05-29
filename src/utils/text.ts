@@ -13,7 +13,7 @@ export function brandVariant(value: string): ReactNode {
     Fragment,
     null,
     createElement('span', { className: 'brand-copy brand-copy--desktop' }, value),
-    createElement('span', { className: 'brand-copy brand-copy--mobile' }, value.split('B-POWER').join('B•POWER'))
+    createElement('span', { className: 'brand-copy brand-copy--mobile' }, value)
   );
 }
 
