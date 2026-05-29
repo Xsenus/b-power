@@ -1886,15 +1886,15 @@ body {
   }
 
   .product__info {
-    height: 888px;
-    min-height: 888px;
+    height: auto;
+    min-height: 0;
     padding: 16px;
     border-radius: 12px;
-    overflow: hidden;
+    overflow: visible;
   }
 
   .product__info h3 {
-    min-height: 256px;
+    min-height: 0;
     font-size: 24px;
     line-height: 32px;
   }
@@ -1906,7 +1906,7 @@ body {
   }
 
   .product__bullets {
-    min-height: 280px;
+    min-height: 0;
   }
 
   .product__subtitle {
