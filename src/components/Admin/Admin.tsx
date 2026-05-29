@@ -339,7 +339,7 @@ export function Admin({ initialContent }: AdminProps) {
     return (
       <main className="admin admin--login">
         <form className="admin-login" onSubmit={onLogin}>
-          <img src="/assets/images/figma-logo-desktop-exact.png" alt="B-POWER" />
+          <img src="/assets/images/logo.svg" alt="B-POWER" />
           <h1>Админка B-POWER</h1>
           <input className="admin-login__username" type="text" name="username" autoComplete="username" value="admin" readOnly tabIndex={-1} />
           <label>
@@ -357,7 +357,7 @@ export function Admin({ initialContent }: AdminProps) {
   return (
     <main className="admin">
       <header className="admin__header">
-        <a href="/" aria-label="На лендинг"><img src="/assets/images/figma-logo-desktop-exact.png" alt="B-POWER" /></a>
+        <a href="/" aria-label="На лендинг"><img src="/assets/images/logo.svg" alt="B-POWER" /></a>
         <div>
           <h1>Панель управления</h1>
           <p>Редактирование всех текстов, медиа, ссылок, таймера, иконок и заявок лендинга.</p>

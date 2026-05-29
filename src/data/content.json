@@ -6,10 +6,10 @@
     "ogImage": "https://buffalo-protein.ru/assets/images/product-set.webp"
   },
   "brand": {
-    "logo": "/assets/images/figma-logo-desktop-exact.png",
-    "mobileLogo": "/assets/images/figma-logo-mobile-exact.png",
-    "footerLogo": "/assets/images/figma-logo-desktop-exact.png",
-    "footerMobileLogo": "/assets/images/figma-logo-footer-mobile-exact.png",
+    "logo": "/assets/images/logo.svg",
+    "mobileLogo": "/assets/images/logo.svg",
+    "footerLogo": "/assets/images/logo.svg",
+    "footerMobileLogo": "/assets/images/logo.svg",
     "logoAlt": "B-POWER",
     "logoScrollTop": true
   },
