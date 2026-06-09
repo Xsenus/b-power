@@ -403,9 +403,9 @@ textarea:focus-visible {
 .not-found__man {
   position: absolute;
   z-index: 2;
-  left: -18px;
+  left: 56px;
   bottom: 0;
-  width: clamp(500px, 45vw, 820px);
+  width: 620px;
   max-width: none;
   pointer-events: none;
 }
@@ -415,7 +415,7 @@ textarea:focus-visible {
   z-index: 3;
   display: grid;
   justify-items: center;
-  padding: 48px 24px 0;
+  padding: 54px 80px 0 610px;
   text-align: center;
   text-transform: uppercase;
 }
