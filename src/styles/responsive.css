@@ -213,8 +213,8 @@
   }
 
   .not-found__man {
-    left: calc((100vw - min(calc(100vw - 44px), 980px)) / 2 - 112px);
-    bottom: 60px;
+    left: -112px;
+    bottom: 0;
     width: 510px;
   }
 

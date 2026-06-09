@@ -114,13 +114,13 @@ export default function App() {
         <div className="page-top-anchor" id="top" aria-hidden="true" />
         <Header brand={content.brand} nav={content.nav} contacts={content.contacts} />
         <main className="not-found" aria-labelledby="not-found-title">
-          <img
-            className="not-found__man"
-            src="/assets/images/figma-about-man.webp"
-            alt=""
-            aria-hidden="true"
-          />
           <section className="not-found__panel">
+            <img
+              className="not-found__man"
+              src="/assets/images/figma-about-man.webp"
+              alt=""
+              aria-hidden="true"
+            />
             <div className="not-found__content">
               <p className="not-found__code" aria-hidden="true">404</p>
               <h1 className="not-found__title" id="not-found-title">

@@ -392,6 +392,7 @@ textarea:focus-visible {
 .not-found__panel::after {
   content: "";
   position: absolute;
+  z-index: 1;
   inset: 0;
   pointer-events: none;
   background:
@@ -402,8 +403,8 @@ textarea:focus-visible {
 .not-found__man {
   position: absolute;
   z-index: 2;
-  left: calc((100vw - min(calc(100vw - 80px), 1840px)) / 2 - 18px);
-  bottom: 82px;
+  left: -18px;
+  bottom: 0;
   width: clamp(500px, 45vw, 820px);
   max-width: none;
   pointer-events: none;
