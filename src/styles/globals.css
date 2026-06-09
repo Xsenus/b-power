@@ -380,6 +380,7 @@ textarea:focus-visible {
 
 .not-found__panel {
   position: relative;
+  z-index: 1;
   width: min(calc(100% - 80px), 1840px);
   min-height: 520px;
   margin: 0 auto;
