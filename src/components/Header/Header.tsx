@@ -37,7 +37,9 @@ export function Header({ brand, nav, contacts }: HeaderProps) {
     if (!href.startsWith('#')) return;
     event.preventDefault();
     setOpen(false);
-    scrollPageToAnchor(href);
+    if (!scrollPageToAnchor(href)) {
+      window.location.assign(`/${href}`);
+    }
   }
 
   useEffect(() => {

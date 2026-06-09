@@ -193,6 +193,10 @@ function sendError(res, status, error) {
   res.status(status).json({ ok: false, error });
 }
 
+function hasUtmQuery(query) {
+  return Object.keys(query || {}).some((key) => key.toLowerCase().startsWith('utm_'));
+}
+
 function base64url(value) {
   return Buffer.from(value).toString('base64url');
 }
@@ -471,7 +475,7 @@ try {
   app.use(express.static(distDir));
   app.get(/.*/, (req, res, next) => {
     if (req.path.startsWith('/api')) return next();
-    res.sendFile(path.join(distDir, 'index.html'));
+    res.status(hasUtmQuery(req.query) ? 200 : 404).sendFile(path.join(distDir, 'index.html'));
   });
 } catch {
   // Dev mode: Vite serves frontend separately.

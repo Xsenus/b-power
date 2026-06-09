@@ -1,5 +1,6 @@
 Options -MultiViews
 DirectoryIndex index.html
+ErrorDocument 404 /index.html
 SetEnvIf Authorization "(.*)" HTTP_AUTHORIZATION=$1
 AddType application/manifest+json .webmanifest
 
@@ -10,5 +11,7 @@ AddType application/manifest+json .webmanifest
   RewriteCond %{REQUEST_FILENAME} -f [OR]
   RewriteCond %{REQUEST_FILENAME} -d
   RewriteRule ^ - [L]
+  RewriteCond %{QUERY_STRING} (^|&)utm_[^=&]*= [NC]
   RewriteRule ^ index.html [L]
+  RewriteRule ^ - [R=404,L]
 </IfModule>

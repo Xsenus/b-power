@@ -22,7 +22,9 @@ export function Footer({ brand, footer, nav, contacts }: FooterProps) {
   function scrollToNavItem(event: MouseEvent<HTMLAnchorElement>, href: string) {
     if (!href.startsWith('#')) return;
     event.preventDefault();
-    scrollPageToAnchor(href);
+    if (!scrollPageToAnchor(href)) {
+      window.location.assign(`/${href}`);
+    }
   }
 
   return (
