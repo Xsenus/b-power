@@ -2,5 +2,6 @@ User-agent: *
 Allow: /
 Disallow: /admin
 Disallow: /assets/docs/
+Disallow: /*?*
 
 Sitemap: https://buffalo-protein.ru/sitemap.xml
