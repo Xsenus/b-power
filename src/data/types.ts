@@ -71,6 +71,7 @@ export type ProductItem = {
   video?: string;
   thumbnail: string;
   alt: string;
+  prices?: string[];
 };
 
 export type ProductWeight = {

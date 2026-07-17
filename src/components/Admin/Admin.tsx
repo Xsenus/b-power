@@ -1,5 +1,5 @@
 import { FormEvent, KeyboardEvent, ReactNode, useEffect, useState } from 'react';
-import type { AudienceItem, EmailSettings, FactItem, LandingContent, Lead, ProductItem } from '../../data/types';
+import type { AudienceItem, EmailSettings, FactItem, LandingContent, Lead, ProductItem, ProductWeight } from '../../data/types';
 import { deleteLead, exportLeads, fetchContent, fetchLeads, fetchEmailSettings, loginAdmin, saveContent, saveEmailSettings, uploadDocument } from '../../utils/api';
 
 type AdminProps = {
@@ -190,7 +190,8 @@ export function Admin({ initialContent }: AdminProps) {
       bullets: baseProduct?.bullets?.length ? [...baseProduct.bullets] : ['Описание преимущества продукта'],
       image: baseProduct?.image ?? '/assets/images/figma-product-main.webp',
       thumbnail: baseProduct?.thumbnail ?? baseProduct?.image ?? '/assets/images/figma-product-main.webp',
-      alt: 'B-POWER'
+      alt: 'B-POWER',
+      prices: content.product.weights.map(() => '')
     };
 
     updateContent((draft) => {
@@ -548,6 +549,7 @@ export function Admin({ initialContent }: AdminProps) {
                 <ProductEditor
                   item={item}
                   index={index}
+                  weights={content.product.weights}
                   updateContent={updateContent}
                   canDelete={content.product.items.length > 1}
                   onDelete={() => deleteProduct(index)}
@@ -973,11 +975,12 @@ type EditorProps<T> = {
 };
 
 type ProductEditorProps = EditorProps<ProductItem> & {
+  weights: ProductWeight[];
   canDelete: boolean;
   onDelete: () => void;
 };
 
-function ProductEditor({ item, index, updateContent, canDelete, onDelete }: ProductEditorProps) {
+function ProductEditor({ item, index, weights, updateContent, canDelete, onDelete }: ProductEditorProps) {
   return (
     <div className="admin-repeat">
       <div className="admin-repeat__top">
@@ -994,6 +997,22 @@ function ProductEditor({ item, index, updateContent, canDelete, onDelete }: Prod
       <AssetField label="Видео продукта" value={item.video ?? ''} onChange={(value) => updateContent((draft) => { draft.product.items[index].video = value || undefined; })} />
       <AssetField label="Миниатюра" value={item.thumbnail} onChange={(value) => updateContent((draft) => { draft.product.items[index].thumbnail = value; })} />
       <AdminField label="Alt" value={item.alt} onChange={(value) => updateContent((draft) => { draft.product.items[index].alt = value; })} />
+      <h3>Цены по весам</h3>
+      <div className="admin-inline-fields">
+        {weights.map((weight, weightIndex) => (
+          <AdminField
+            key={`${weight.value}-${weightIndex}`}
+            label={`Цена для ${weight.value}, ₽`}
+            value={item.prices?.[weightIndex] ?? ''}
+            type="text"
+            onChange={(value) => updateContent((draft) => {
+              const prices = draft.product.items[index].prices ?? draft.product.weights.map(() => '');
+              prices[weightIndex] = value.replace(/\D/g, '');
+              draft.product.items[index].prices = prices;
+            })}
+          />
+        ))}
+      </div>
     </div>
   );
 }

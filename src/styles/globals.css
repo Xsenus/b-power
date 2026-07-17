@@ -673,6 +673,7 @@ textarea:focus-visible {
 }
 
 .weight-card {
+  appearance: none;
   min-width: 96px;
   min-height: 78px;
   padding: 10px 13px;
@@ -680,8 +681,9 @@ textarea:focus-visible {
   border-radius: 4px;
   background: rgba(255, 255, 255, 0.08);
   color: #fff;
-  cursor: default;
-  transition: background 170ms ease;
+  cursor: pointer;
+  text-align: left;
+  transition: background 170ms ease, border-color 170ms ease;
 }
 
 .weight-card strong,
@@ -700,9 +702,28 @@ textarea:focus-visible {
   font-size: 12px;
 }
 
+.weight-card:hover,
+.weight-card:focus-visible,
+.weight-card--active {
+  border-color: #fff;
+}
+
+.product__purchase {
+  margin-top: 28px;
+}
+
+.product__price {
+  margin: 0 0 20px;
+  color: #fff;
+  font-family: var(--font-heading);
+  font-size: 32px;
+  font-weight: 500;
+  line-height: 1;
+}
+
 .product__cta {
   width: 100%;
-  margin-top: 28px;
+  margin-top: 0;
 }
 
 .features {

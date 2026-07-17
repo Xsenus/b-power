@@ -7,9 +7,22 @@ import { brandVariant } from '../../utils/text';
 import { SectionLabel } from '../Ui/SectionLabel';
 import { FeatureIcon } from '../Ui/Icon';
 
+const priceFormatter = new Intl.NumberFormat('ru-RU', { maximumFractionDigits: 0 });
+
+function formatPrice(value?: string) {
+  if (!value) return null;
+
+  const numericValue = Number(value.replace(/\D/g, ''));
+  if (!Number.isFinite(numericValue) || numericValue <= 0) return null;
+
+  return `${priceFormatter.format(numericValue)} ₽`;
+}
+
 export function ProductSwitcher({ product }: { product: ProductContent }) {
   const [activeId, setActiveId] = useState(product.items[0]?.id ?? '');
+  const [activeWeightIndex, setActiveWeightIndex] = useState(() => Math.min(1, Math.max(product.weights.length - 1, 0)));
   const keyboardFocusId = useRef<string | null>(null);
+  const keyboardFocusWeightIndex = useRef<number | null>(null);
   const active = useMemo(
     () => product.items.find((item) => item.id === activeId) ?? product.items[0],
     [activeId, product.items]
@@ -27,6 +40,7 @@ export function ProductSwitcher({ product }: { product: ProductContent }) {
       return firstOrder - secondOrder;
     });
   }, [product.items]);
+  const activePrice = formatPrice(active?.prices?.[activeWeightIndex]);
 
   function scrollToButtonTarget(event: MouseEvent<HTMLAnchorElement>) {
     if (!product.buttonHref.startsWith('#')) return;
@@ -41,6 +55,19 @@ export function ProductSwitcher({ product }: { product: ProductContent }) {
     keyboardFocusId.current = null;
     nextButton?.focus();
   }, [activeId]);
+
+  useEffect(() => {
+    if (activeWeightIndex < product.weights.length) return;
+    setActiveWeightIndex(Math.max(product.weights.length - 1, 0));
+  }, [activeWeightIndex, product.weights.length]);
+
+  useEffect(() => {
+    if (keyboardFocusWeightIndex.current === null) return;
+
+    const nextButton = document.querySelector<HTMLButtonElement>(`.weight-card[data-weight-index="${keyboardFocusWeightIndex.current}"]`);
+    keyboardFocusWeightIndex.current = null;
+    nextButton?.focus();
+  }, [activeWeightIndex]);
 
   if (!active) return null;
 
@@ -67,6 +94,29 @@ export function ProductSwitcher({ product }: { product: ProductContent }) {
     const nextItem = thumbnailItems[nextIndex];
     keyboardFocusId.current = nextItem.id;
     setActiveId(nextItem.id);
+  }
+
+  function onWeightKeyDown(event: KeyboardEvent<HTMLButtonElement>, weightIndex: number) {
+    const lastIndex = product.weights.length - 1;
+    if (lastIndex < 0) return;
+
+    let nextIndex = weightIndex;
+
+    if (event.key === 'ArrowRight' || event.key === 'ArrowDown') {
+      nextIndex = weightIndex === lastIndex ? 0 : weightIndex + 1;
+    } else if (event.key === 'ArrowLeft' || event.key === 'ArrowUp') {
+      nextIndex = weightIndex === 0 ? lastIndex : weightIndex - 1;
+    } else if (event.key === 'Home') {
+      nextIndex = 0;
+    } else if (event.key === 'End') {
+      nextIndex = lastIndex;
+    } else {
+      return;
+    }
+
+    event.preventDefault();
+    keyboardFocusWeightIndex.current = nextIndex;
+    setActiveWeightIndex(nextIndex);
   }
 
   return (
@@ -130,20 +180,30 @@ export function ProductSwitcher({ product }: { product: ProductContent }) {
 
               <div className="product__weights">
                 <span className="product__selector-label">{product.weightLabel}</span>
-                <div className="product__weight-list">
-                  {product.weights.map((weight) => (
-                    <div
-                      className="weight-card"
-                      key={weight.value}
+                <div className="product__weight-list" role="radiogroup" aria-label="Выберите вес продукта">
+                  {product.weights.map((weight, weightIndex) => (
+                    <button
+                      className={cn('weight-card', weightIndex === activeWeightIndex && 'weight-card--active')}
+                      type="button"
+                      role="radio"
+                      aria-checked={weightIndex === activeWeightIndex}
+                      tabIndex={weightIndex === activeWeightIndex ? 0 : -1}
+                      data-weight-index={weightIndex}
+                      key={`${weight.value}-${weightIndex}`}
+                      onClick={() => setActiveWeightIndex(weightIndex)}
+                      onKeyDown={(event) => onWeightKeyDown(event, weightIndex)}
                     >
                       <strong>{weight.value}</strong>
                       <span>{weight.label}</span>
-                    </div>
+                    </button>
                   ))}
                 </div>
               </div>
             </div>
-            <a className="button button--dark product__cta" href={product.buttonHref} onClick={scrollToButtonTarget}>{product.buttonText}</a>
+            <div className="product__purchase">
+              {activePrice && <p className="product__price" aria-live="polite">{activePrice}</p>}
+              <a className="button button--dark product__cta" href={product.buttonHref} onClick={scrollToButtonTarget}>{product.buttonText}</a>
+            </div>
           </article>
         </div>
 

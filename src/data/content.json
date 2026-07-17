@@ -114,7 +114,8 @@
         ],
         "image": "/assets/images/figma-product-main.webp",
         "thumbnail": "/assets/images/figma-product-thumb-natural.png",
-        "alt": "Банка B-POWER натуральный вкус"
+        "alt": "Банка B-POWER натуральный вкус",
+        "prices": ["", ""]
       },
       {
         "id": "extra",
@@ -129,7 +130,8 @@
         ],
         "image": "/assets/images/figma-product-red.webp",
         "thumbnail": "/assets/images/figma-product-red.webp",
-        "alt": "Банка B-POWER Protein + BCAA"
+        "alt": "Банка B-POWER Protein + BCAA",
+        "prices": ["", ""]
       },
       {
         "id": "daily",
@@ -144,7 +146,8 @@
         ],
         "image": "/assets/images/figma-product-red-alt.webp",
         "thumbnail": "/assets/images/figma-product-thumb-1.webp",
-        "alt": "Банка B-POWER Daily Whey"
+        "alt": "Банка B-POWER Daily Whey",
+        "prices": ["", ""]
       }
     ],
     "weights": [
